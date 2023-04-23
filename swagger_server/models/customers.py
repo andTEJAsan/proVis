@@ -14,19 +14,15 @@ class Customers(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, cus_id: str=None, username: str=None, emailid: str=None, googleid: str=None, facebookid: str=None, phone_number: int=None, password: str=None):  # noqa: E501
+    def __init__(self, cus_id: str=None, name: str=None, emailid: str=None, phone_number: int=None, password: str=None):  # noqa: E501
         """Customers - a model defined in Swagger
 
         :param cus_id: The cus_id of this Customers.  # noqa: E501
         :type cus_id: str
-        :param username: The username of this Customers.  # noqa: E501
-        :type username: str
+        :param name: The name of this Customers.  # noqa: E501
+        :type name: str
         :param emailid: The emailid of this Customers.  # noqa: E501
         :type emailid: str
-        :param googleid: The googleid of this Customers.  # noqa: E501
-        :type googleid: str
-        :param facebookid: The facebookid of this Customers.  # noqa: E501
-        :type facebookid: str
         :param phone_number: The phone_number of this Customers.  # noqa: E501
         :type phone_number: int
         :param password: The password of this Customers.  # noqa: E501
@@ -34,28 +30,22 @@ class Customers(Model):
         """
         self.swagger_types = {
             'cus_id': str,
-            'username': str,
+            'name': str,
             'emailid': str,
-            'googleid': str,
-            'facebookid': str,
             'phone_number': int,
             'password': str
         }
 
         self.attribute_map = {
             'cus_id': 'cus_id',
-            'username': 'username',
+            'name': 'name',
             'emailid': 'emailid',
-            'googleid': 'googleid',
-            'facebookid': 'facebookid',
             'phone_number': 'phone_number',
             'password': 'password'
         }
         self._cus_id = cus_id
-        self._username = username
+        self._name = name
         self._emailid = emailid
-        self._googleid = googleid
-        self._facebookid = facebookid
         self._phone_number = phone_number
         self._password = password
 
@@ -94,25 +84,25 @@ class Customers(Model):
         self._cus_id = cus_id
 
     @property
-    def username(self) -> str:
-        """Gets the username of this Customers.
+    def name(self) -> str:
+        """Gets the name of this Customers.
 
 
-        :return: The username of this Customers.
+        :return: The name of this Customers.
         :rtype: str
         """
-        return self._username
+        return self._name
 
-    @username.setter
-    def username(self, username: str):
-        """Sets the username of this Customers.
+    @name.setter
+    def name(self, name: str):
+        """Sets the name of this Customers.
 
 
-        :param username: The username of this Customers.
-        :type username: str
+        :param name: The name of this Customers.
+        :type name: str
         """
 
-        self._username = username
+        self._name = name
 
     @property
     def emailid(self) -> str:
@@ -134,48 +124,6 @@ class Customers(Model):
         """
 
         self._emailid = emailid
-
-    @property
-    def googleid(self) -> str:
-        """Gets the googleid of this Customers.
-
-
-        :return: The googleid of this Customers.
-        :rtype: str
-        """
-        return self._googleid
-
-    @googleid.setter
-    def googleid(self, googleid: str):
-        """Sets the googleid of this Customers.
-
-
-        :param googleid: The googleid of this Customers.
-        :type googleid: str
-        """
-
-        self._googleid = googleid
-
-    @property
-    def facebookid(self) -> str:
-        """Gets the facebookid of this Customers.
-
-
-        :return: The facebookid of this Customers.
-        :rtype: str
-        """
-        return self._facebookid
-
-    @facebookid.setter
-    def facebookid(self, facebookid: str):
-        """Sets the facebookid of this Customers.
-
-
-        :param facebookid: The facebookid of this Customers.
-        :type facebookid: str
-        """
-
-        self._facebookid = facebookid
 
     @property
     def phone_number(self) -> int:

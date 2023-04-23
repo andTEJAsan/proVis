@@ -14,45 +14,45 @@ class Contractors(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, contractor_id: str=None, username: str=None, emailid: str=None, phone_number: int=None, address: str=None, company_uid: str=None):  # noqa: E501
+    def __init__(self, contractor_id: str=None, name: str=None, email: str=None, address: str=None, phone_no: int=None, company_id: str=None):  # noqa: E501
         """Contractors - a model defined in Swagger
 
         :param contractor_id: The contractor_id of this Contractors.  # noqa: E501
         :type contractor_id: str
-        :param username: The username of this Contractors.  # noqa: E501
-        :type username: str
-        :param emailid: The emailid of this Contractors.  # noqa: E501
-        :type emailid: str
-        :param phone_number: The phone_number of this Contractors.  # noqa: E501
-        :type phone_number: int
+        :param name: The name of this Contractors.  # noqa: E501
+        :type name: str
+        :param email: The email of this Contractors.  # noqa: E501
+        :type email: str
         :param address: The address of this Contractors.  # noqa: E501
         :type address: str
-        :param company_uid: The company_uid of this Contractors.  # noqa: E501
-        :type company_uid: str
+        :param phone_no: The phone_no of this Contractors.  # noqa: E501
+        :type phone_no: int
+        :param company_id: The company_id of this Contractors.  # noqa: E501
+        :type company_id: str
         """
         self.swagger_types = {
             'contractor_id': str,
-            'username': str,
-            'emailid': str,
-            'phone_number': int,
+            'name': str,
+            'email': str,
             'address': str,
-            'company_uid': str
+            'phone_no': int,
+            'company_id': str
         }
 
         self.attribute_map = {
             'contractor_id': 'contractor_id',
-            'username': 'username',
-            'emailid': 'emailid',
-            'phone_number': 'phone_number',
+            'name': 'name',
+            'email': 'email',
             'address': 'address',
-            'company_uid': 'company_uid'
+            'phone_no': 'phone_no',
+            'company_id': 'company_id'
         }
         self._contractor_id = contractor_id
-        self._username = username
-        self._emailid = emailid
-        self._phone_number = phone_number
+        self._name = name
+        self._email = email
         self._address = address
-        self._company_uid = company_uid
+        self._phone_no = phone_no
+        self._company_id = company_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Contractors':
@@ -69,7 +69,6 @@ class Contractors(Model):
     def contractor_id(self) -> str:
         """Gets the contractor_id of this Contractors.
 
-        contractor id  # noqa: E501
 
         :return: The contractor_id of this Contractors.
         :rtype: str
@@ -80,7 +79,6 @@ class Contractors(Model):
     def contractor_id(self, contractor_id: str):
         """Sets the contractor_id of this Contractors.
 
-        contractor id  # noqa: E501
 
         :param contractor_id: The contractor_id of this Contractors.
         :type contractor_id: str
@@ -89,67 +87,46 @@ class Contractors(Model):
         self._contractor_id = contractor_id
 
     @property
-    def username(self) -> str:
-        """Gets the username of this Contractors.
+    def name(self) -> str:
+        """Gets the name of this Contractors.
 
 
-        :return: The username of this Contractors.
+        :return: The name of this Contractors.
         :rtype: str
         """
-        return self._username
+        return self._name
 
-    @username.setter
-    def username(self, username: str):
-        """Sets the username of this Contractors.
+    @name.setter
+    def name(self, name: str):
+        """Sets the name of this Contractors.
 
 
-        :param username: The username of this Contractors.
-        :type username: str
+        :param name: The name of this Contractors.
+        :type name: str
         """
 
-        self._username = username
+        self._name = name
 
     @property
-    def emailid(self) -> str:
-        """Gets the emailid of this Contractors.
+    def email(self) -> str:
+        """Gets the email of this Contractors.
 
 
-        :return: The emailid of this Contractors.
+        :return: The email of this Contractors.
         :rtype: str
         """
-        return self._emailid
+        return self._email
 
-    @emailid.setter
-    def emailid(self, emailid: str):
-        """Sets the emailid of this Contractors.
+    @email.setter
+    def email(self, email: str):
+        """Sets the email of this Contractors.
 
 
-        :param emailid: The emailid of this Contractors.
-        :type emailid: str
+        :param email: The email of this Contractors.
+        :type email: str
         """
 
-        self._emailid = emailid
-
-    @property
-    def phone_number(self) -> int:
-        """Gets the phone_number of this Contractors.
-
-
-        :return: The phone_number of this Contractors.
-        :rtype: int
-        """
-        return self._phone_number
-
-    @phone_number.setter
-    def phone_number(self, phone_number: int):
-        """Sets the phone_number of this Contractors.
-
-
-        :param phone_number: The phone_number of this Contractors.
-        :type phone_number: int
-        """
-
-        self._phone_number = phone_number
+        self._email = email
 
     @property
     def address(self) -> str:
@@ -173,24 +150,43 @@ class Contractors(Model):
         self._address = address
 
     @property
-    def company_uid(self) -> str:
-        """Gets the company_uid of this Contractors.
+    def phone_no(self) -> int:
+        """Gets the phone_no of this Contractors.
 
-        company id which has hired contractor  # noqa: E501
 
-        :return: The company_uid of this Contractors.
+        :return: The phone_no of this Contractors.
+        :rtype: int
+        """
+        return self._phone_no
+
+    @phone_no.setter
+    def phone_no(self, phone_no: int):
+        """Sets the phone_no of this Contractors.
+
+
+        :param phone_no: The phone_no of this Contractors.
+        :type phone_no: int
+        """
+
+        self._phone_no = phone_no
+
+    @property
+    def company_id(self) -> str:
+        """Gets the company_id of this Contractors.
+
+
+        :return: The company_id of this Contractors.
         :rtype: str
         """
-        return self._company_uid
+        return self._company_id
 
-    @company_uid.setter
-    def company_uid(self, company_uid: str):
-        """Sets the company_uid of this Contractors.
+    @company_id.setter
+    def company_id(self, company_id: str):
+        """Sets the company_id of this Contractors.
 
-        company id which has hired contractor  # noqa: E501
 
-        :param company_uid: The company_uid of this Contractors.
-        :type company_uid: str
+        :param company_id: The company_id of this Contractors.
+        :type company_id: str
         """
 
-        self._company_uid = company_uid
+        self._company_id = company_id

@@ -41,7 +41,8 @@ class TestUserController(BaseTestCase):
             data=json.dumps(body),
             content_type='application/json')
         self.assert200(response,
-                      'Response body is : ' + response.data.decode('utf-8'))
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_send_verification_mail(self):
         """Test case for send_verification_mail
 
@@ -67,7 +68,8 @@ class TestUserController(BaseTestCase):
             data=json.dumps(body),
             content_type='application/json')
         self.assert200(response,
-                      'Response body is : ' + response.data.decode('utf-8'))
+                       'Response body is : ' + response.data.decode('utf-8'))
+
 
 if __name__ == '__main__':
     import unittest

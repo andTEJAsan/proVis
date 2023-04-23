@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
+from swagger_server.models.bookmark_request import BookmarkRequest  # noqa: E501
 from swagger_server.models.bookmarks import Bookmarks  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -50,7 +51,7 @@ class TestBookmarksController(BaseTestCase):
 
         create a new bookmark for a customer with given id
         """
-        body = Bookmarks()
+        body = BookmarkRequest()
         response = self.client.open(
             '/api//customers/{id}/bookmarks'.format(id='id_example'),
             method='POST',

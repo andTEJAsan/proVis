@@ -14,50 +14,55 @@ class Orders(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: str=None, cus_uid: str=None, order_date: datetime=None, p_uid: str=None, scheduling_status: str=None, payment_status: str=None, exchange_emails: str=None):  # noqa: E501
+    def __init__(self, id: str=None, cus_uid: str=None, order_date_time: datetime=None, p_uid: str=None, product_img_url: str=None, company_name: str=None, company_img_url: str=None, message: str=None):  # noqa: E501
         """Orders - a model defined in Swagger
 
         :param id: The id of this Orders.  # noqa: E501
         :type id: str
         :param cus_uid: The cus_uid of this Orders.  # noqa: E501
         :type cus_uid: str
-        :param order_date: The order_date of this Orders.  # noqa: E501
-        :type order_date: datetime
+        :param order_date_time: The order_date_time of this Orders.  # noqa: E501
+        :type order_date_time: datetime
         :param p_uid: The p_uid of this Orders.  # noqa: E501
         :type p_uid: str
-        :param scheduling_status: The scheduling_status of this Orders.  # noqa: E501
-        :type scheduling_status: str
-        :param payment_status: The payment_status of this Orders.  # noqa: E501
-        :type payment_status: str
-        :param exchange_emails: The exchange_emails of this Orders.  # noqa: E501
-        :type exchange_emails: str
+        :param product_img_url: The product_img_url of this Orders.  # noqa: E501
+        :type product_img_url: str
+        :param company_name: The company_name of this Orders.  # noqa: E501
+        :type company_name: str
+        :param company_img_url: The company_img_url of this Orders.  # noqa: E501
+        :type company_img_url: str
+        :param message: The message of this Orders.  # noqa: E501
+        :type message: str
         """
         self.swagger_types = {
             'id': str,
             'cus_uid': str,
-            'order_date': datetime,
+            'order_date_time': datetime,
             'p_uid': str,
-            'scheduling_status': str,
-            'payment_status': str,
-            'exchange_emails': str
+            'product_img_url': str,
+            'company_name': str,
+            'company_img_url': str,
+            'message': str
         }
 
         self.attribute_map = {
             'id': 'id',
             'cus_uid': 'cus_uid',
-            'order_date': 'order_date',
+            'order_date_time': 'order_date_time',
             'p_uid': 'p_uid',
-            'scheduling_status': 'scheduling_status',
-            'payment_status': 'payment_status',
-            'exchange_emails': 'exchange_emails'
+            'product_img_url': 'product_img_url',
+            'company_name': 'company_name',
+            'company_img_url': 'company_img_url',
+            'message': 'message'
         }
         self._id = id
         self._cus_uid = cus_uid
-        self._order_date = order_date
+        self._order_date_time = order_date_time
         self._p_uid = p_uid
-        self._scheduling_status = scheduling_status
-        self._payment_status = payment_status
-        self._exchange_emails = exchange_emails
+        self._product_img_url = product_img_url
+        self._company_name = company_name
+        self._company_img_url = company_img_url
+        self._message = message
 
     @classmethod
     def from_dict(cls, dikt) -> 'Orders':
@@ -115,25 +120,25 @@ class Orders(Model):
         self._cus_uid = cus_uid
 
     @property
-    def order_date(self) -> datetime:
-        """Gets the order_date of this Orders.
+    def order_date_time(self) -> datetime:
+        """Gets the order_date_time of this Orders.
 
 
-        :return: The order_date of this Orders.
+        :return: The order_date_time of this Orders.
         :rtype: datetime
         """
-        return self._order_date
+        return self._order_date_time
 
-    @order_date.setter
-    def order_date(self, order_date: datetime):
-        """Sets the order_date of this Orders.
+    @order_date_time.setter
+    def order_date_time(self, order_date_time: datetime):
+        """Sets the order_date_time of this Orders.
 
 
-        :param order_date: The order_date of this Orders.
-        :type order_date: datetime
+        :param order_date_time: The order_date_time of this Orders.
+        :type order_date_time: datetime
         """
 
-        self._order_date = order_date
+        self._order_date_time = order_date_time
 
     @property
     def p_uid(self) -> str:
@@ -159,82 +164,87 @@ class Orders(Model):
         self._p_uid = p_uid
 
     @property
-    def scheduling_status(self) -> str:
-        """Gets the scheduling_status of this Orders.
+    def product_img_url(self) -> str:
+        """Gets the product_img_url of this Orders.
 
-        status of meeting scheduled  # noqa: E501
 
-        :return: The scheduling_status of this Orders.
+        :return: The product_img_url of this Orders.
         :rtype: str
         """
-        return self._scheduling_status
+        return self._product_img_url
 
-    @scheduling_status.setter
-    def scheduling_status(self, scheduling_status: str):
-        """Sets the scheduling_status of this Orders.
+    @product_img_url.setter
+    def product_img_url(self, product_img_url: str):
+        """Sets the product_img_url of this Orders.
 
-        status of meeting scheduled  # noqa: E501
 
-        :param scheduling_status: The scheduling_status of this Orders.
-        :type scheduling_status: str
+        :param product_img_url: The product_img_url of this Orders.
+        :type product_img_url: str
         """
-        allowed_values = ["completed", "confirmed", "pending"]  # noqa: E501
-        if scheduling_status not in allowed_values:
-            raise ValueError(
-                "Invalid value for `scheduling_status` ({0}), must be one of {1}"
-                .format(scheduling_status, allowed_values)
-            )
 
-        self._scheduling_status = scheduling_status
+        self._product_img_url = product_img_url
 
     @property
-    def payment_status(self) -> str:
-        """Gets the payment_status of this Orders.
+    def company_name(self) -> str:
+        """Gets the company_name of this Orders.
 
-        status of payment, if order confirmed on meeting  # noqa: E501
 
-        :return: The payment_status of this Orders.
+        :return: The company_name of this Orders.
         :rtype: str
         """
-        return self._payment_status
+        return self._company_name
 
-    @payment_status.setter
-    def payment_status(self, payment_status: str):
-        """Sets the payment_status of this Orders.
+    @company_name.setter
+    def company_name(self, company_name: str):
+        """Sets the company_name of this Orders.
 
-        status of payment, if order confirmed on meeting  # noqa: E501
 
-        :param payment_status: The payment_status of this Orders.
-        :type payment_status: str
+        :param company_name: The company_name of this Orders.
+        :type company_name: str
         """
-        allowed_values = ["meeting pending", "completed", "pending"]  # noqa: E501
-        if payment_status not in allowed_values:
-            raise ValueError(
-                "Invalid value for `payment_status` ({0}), must be one of {1}"
-                .format(payment_status, allowed_values)
-            )
 
-        self._payment_status = payment_status
+        self._company_name = company_name
 
     @property
-    def exchange_emails(self) -> str:
-        """Gets the exchange_emails of this Orders.
+    def company_img_url(self) -> str:
+        """Gets the company_img_url of this Orders.
+
+
+        :return: The company_img_url of this Orders.
+        :rtype: str
+        """
+        return self._company_img_url
+
+    @company_img_url.setter
+    def company_img_url(self, company_img_url: str):
+        """Sets the company_img_url of this Orders.
+
+
+        :param company_img_url: The company_img_url of this Orders.
+        :type company_img_url: str
+        """
+
+        self._company_img_url = company_img_url
+
+    @property
+    def message(self) -> str:
+        """Gets the message of this Orders.
 
         email communication b/w customer and contractor  # noqa: E501
 
-        :return: The exchange_emails of this Orders.
+        :return: The message of this Orders.
         :rtype: str
         """
-        return self._exchange_emails
+        return self._message
 
-    @exchange_emails.setter
-    def exchange_emails(self, exchange_emails: str):
-        """Sets the exchange_emails of this Orders.
+    @message.setter
+    def message(self, message: str):
+        """Sets the message of this Orders.
 
         email communication b/w customer and contractor  # noqa: E501
 
-        :param exchange_emails: The exchange_emails of this Orders.
-        :type exchange_emails: str
+        :param message: The message of this Orders.
+        :type message: str
         """
 
-        self._exchange_emails = exchange_emails
+        self._message = message

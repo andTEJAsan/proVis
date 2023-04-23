@@ -1,28 +1,12 @@
 import connexion
 import six
-import datetime
 
+from swagger_server.models.order_request import OrderRequest  # noqa: E501
 from swagger_server.models.orders import Orders  # noqa: E501
 from swagger_server import util,db
 
 
-def delete_customer_order(id, orderid):  # noqa: E501
-    """deletes a specific customer&#x27;s order by id of both
-
-    deletes a specific customer&#x27;s order by id of both # noqa: E501
-
-    :param id: ID of customer whose orders need to be deleted
-    :type id: str
-    :param orderid: ID of order that needs to be deleted
-    :type orderid: str
-
-    :rtype: None
-    """
-    db.delete_customer_order(id,orderid)
-    return 'do some magic!'
-
-
-def get_customer_order(id, orderid):  # noqa: E501
+def get_customer_order(cusid, orderid):  # noqa: E501
     """get a customer&#x27;s specific order by id of both
 
     retrieves a specific order by id of customer and order # noqa: E501
@@ -34,10 +18,13 @@ def get_customer_order(id, orderid):  # noqa: E501
 
     :rtype: Orders
     """
-    return db.get_customer_order(id,orderid)
+    try:
+        return db.getorder_fromid(cusid,orderid)
+    except NameError:
+        return  {"error":"Order with given order id doesn't exist","status":400}
 
 
-def get_customer_orders(id):  # noqa: E501
+def get_customer_orders(cusid):  # noqa: E501
     """get a list of all orders of a specific customers
 
     fetches all orders of a specific customer # noqa: E501
@@ -47,35 +34,10 @@ def get_customer_orders(id):  # noqa: E501
 
     :rtype: List[Orders]
     """
-    return db.get_customer_orders 
+    return db.getorders_fromcusid(cusid)
 
 
-def patch_customer_order(body, id, orderid):  # noqa: E501
-    """update the details of a customer&#x27;s specific order by id of both
-
-    updates the details of a customer&#x27;s order by passing parameters to be changed # noqa: E501
-
-    :param body: updates a customer&#x27;s specific order
-    :type body: dict | bytes
-    :param id: ID of customer whose orders need to be updated
-    :type id: str
-    :param orderid: ID of order that needs to be updated
-    :type orderid: str
-
-    :rtype: Orders
-    """
-    if connexion.request.is_json:
-        
-        body = Orders.from_dict(connexion.request.get_json())  # noqa: E501
-
-        db.patch_orderdate_orderid(body.order_date(),body.cus_ui().p_uid())
-        db.patch_scheduling_status_orderid(body.scheduling_status().body.cus_id(),body.p_uid())
-        db.patch_payment_status_orderid(body.payment_status(),body.cus_id(),body.p_uid())
-        db.patch_exchangemail_orderid(body.exchange_emails(),body.cus_id(),body.p_uid()) 
-    return body 
-
-
-def post_order(body, id):  # noqa: E501
+def post_order(body):  # noqa: E501
     """create a new order for a customer with given id
 
     create a new order for a customer with given id # noqa: E501
@@ -88,8 +50,20 @@ def post_order(body, id):  # noqa: E501
     :rtype: Orders
     """
     if connexion.request.is_json:
+        body = OrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        order=Orders(cus_uid=body._cus_uid,order_date_time=body._order_date_time,p_uid=body._p_uid,message=body._message)
 
-        body = Orders.from_dict(connexion.request.get_json())  # noqa: E501
-        body.cus_uid(id=id)
+        try:
+            db.check_customer_exists(order.cus_uid)
+        except NameError:
+            return {"error":"Customer with given cus_uid doesn't exist","status":400}
+        
+        try:
+            db.check_product_exists(order.p_uid)
+        except NameError:
+            return {"error":"Product with given p_uid doesn't exist","status":400}
+        
+        db.add_orders(order)
 
-    return db.post_order(body,id)
+        return order
+

@@ -5,44 +5,44 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.customers import Customers  # noqa: E501
-from swagger_server.models.register_response import RegisterResponse  # noqa: E501
+from swagger_server.models.contractor_request import ContractorRequest  # noqa: E501
+from swagger_server.models.contractors import Contractors  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
-class TestCustomersController(BaseTestCase):
-    """CustomersController integration test stubs"""
+class TestContractorsController(BaseTestCase):
+    """ContractorsController integration test stubs"""
 
-    def test_get_customer(self):
-        """Test case for get_customer
+    def test_get_contractor(self):
+        """Test case for get_contractor
 
-        get a customer by id
+        get a contractor by id
         """
         response = self.client.open(
-            '/api//customers/{id}'.format(id='id_example'),
+            '/api//contractors/{id}'.format(id='id_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_get_customers(self):
-        """Test case for get_customers
+    def test_get_contractors(self):
+        """Test case for get_contractors
 
-        get a list of all customers
+        get a list of all contractors
         """
         response = self.client.open(
-            '/api//customers',
+            '/api//contractors',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_post_customers(self):
-        """Test case for post_customers
+    def test_post_contractor(self):
+        """Test case for post_contractor
 
-        create a new customer
+        create a new contractor
         """
-        body = Customers()
+        body = ContractorRequest()
         response = self.client.open(
-            '/api//customers',
+            '/api//contractors',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
