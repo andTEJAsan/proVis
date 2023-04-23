@@ -17,25 +17,6 @@ def companies_get():  # noqa: E501
     return db.get_all_companies()
 
 
-def companies_queryid_get(companyid:str):  # noqa: E501
-    """get a company by id
-
-    retrieves a specific company by id. # noqa: E501
-
-    :param id: ID of company that needs to be fetched
-    :type id: str
-
-    :rtype: Companies
-    """
-
-    try:
-        db.check_company_exists(companyid)
-    except NameError:
-        return  {"error":"Company with given company_id doesn't exist","status":400}
-    
-    return db.get_company_by_id(companyid)
-
-
 def companies_post(body):  # noqa: E501
     """create a new Company
 
@@ -54,5 +35,22 @@ def companies_post(body):  # noqa: E501
         except NameError:
             return  {"error":"Company already exists in the database","status":400}
 
-    return company
+        return company
+
+
+def companies_queryid_get(queryid):  # noqa: E501
+    """get a company by id
+
+    retrieves a specific company by id. # noqa: E501
+
+    :param queryid: ID of company that needs to be fetched
+    :type queryid: str
+
+    :rtype: Companies
+    """
+    try:
+        db.check_company_exists(queryid)
+    except NameError:
+        return  {"error":"Company with given company_id doesn't exist","status":400}
     
+    return db.get_company_by_id(queryid)

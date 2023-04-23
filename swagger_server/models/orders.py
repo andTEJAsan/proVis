@@ -14,7 +14,7 @@ class Orders(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: str=None, cus_uid: str=None, order_date_time: datetime=None, p_uid: str=None, product_img_url: str=None, company_name: str=None, company_img_url: str=None, message: str=None):  # noqa: E501
+    def __init__(self, id: str=None, cus_uid: str=None, order_date_time: str=None, p_uid: str=None, product_img_url: str=None, company_name: str=None, company_img_url: str=None, message: str=None):  # noqa: E501
         """Orders - a model defined in Swagger
 
         :param id: The id of this Orders.  # noqa: E501
@@ -37,7 +37,7 @@ class Orders(Model):
         self.swagger_types = {
             'id': str,
             'cus_uid': str,
-            'order_date_time': datetime,
+            'order_date_time': str,
             'p_uid': str,
             'product_img_url': str,
             'company_name': str,
@@ -120,7 +120,7 @@ class Orders(Model):
         self._cus_uid = cus_uid
 
     @property
-    def order_date_time(self) -> datetime:
+    def order_date_time(self) -> str:
         """Gets the order_date_time of this Orders.
 
 
@@ -130,7 +130,7 @@ class Orders(Model):
         return self._order_date_time
 
     @order_date_time.setter
-    def order_date_time(self, order_date_time: datetime):
+    def order_date_time(self, order_date_time: str):
         """Sets the order_date_time of this Orders.
 
 

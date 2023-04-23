@@ -14,7 +14,7 @@ class Products(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, p_uid: str=None, location: str=None, category: str=None, product_img_url: str=None, product_description: str=None, company_name: str=None, company_img_url: str=None, contractor_id: str=None):  # noqa: E501
+    def __init__(self, p_uid: str=None, location: str=None, category: str=None, product_img_url: str=None, product_description: str=None, company_name: str=None, company_id: str=None, company_img_url: str=None, contractor_id: str=None, contractor_name: str=None):  # noqa: E501
         """Products - a model defined in Swagger
 
         :param p_uid: The p_uid of this Products.  # noqa: E501
@@ -33,6 +33,8 @@ class Products(Model):
         :type company_img_url: str
         :param contractor_id: The contractor_id of this Products.  # noqa: E501
         :type contractor_id: str
+        :param contractor_name: The contractor_name of this Products.  # noqa: E501
+        :type contractor_name: str
         """
         self.swagger_types = {
             'p_uid': str,
@@ -41,8 +43,10 @@ class Products(Model):
             'product_img_url': str,
             'product_description': str,
             'company_name': str,
+            'company_id' :str,
             'company_img_url': str,
-            'contractor_id': str
+            'contractor_id': str,
+            'contractor_name': str
         }
 
         self.attribute_map = {
@@ -52,8 +56,10 @@ class Products(Model):
             'product_img_url': 'product_img_url',
             'product_description': 'product_description',
             'company_name': 'company_name',
+            'company_id': 'company_id',
             'company_img_url': 'company_img_url',
-            'contractor_id': 'contractor_id'
+            'contractor_id': 'contractor_id',
+            'contractor_name': 'contractor_name'
         }
         self._p_uid = p_uid
         self._location = location
@@ -61,8 +67,10 @@ class Products(Model):
         self._product_img_url = product_img_url
         self._product_description = product_description
         self._company_name = company_name
+        self._company_id=company_id
         self._company_img_url = company_img_url
         self._contractor_id = contractor_id
+        self._contractor_name = contractor_name
 
     @classmethod
     def from_dict(cls, dikt) -> 'Products':
@@ -202,6 +210,28 @@ class Products(Model):
         self._company_name = company_name
 
     @property
+    def company_id(self) -> str:
+        """Gets the company_id of this Products.
+
+
+        :return: The company_id of this Products.
+        :rtype: str
+        """
+        return self._company_id
+
+    @company_id.setter
+    def company_id(self, company_id: str):
+        """Sets the company_id of this Products.
+
+
+        :param company_id: The company_id of this Products.
+        :type company_id: str
+        """
+
+        self._company_id = company_id
+
+
+    @property
     def company_img_url(self) -> str:
         """Gets the company_img_url of this Products.
 
@@ -242,3 +272,24 @@ class Products(Model):
         """
 
         self._contractor_id = contractor_id
+
+    @property
+    def contractor_name(self) -> str:
+        """Gets the contractor_name of this Products.
+
+
+        :return: The contractor_name of this Products.
+        :rtype: str
+        """
+        return self._contractor_name
+
+    @contractor_name.setter
+    def contractor_name(self, contractor_name: str):
+        """Sets the contractor_name of this Products.
+
+
+        :param contractor_name: The contractor_name of this Products.
+        :type contractor_name: str
+        """
+
+        self._contractor_name = contractor_name

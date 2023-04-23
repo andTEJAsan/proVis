@@ -6,46 +6,46 @@ from swagger_server.models.orders import Orders  # noqa: E501
 from swagger_server import util,db
 
 
-def get_customer_order(cusid, orderid):  # noqa: E501
+def get_customer_order(queryid, orderid):  # noqa: E501
     """get a customer&#x27;s specific order by id of both
 
     retrieves a specific order by id of customer and order # noqa: E501
 
-    :param id: ID of customer whose orders need to be fetched
-    :type id: str
+    :param queryid: ID of customer whose orders need to be fetched
+    :type queryid: str
     :param orderid: ID of order that needs to be fetched
     :type orderid: str
 
     :rtype: Orders
     """
     try:
-        return db.getorder_fromid(cusid,orderid)
+        return db.getorder_fromid(orderid)
     except NameError:
         return  {"error":"Order with given order id doesn't exist","status":400}
 
 
-def get_customer_orders(cusid):  # noqa: E501
+def get_customer_orders(queryid):  # noqa: E501
     """get a list of all orders of a specific customers
 
     fetches all orders of a specific customer # noqa: E501
 
-    :param id: ID of customer whose orders need to be fetched
-    :type id: str
+    :param queryid: ID of customer whose orders need to be fetched
+    :type queryid: str
 
     :rtype: List[Orders]
     """
-    return db.getorders_fromcusid(cusid)
+    return db.getorders_fromcusid(queryid)
 
 
-def post_order(body):  # noqa: E501
+def post_order(body, queryid):  # noqa: E501
     """create a new order for a customer with given id
 
     create a new order for a customer with given id # noqa: E501
 
     :param body: creates a new order for a specific customer
     :type body: dict | bytes
-    :param id: ID of customer for which new order is being added
-    :type id: str
+    :param queryid: ID of customer for which new order is being added
+    :type queryid: str
 
     :rtype: Orders
     """
@@ -66,4 +66,3 @@ def post_order(body):  # noqa: E501
         db.add_orders(order)
 
         return order
-

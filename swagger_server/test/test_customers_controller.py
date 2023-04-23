@@ -19,7 +19,7 @@ class TestCustomersController(BaseTestCase):
         get a customer by id
         """
         response = self.client.open(
-            '/api//customers/{id}'.format(id='id_example'),
+            '/api//customers/{queryid}'.format(queryid='queryid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

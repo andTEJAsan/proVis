@@ -19,7 +19,7 @@ class TestOrdersController(BaseTestCase):
         get a customer's specific order by id of both
         """
         response = self.client.open(
-            '/api//customers/{id}/orders/{orderid}'.format(id='id_example', orderid='orderid_example'),
+            '/api//customers/{queryid}/orders/{orderid}'.format(queryid='queryid_example', orderid='orderid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -30,7 +30,7 @@ class TestOrdersController(BaseTestCase):
         get a list of all orders of a specific customers
         """
         response = self.client.open(
-            '/api//customers/{id}/orders'.format(id='id_example'),
+            '/api//customers/{queryid}/orders'.format(queryid='queryid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -42,7 +42,7 @@ class TestOrdersController(BaseTestCase):
         """
         body = OrderRequest()
         response = self.client.open(
-            '/api//customers/{id}/orders'.format(id='id_example'),
+            '/api//customers/{queryid}/orders'.format(queryid='queryid_example'),
             method='POST',
             data=json.dumps(body),
             content_type='application/json')

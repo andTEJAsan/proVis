@@ -6,22 +6,22 @@ from swagger_server.models.register_response import RegisterResponse  # noqa: E5
 from swagger_server import util,db
 
 
-def get_customer(cusid):  # noqa: E501
+def get_customer(queryid):  # noqa: E501
     """get a customer by id
 
     retrieves a specific customer by id. # noqa: E501
 
-    :param id: ID of customer that needs to be fetched
-    :type id: str
+    :param queryid: ID of customer that needs to be fetched
+    :type queryid: str
 
     :rtype: Customers
     """
     try:
-        db.check_customer_exists(cusid)
+        db.check_customer_exists(queryid)
     except NameError:
         return {"error":"Customer with given cus_uid doesn't exist","status":400}
 
-    return db.get_customer_by_id(cusid)
+    return db.get_customer_by_id(queryid)
 
 
 def get_customers():  # noqa: E501

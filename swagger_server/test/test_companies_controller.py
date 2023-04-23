@@ -24,17 +24,6 @@ class TestCompaniesController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
-    def test_companies_id_get(self):
-        """Test case for companies_id_get
-
-        get a company by id
-        """
-        response = self.client.open(
-            '/api//companies/{id}'.format(id='id_example'),
-            method='GET')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
-
     def test_companies_post(self):
         """Test case for companies_post
 
@@ -46,6 +35,17 @@ class TestCompaniesController(BaseTestCase):
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_companies_queryid_get(self):
+        """Test case for companies_queryid_get
+
+        get a company by id
+        """
+        response = self.client.open(
+            '/api//companies/{queryid}'.format(queryid='queryid_example'),
+            method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

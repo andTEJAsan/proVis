@@ -2,6 +2,7 @@
 #1. Testing of all functions of bookmarks,reviews,orders is remaining
 
 from typing import Optional
+from typing import Callable
 import pymysql
 import datetime
 
@@ -81,7 +82,7 @@ def setup():
         `id` INT(6) NOT NULL AUTO_INCREMENT,
         `cus_uid` INT(6) NOT NULL,
         `p_uid` INT(6) NOT NULL,
-        `order_date_time` DATETIME DEFAULT NULL,
+        `order_date_time` VARCHAR(255) DEFAULT NULL,
         `message` VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`cus_uid`) REFERENCES `customers` (`cus_uid`),
@@ -180,6 +181,7 @@ def check_customer_exists(cusid:str)->None:
         if r is None:
             raise NameError
 
+
 def get_customer_by_id(cusid:str) ->Optional[Customers]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `customers` WHERE `cus_uid`=%s""",cusid)
@@ -262,12 +264,12 @@ def get_all_companies() ->list[Companies]:
 
 def get_company_by_id(companyid:str)->Optional[Companies]:
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT * FROM `companies` WHERE `id`=%s""",companyid)
+        cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
         r=cursor.fetchone()
         if r is None:
             raise NameError
         company=Companies(company_id=r['company_id'],name=r['name'],company_img_url=r['company_img_url'],
-                          about_us=r['about_us'],website_link=r['webstie_link'])
+                          about_us=r['about_us'],website_link=r['website_link'])
         return company
         
 
@@ -333,7 +335,7 @@ def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
         return contractor
 
 #BOOKMARKS
-def add_bookmarks(bookmark:Bookmarks) -> None:
+def add_bookmarks(bookmark:BookmarkRequest) -> None:
     with connection.cursor() as cursor:
         query="""INSERT INTO bookmarks (cus_uid,p_uid) VALUES (%s,%s)"""
         values=(bookmark.cus_uid,bookmark.p_uid)
@@ -347,22 +349,24 @@ def getbookmarks_fromcusid(cusid:str)->list[Bookmarks]:
         cursor.execute("""SELECT * FROM `bookmarks` WHERE `cus_uid`=%s""",cusid)
         results=cursor.fetchall()
         for element in results:
-            bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],p_uid=element['p_uid'])
+            product=getproduct_frompuid(element['p_uid'])
+            bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)
             bk.append(bookmark)
     return bk
 
-def getbookmark_fromid(cusid:str,bookmarkid:str)->Optional[Bookmarks]:
+def getbookmark_fromid(bookmarkid:str)->Optional[Bookmarks]:
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT * FROM `bookmarks` WHERE `id`=%s AND `cus_uid`=%s""",bookmarkid,cusid)
+        cursor.execute("""SELECT * FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
         element=cursor.fetchone()
         if element is None:
             raise NameError
-        bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],p_uid=element['p_uid'])    
-    return bookmark
+        product=getproduct_frompuid(element['p_uid'])
+        bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)    
+        return bookmark
 
-def deletebookmark_fromid(cusid:str,bookmarkid:str)->None:
+def deletebookmark_fromid(bookmarkid:str)->None:
     with connection.cursor() as cursor:
-        cursor.execute("""DELETE FROM WHERE `id`=%s AND `cus_uid`=%s""",bookmarkid,cusid)
+        cursor.execute("""DELETE FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
         connection.commit()
 
 #LOCATIONS
@@ -464,7 +468,7 @@ def getcontractorid_frompuid(puid:str)->str:
         cursor.execute("""SELECT `contractor_id` FROM `products` WHERE `p_uid`=%s""",puid)
         element=cursor.fetchone()
         if element is not None:
-            contractorid=element['contractorid']
+            contractorid=element['contractor_id']
             return contractorid
         return None
     
@@ -508,9 +512,11 @@ def get_all_products()->list[Products]:
             companyid=getcompanyid_fromcontractorid(element['contractor_id'])
             company_img_url=getcompanyimgurl_fromcompanyid(companyid)
             company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id']) #get object Contractor from contractorid
             product=Products(p_uid=element['p_uid'],location=location,category=category,
                              product_img_url=element['product_img_url'],product_description=element['product_description'],
-                             company_name=company_name,company_img_url=company_img_url,contractor_id=element['contractor_id'])
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,contractor_id=element['contractor_id'],
+                             contractor_name=contractor.name)
             pr.append(product)
     return pr
                
@@ -527,10 +533,12 @@ def getproduct_frompuid(puid:str)->Optional[Products]:
         companyid=getcompanyid_fromcontractorid(element['contractor_id'])
         company_img_url=getcompanyimgurl_fromcompanyid(companyid)
         company_name=getcompanyname_fromcompanyid(companyid)
+        contractor=get_contractor_by_id(element['contractor_id'])
         product=Products(p_uid=element['p_uid'],location=location,category=category,
                             product_img_url=element['product_img_url'],product_description=element['product_description'],
-                            company_name=company_name,company_img_url=company_img_url,contractor_id=element['contractor_id'])
-    return product
+                            company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                            contractor_id=element['contractor_id'],contractor_name=contractor.name)
+        return product
 
 def getproduct_fromlocationandcategory(location:str,category:str)->list[Products]:
 
@@ -547,9 +555,57 @@ def getproduct_fromlocationandcategory(location:str,category:str)->list[Products
             companyid=getcompanyid_fromcontractorid(element['contractor_id'])
             company_img_url=getcompanyimgurl_fromcompanyid(companyid)
             company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
             product=Products(p_uid=element['p_uid'],location=location,category=category,
                              product_img_url=element['product_img_url'],product_description=element['product_description'],
-                             company_name=company_name,company_img_url=company_img_url,contractor_id=element['contractor_id'])
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
+            pr.append(product)
+
+    return pr
+
+def getproduct_fromlocation(location:str)->list[Products]:
+
+    pr=[]
+    with connection.cursor() as cursor:
+        locationid=getlocationid_fromlocation(location)
+        cursor.execute("""SELECT * FROM `products` WHERE `location_id`=%s""",locationid)
+        results=cursor.fetchall()
+
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
+            pr.append(product)
+
+    return pr
+
+def getproduct_fromcategory(category:str)->list[Products]:
+
+    pr=[]
+    with connection.cursor() as cursor:
+        categoryid=getcategoryid_fromcategory(category)
+        cursor.execute("""SELECT * FROM `products` WHERE `category_id`=%s""",categoryid)
+        results=cursor.fetchall()
+
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
             pr.append(product)
 
     return pr
@@ -581,12 +637,13 @@ def getorders_fromcusid(cusid:str)->list[Orders]:
                         company_img_url=companyimgurl,message=element['message'])
             
             od.append(order)
+
     return od
 
-def getorder_fromid(cusid:str,orderid:str)->Optional[Orders]:
+def getorder_fromid(orderid:str)->Optional[Orders]:
 
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT * FROM `orders` WHERE `cus_uid`=%s AND `id`=%s""",cusid,orderid)
+        cursor.execute("""SELECT * FROM `orders` WHERE `id`=%s""",orderid)
         element=cursor.fetchone()
 
         if(element is None):
@@ -607,8 +664,9 @@ def getorder_fromid(cusid:str,orderid:str)->Optional[Orders]:
  #REVIEWS
 def add_reviews(review:Reviews) -> None:
     with connection.cursor() as cursor:
+
         query="""INSERT INTO reviews(cus_uid,p_uid,review) VALUES (%s,%s,%s)"""
-        values=(review.cus_uid,review.p_uid,review._review)
+        values=(review.cus_uid,review.p_uid,review.review)
         cursor.execute(query,values)
         connection.commit()
         review.id=str(cursor.lastrowid)       
@@ -620,7 +678,8 @@ def getreviews_frompuid(puid:str)->list[Reviews]:
         cursor.execute("""SELECT * FROM `reviews` WHERE `p_uid`=%s""",puid)
         results=cursor.fetchall()
         for element in results:
-                review=Reviews(id=element['id'],cus_uid=element['cus_uid'],p_uid=element['p_uid'],review=element['review'])
+                customer=get_customer_by_id(element['cus_uid'])
+                review=Reviews(name=customer.name,id=element['id'],cus_uid=element['cus_uid'],p_uid=element['p_uid'],review=element['review'])
                 rw.append(review)
     return rw
 

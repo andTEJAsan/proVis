@@ -6,23 +6,22 @@ from swagger_server.models.contractors import Contractors  # noqa: E501
 from swagger_server import util,db
 
 
-def get_contractor(contractorid:str):  # noqa: E501
+def get_contractor(queryid:str):  # noqa: E501
     """get a contractor by id
 
     retrieves a specific contractor by id. # noqa: E501
 
-    :param id: ID of contractor that needs to be fetched
-    :type id: str
+    :param queryid: ID of contractor that needs to be fetched
+    :type queryid: str
 
     :rtype: Contractors
     """
-
     try:
-        db.check_contractor_exists(contractorid)
+        db.check_contractor_exists(queryid)
     except NameError:
         return  {"error":"Contractor with given contractor_id doesn't exist","status":400}
     
-    return db.get_contractor_by_id(contractorid)
+    return db.get_contractor_by_id(queryid)
 
 
 def get_contractors():  # noqa: E501
@@ -33,7 +32,6 @@ def get_contractors():  # noqa: E501
 
     :rtype: List[Contractors]
     """
-
     return db.get_all_contractors()
 
 

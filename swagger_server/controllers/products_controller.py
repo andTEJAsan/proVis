@@ -12,8 +12,8 @@ def get_product(queryid):  # noqa: E501
 
     retrieves a specific product by id. # noqa: E501
 
-    :param id: ID of product that needs to be fetched
-    :type id: str
+    :param queryid: ID of product that needs to be fetched
+    :type queryid: str
 
     :rtype: Products
     """
@@ -25,8 +25,7 @@ def get_product(queryid):  # noqa: E501
     return db.getproduct_frompuid(queryid)
 
 
-
-def get_product_by_tags(location, category):  # noqa: E501
+def get_product_by_tags(location=None, category=None):  # noqa: E501
     """gets all products matching the tags
 
     gets all products matching the tags # noqa: E501
@@ -38,12 +37,17 @@ def get_product_by_tags(location, category):  # noqa: E501
 
     :rtype: Products
     """
+    if(location!=None and category!=None):
+        return db.getproduct_fromlocationandcategory(location,category)
+    elif(location!=None and category==None):
+        return db.getproduct_fromlocation(location)
+    elif(location==None and category!=None):
+        return db.getproduct_fromcategory(category)
+    else:
+        return db.get_all_products()
 
 
-    return db.getproduct_fromlocationandcategory(location,category)
-
-
-def get_products():  # noqa:
+def get_products():  # noqa: E501
     """get a list of all products
 
     retrieves all products. # noqa: E501
@@ -52,6 +56,7 @@ def get_products():  # noqa:
     :rtype: List[Products]
     """
     return db.get_all_products()
+
 
 
 def post_product(body):  # noqa: E501

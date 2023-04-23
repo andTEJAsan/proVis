@@ -19,7 +19,7 @@ class TestContractorsController(BaseTestCase):
         get a contractor by id
         """
         response = self.client.open(
-            '/api//contractors/{id}'.format(id='id_example'),
+            '/api//contractors/{queryid}'.format(queryid='queryid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

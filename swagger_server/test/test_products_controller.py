@@ -18,7 +18,7 @@ class TestProductsController(BaseTestCase):
         get a product by id
         """
         response = self.client.open(
-            '/api//products/{id}'.format(id='id_example'),
+            '/api//products/{queryid}'.format(queryid='queryid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

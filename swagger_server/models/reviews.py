@@ -14,9 +14,11 @@ class Reviews(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: str=None, cus_uid: str=None, p_uid: str=None, review: str=None):  # noqa: E501
+    def __init__(self, name: str=None, id: str=None, cus_uid: str=None, p_uid: str=None, review: str=None):  # noqa: E501
         """Reviews - a model defined in Swagger
 
+        :param name: The name of this Reviews.  # noqa: E501
+        :type name: str
         :param id: The id of this Reviews.  # noqa: E501
         :type id: str
         :param cus_uid: The cus_uid of this Reviews.  # noqa: E501
@@ -27,6 +29,7 @@ class Reviews(Model):
         :type review: str
         """
         self.swagger_types = {
+            'name': str,
             'id': str,
             'cus_uid': str,
             'p_uid': str,
@@ -34,11 +37,13 @@ class Reviews(Model):
         }
 
         self.attribute_map = {
+            'name': 'name',
             'id': 'id',
             'cus_uid': 'cus_uid',
             'p_uid': 'p_uid',
             'review': 'review'
         }
+        self._name = name
         self._id = id
         self._cus_uid = cus_uid
         self._p_uid = p_uid
@@ -54,6 +59,27 @@ class Reviews(Model):
         :rtype: Reviews
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def name(self) -> str:
+        """Gets the name of this Reviews.
+
+
+        :return: The name of this Reviews.
+        :rtype: str
+        """
+        return self._name
+
+    @name.setter
+    def name(self, name: str):
+        """Sets the name of this Reviews.
+
+
+        :param name: The name of this Reviews.
+        :type name: str
+        """
+
+        self._name = name
 
     @property
     def id(self) -> str:

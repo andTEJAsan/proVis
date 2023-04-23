@@ -79,7 +79,7 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.customers_controller
-  /customers/{id}:
+  /customers/{queryid}:
     get:
       tags:
       - Customers
@@ -87,7 +87,7 @@ paths:
       description: retrieves a specific customer by id.
       operationId: get_customer
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer that needs to be fetched
         required: true
@@ -105,7 +105,7 @@ paths:
         "404":
           description: Customer not found
       x-openapi-router-controller: swagger_server.controllers.customers_controller
-  /customers/{id}/orders:
+  /customers/{queryid}/orders:
     get:
       tags:
       - Orders
@@ -113,7 +113,7 @@ paths:
       description: fetches all orders of a specific customer
       operationId: get_customer_orders
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer whose orders need to be fetched
         required: true
@@ -141,7 +141,7 @@ paths:
       description: create a new order for a customer with given id
       operationId: post_order
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer for which new order is being added
         required: true
@@ -166,7 +166,7 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.orders_controller
-  /customers/{id}/orders/{orderid}:
+  /customers/{queryid}/orders/{orderid}:
     get:
       tags:
       - Orders
@@ -174,7 +174,7 @@ paths:
       description: retrieves a specific order by id of customer and order
       operationId: get_customer_order
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer whose orders need to be fetched
         required: true
@@ -200,15 +200,15 @@ paths:
         "404":
           description: Customer or order not found
       x-openapi-router-controller: swagger_server.controllers.orders_controller
-  /products/{id}/reviews:
+  /products/{queryid}/reviews:
     get:
       tags:
       - Reviews
       summary: get a list of all Reviews of a specific product
       description: fetches all Reviews of a specific product
-      operationId: products_id_reviews_get
+      operationId: products_queryid_reviews_get
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of product whose bookmark is needed
         required: true
@@ -234,9 +234,9 @@ paths:
       - Reviews
       summary: create a new review for a product with given id
       description: create a new bookamark for a customer with given id
-      operationId: products_id_reviews_post
+      operationId: products_queryid_reviews_post
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of product for which new review has to be added
         required: true
@@ -261,15 +261,15 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.reviews_controller
-  /products/{id}/reviews/{reviewid}:
+  /products/{queryid}/reviews/{reviewid}:
     delete:
       tags:
       - Reviews
       summary: deletes a specific product's review by id of both
       description: deletes a specific product's review by id of both
-      operationId: products_id_reviews_reviewid_delete
+      operationId: products_queryid_reviews_reviewid_delete
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of product whose review needs to be deleted
         required: true
@@ -289,7 +289,7 @@ paths:
         "404":
           description: product id  does not exist
       x-openapi-router-controller: swagger_server.controllers.reviews_controller
-  /customers/{id}/bookmarks:
+  /customers/{queryid}/bookmarks:
     get:
       tags:
       - Bookmarks
@@ -297,7 +297,7 @@ paths:
       description: fetches all bookmarks of a specific customer
       operationId: get_customer_bookmarks
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer whose bookmark is needed
         required: true
@@ -325,7 +325,7 @@ paths:
       description: create a new bookamark for a customer with given id
       operationId: post_bookmark
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer for which new bookmark has to be added
         required: true
@@ -350,7 +350,7 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.bookmarks_controller
-  /customers/{id}/bookmarks/{bookmarkid}:
+  /customers/{queryid}/bookmarks/{bookmarkid}:
     get:
       tags:
       - Bookmarks
@@ -358,7 +358,7 @@ paths:
       description: retrieves a specific bookmark by id of customer and order
       operationId: get_customer_bookmark
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer
         required: true
@@ -391,7 +391,7 @@ paths:
       description: deletes a specific customer's bookmark by id of both
       operationId: delete_customer_bookmark
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of customer whose bookmark needs to be deleted
         required: true
@@ -454,7 +454,7 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.products_controller
-  /products/{id}:
+  /products/{queryid}:
     get:
       tags:
       - Products
@@ -462,7 +462,7 @@ paths:
       description: retrieves a specific product by id.
       operationId: get_product
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of product that needs to be fetched
         required: true
@@ -557,7 +557,7 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.contractors_controller
-  /contractors/{id}:
+  /contractors/{queryid}:
     get:
       tags:
       - Contractors
@@ -565,7 +565,7 @@ paths:
       description: retrieves a specific contractor by id.
       operationId: get_contractor
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of contractor that needs to be fetched
         required: true
@@ -626,15 +626,15 @@ paths:
         "400":
           description: malformed request
       x-openapi-router-controller: swagger_server.controllers.companies_controller
-  /companies/{id}:
+  /companies/{queryid}:
     get:
       tags:
       - Companies
       summary: get a company by id
       description: retrieves a specific company by id.
-      operationId: companies_id_get
+      operationId: companies_queryid_get
       parameters:
-      - name: id
+      - name: queryid
         in: path
         description: ID of company that needs to be fetched
         required: true
@@ -882,13 +882,20 @@ components:
           type: string
           description: customer id of the one who placed the order
           example: vycs78
-        p_uid:
-          type: string
-          description: product id of the product bookamarked
-          example: vycs78
+        product:
+          $ref: '#/components/schemas/Products'
       example:
+        product:
+          contractor_name: contractor_name
+          contractor_id: 82390kf
+          p_uid: vycs78
+          company_name: proVis
+          location: Delhi
+          category: interior design
+          product_description: this is the worst
+          company_img_url: https://www.youtube.com/
+          product_img_url: https://www.youtube.com/
         cus_uid: vycs78
-        p_uid: vycs78
         id: vycs78
     Bookmark_Request:
       type: object
@@ -904,6 +911,8 @@ components:
     Reviews:
       type: object
       properties:
+        name:
+          type: string
         id:
           type: string
           example: vycs78
@@ -922,6 +931,7 @@ components:
         cus_uid: vycs78
         p_uid: vycs78
         review: this is the worst
+        name: name
         id: vycs78
     Review_Request:
       type: object
@@ -964,7 +974,10 @@ components:
         contractor_id:
           type: string
           example: 82390kf
+        contractor_name:
+          type: string
       example:
+        contractor_name: contractor_name
         contractor_id: 82390kf
         p_uid: vycs78
         company_name: proVis

@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.products import Products  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,30 +15,30 @@ class Bookmarks(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: str=None, cus_uid: str=None, p_uid: str=None):  # noqa: E501
+    def __init__(self, id: str=None, cus_uid: str=None, product: Products=None):  # noqa: E501
         """Bookmarks - a model defined in Swagger
 
         :param id: The id of this Bookmarks.  # noqa: E501
         :type id: str
         :param cus_uid: The cus_uid of this Bookmarks.  # noqa: E501
         :type cus_uid: str
-        :param p_uid: The p_uid of this Bookmarks.  # noqa: E501
-        :type p_uid: str
+        :param product: The product of this Bookmarks.  # noqa: E501
+        :type product: Products
         """
         self.swagger_types = {
             'id': str,
             'cus_uid': str,
-            'p_uid': str
+            'product': Products
         }
 
         self.attribute_map = {
             'id': 'id',
             'cus_uid': 'cus_uid',
-            'p_uid': 'p_uid'
+            'product': 'product'
         }
         self._id = id
         self._cus_uid = cus_uid
-        self._p_uid = p_uid
+        self._product = product
 
     @classmethod
     def from_dict(cls, dikt) -> 'Bookmarks':
@@ -95,24 +96,22 @@ class Bookmarks(Model):
         self._cus_uid = cus_uid
 
     @property
-    def p_uid(self) -> str:
-        """Gets the p_uid of this Bookmarks.
+    def product(self) -> Products:
+        """Gets the product of this Bookmarks.
 
-        product id of the product bookamarked  # noqa: E501
 
-        :return: The p_uid of this Bookmarks.
-        :rtype: str
+        :return: The product of this Bookmarks.
+        :rtype: Products
         """
-        return self._p_uid
+        return self._product
 
-    @p_uid.setter
-    def p_uid(self, p_uid: str):
-        """Sets the p_uid of this Bookmarks.
+    @product.setter
+    def product(self, product: Products):
+        """Sets the product of this Bookmarks.
 
-        product id of the product bookamarked  # noqa: E501
 
-        :param p_uid: The p_uid of this Bookmarks.
-        :type p_uid: str
+        :param product: The product of this Bookmarks.
+        :type product: Products
         """
 
-        self._p_uid = p_uid
+        self._product = product
