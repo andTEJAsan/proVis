@@ -14,35 +14,40 @@ class Companies(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, company_uid: str=None, name: str=None, company_img_url: str=None, address: str=None):  # noqa: E501
+    def __init__(self, company_id: str=None, name: str=None, company_img_url: str=None, about_us: str=None, website_link: str=None):  # noqa: E501
         """Companies - a model defined in Swagger
 
-        :param company_uid: The company_uid of this Companies.  # noqa: E501
-        :type company_uid: str
+        :param company_id: The company_id of this Companies.  # noqa: E501
+        :type company_id: str
         :param name: The name of this Companies.  # noqa: E501
         :type name: str
         :param company_img_url: The company_img_url of this Companies.  # noqa: E501
         :type company_img_url: str
-        :param address: The address of this Companies.  # noqa: E501
-        :type address: str
+        :param about_us: The about_us of this Companies.  # noqa: E501
+        :type about_us: str
+        :param website_link: The website_link of this Companies.  # noqa: E501
+        :type website_link: str
         """
         self.swagger_types = {
-            'company_uid': str,
+            'company_id': str,
             'name': str,
             'company_img_url': str,
-            'address': str
+            'about_us': str,
+            'website_link': str
         }
 
         self.attribute_map = {
-            'company_uid': 'company_uid',
+            'company_id': 'company_id',
             'name': 'name',
             'company_img_url': 'company_img_url',
-            'address': 'address'
+            'about_us': 'about_us',
+            'website_link': 'website_link'
         }
-        self._company_uid = company_uid
+        self._company_id = company_id
         self._name = name
         self._company_img_url = company_img_url
-        self._address = address
+        self._about_us = about_us
+        self._website_link = website_link
 
     @classmethod
     def from_dict(cls, dikt) -> 'Companies':
@@ -56,27 +61,25 @@ class Companies(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def company_uid(self) -> str:
-        """Gets the company_uid of this Companies.
+    def company_id(self) -> str:
+        """Gets the company_id of this Companies.
 
-        company id  # noqa: E501
 
-        :return: The company_uid of this Companies.
+        :return: The company_id of this Companies.
         :rtype: str
         """
-        return self._company_uid
+        return self._company_id
 
-    @company_uid.setter
-    def company_uid(self, company_uid: str):
-        """Sets the company_uid of this Companies.
+    @company_id.setter
+    def company_id(self, company_id: str):
+        """Sets the company_id of this Companies.
 
-        company id  # noqa: E501
 
-        :param company_uid: The company_uid of this Companies.
-        :type company_uid: str
+        :param company_id: The company_id of this Companies.
+        :type company_id: str
         """
 
-        self._company_uid = company_uid
+        self._company_id = company_id
 
     @property
     def name(self) -> str:
@@ -121,22 +124,43 @@ class Companies(Model):
         self._company_img_url = company_img_url
 
     @property
-    def address(self) -> str:
-        """Gets the address of this Companies.
+    def about_us(self) -> str:
+        """Gets the about_us of this Companies.
 
 
-        :return: The address of this Companies.
+        :return: The about_us of this Companies.
         :rtype: str
         """
-        return self._address
+        return self._about_us
 
-    @address.setter
-    def address(self, address: str):
-        """Sets the address of this Companies.
+    @about_us.setter
+    def about_us(self, about_us: str):
+        """Sets the about_us of this Companies.
 
 
-        :param address: The address of this Companies.
-        :type address: str
+        :param about_us: The about_us of this Companies.
+        :type about_us: str
         """
 
-        self._address = address
+        self._about_us = about_us
+
+    @property
+    def website_link(self) -> str:
+        """Gets the website_link of this Companies.
+
+
+        :return: The website_link of this Companies.
+        :rtype: str
+        """
+        return self._website_link
+
+    @website_link.setter
+    def website_link(self, website_link: str):
+        """Sets the website_link of this Companies.
+
+
+        :param website_link: The website_link of this Companies.
+        :type website_link: str
+        """
+
+        self._website_link = website_link

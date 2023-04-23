@@ -1,406 +1,690 @@
+#Changes to be made from testing
+#1. Testing of all functions of bookmarks,reviews,orders is remaining
+
 from typing import Optional
+from typing import Callable
 import pymysql
 import datetime
 
-from swagger_server.models import Bookmarks,Companies,ContractorApiResponse
-from swagger_server.models import Contractors,Customers,LoginResponse,LoginResponseInfo,Orders
-from swagger_server.models import ProductAboutus,ProductApiResponse,ProductBusinesses,ProductCategories
-from swagger_server.models import ProductLists, ProductLocations, ProductProfiles, ProductProjects
-from swagger_server.models import Products,RegisterResponse,RegisterResponseInfo,UserLogin,UserRegister,VerifyEmail
-
+from swagger_server.models import BookmarkRequest,Bookmarks,Categories
+from swagger_server.models import Companies,CompanyRequest,ContractorRequest
+from swagger_server.models import Contractors,Customers,Locations,OrderRequest
+from swagger_server.models import Orders,Products, RegisterResponseInfo,RegisterResponse
+from swagger_server.models import ReviewRequest,Reviews,UserLogin,UserRegister,VerifyEmail
 
 connection = pymysql.connect(host='localhost',
                              user='newusr',
                              password='password',
                              database='tba',
                              cursorclass=pymysql.cursors.DictCursor)
+
 def setup():
-    """sets up the database"""
-    with connection.cursor() as cursor :
 
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `customer` (
-	`cus_uid` INT(6) NOT NULL AUTO_INCREMENT,
-	`google_id` VARCHAR(255) DEFAULT NULL,
-	`facebook_id` VARCHAR(255) DEFAULT NULL,
-	`username` TEXT(255) NOT NULL,
-	`email` VARCHAR(50) NOT NULL UNIQUE,
-	`password` VARCHAR(255) NOT NULL,
-	`phone` INT(20) DEFAULT NULL,
-    `otp`   VARCHAR(255)  DEFAULT NULL,
-	UNIQUE KEY `cus_id` (`cus_uid`) USING BTREE,
-	PRIMARY KEY (`cus_uid`)
-)""")
-                       
-
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_projects` (
-	`id` INT(6) NOT NULL AUTO_INCREMENT,
-	`project_img_url` VARCHAR(255) DEFAULT NULL,
-	`project_name` VARCHAR(25) NOT NULL,
-	`project_address` VARCHAR(255) DEFAULT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_aboutus` (
-	`id` INT(6) NOT NULL AUTO_INCREMENT,
-	`description` TEXT(2000) DEFAULT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_category` (
-	`id` INT(6) NOT NULL AUTO_INCREMENT,
-	`name` TEXT(50) NOT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `products` (
-	`p_uid` INT(6) NOT NULL AUTO_INCREMENT,
-	`p_category_id` INT(6) NOT NULL,
-	`p_location_id` INT(6) DEFAULT NULL,
-	UNIQUE KEY `id` (`p_uid`) USING BTREE,
-	PRIMARY KEY (`p_uid`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_location` (
-	`id` INT(6) NOT NULL,
-	`name` TEXT(100) NOT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `company` (
-	`company_uid` INT(6) NOT NULL,
-	`name` TEXT(255) NOT NULL,
-	`company_img_url` VARCHAR(255) DEFAULT NULL,
-	`address` VARCHAR(300) DEFAULT NULL,
-	UNIQUE KEY `id` (`company_uid`) USING BTREE,
-	PRIMARY KEY (`company_uid`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_contractor` (
-	`contractor_uid` INT(6) NOT NULL,
-	`name` TEXT(255) NOT NULL,
-	`email` VARCHAR(255) DEFAULT NULL,
-	UNIQUE KEY `id` (`contractor_uid`) USING BTREE,
-	PRIMARY KEY (`contractor_uid`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `orders` (
-	`id` INT(6) NOT NULL,
-	`cus_uid` INT(6) NOT NULL,
-	`order_date` VARCHAR(255) DEFAULT NULL,
-	`p_uid` INT(6) NOT NULL,
-	`payment_status` VARCHAR(255) DEFAULT NULL,
-	`message` VARCHAR(500) DEFAULT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`),
-    FOREIGN KEY (`cus_uid`) REFERENCES `customer` (`cus_uid`),
-    FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
-)""")
-
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `bookmarks` (
-	`id` INT(6) NOT NULL,
-	`cus_uid` INT(6) NOT NULL,
-	`p_uid` INT(6) NOT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`),
-    FOREIGN KEY (`cus_uid`) REFERENCES `customer` (`cus_uid`),
-    FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_business` (
-	`id` INT(6) NOT NULL,
-	`contractor_uid` INT(6) NOT NULL,
-	`website_link` VARCHAR(255) DEFAULT NULL,
-	`followers` INT(12) DEFAULT NULL,
-	`address` VARCHAR(255) DEFAULT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`),
-    FOREIGN KEY (`contractor_uid`) REFERENCES `product_contractor` (`contractor_uid`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_profile` (
-	`p_uid` INT(6) NOT NULL,
-	`project_id` INT(6) DEFAULT NULL,
-	`business_id` INT(6) DEFAULT NULL,
-	`aboutus_id` INT(6) DEFAULT NULL,
-	UNIQUE KEY `id` (`p_uid`) USING BTREE,
-	PRIMARY KEY (`p_uid`),
-    FOREIGN KEY (`project_id`) REFERENCES `product_projects` (`id`),
-    FOREIGN KEY (`aboutus_id`) REFERENCES `product_aboutus` (`id`)
-)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS `product_list` (
-	`id` INT(6) NOT NULL,
-	`p_uid` INT(6) NOT NULL,
-	`p_img_url` VARCHAR(255) DEFAULT NULL,
-	`p_description` TEXT(500) DEFAULT NULL,
-	`company_id` INT(6) DEFAULT NULL,
-	`p_contractorid` INT(6) DEFAULT NULL,
-	UNIQUE KEY `id` (`id`) USING BTREE,
-	PRIMARY KEY (`id`),
-    FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`),
-    FOREIGN KEY (`company_id`) REFERENCES `company` (`company_uid`)
-)""")
-    
-def delete_customer_bookmark(id : str,bookmarkid : str) -> None:
-    """ delete bookmark(if exists) otherwise do nothing from bookmarks table having customer id = id and bookmarkid = bookmarkid"""
     with connection.cursor() as cursor:
-        # Execute the delete query
-        result = cursor.execute(
-            "DELETE FROM `bookmarks` WHERE `cus_uid`=%s AND `id`=%s",
-            (int(id), int(bookmarkid))
-        )
 
-        # Commit the transaction
-        connection.commit()
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `customers`(
+        `cus_uid` INT(6) NOT NULL AUTO_INCREMENT,        
+        `name`  VARCHAR(255) NOT NULL,      
+        `email` VARCHAR(255) NOT NULL UNIQUE,
+        `password` VARCHAR(255) NOT NULL,
+        `phone_no` BIGINT DEFAULT NULL,
+        `otp` VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (`cus_uid`)
+        )""")
 
-def get_customer_bookmark(id :str,bookmarkid : str) -> Optional[Bookmarks]:
-    """ from_dict function might be helpful"""
-    with connection.cursor() as cursor:
-        cursor.execute(
-        "SELECT * FROM `bookmarks` WHERE `cus_uid` = %s AND `id` = %s",
-        (int(id), int(bookmarkid)),
-    )
-    result = cursor.fetchone()
-    if result is None:
-        return None
-    return Bookmarks.from_dict({'id':str(result[0]),'cus_uid':str(result[1]),'p_uid':str(result[2])})
-def get_customer_bookmarks(id:str) -> list[Bookmarks]:
-    """get a list of all bookmarks of a specific customer
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `companies`(
+        `company_id` INT(6) NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL UNIQUE,
+        `company_img_url` VARCHAR(255) DEFAULT NULL,
+        `about_us` VARCHAR(255) DEFAULT NULL,
+        `website_link` VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (`company_id`)
+        )""")
 
-    fetches all bookmarks of a specific customer # noqa: E501
 
-    :param id: ID of customer whose bookmark is needed
-    :type id: str
+        cursor.execute("""CREATE TABLE IF NOT EXISTS `locations`(
+        `id` INT(6) NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL,
+        PRIMARY KEY(`id`)
+        )""")
 
-    :rtype: List[Bookmarks]
-    """
-    """ you will get a list of dictionaries after querying from the database, don't forget to use from_dict()"""
-    with connection.cursor() as cursor:
-        cursor.execute(
-           """SELECT * FROM `bookmarks` WHERE `cus_uid`=%s""" , int(id) 
+        cursor.execute("""CREATE TABLE IF NOT EXISTS `categories`(
+        `id` INT(6) NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL,
+        PRIMARY KEY(`id`)
+        )""")
 
-        )
-        results = cursor.fetchall()
-        bookmarks = []
-        for result in results :
-            bookmarks.append(Bookmarks.from_dict({'id':str(result[0]),'cus_uid':str(result[1]),'p_uid':str(result[2])}))
-    return bookmarks
-def post_bookmark(bookmark: Bookmarks,id : str) -> None:
-    """ add the bookmark in the list of bookmarks for given customer id"""
-    assert bookmark.id() is None
-    if bookmark.p_uid() is None:
-        pass
-def getpassword_fromemail(email_id : str) -> str:
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `contractors`(
+        `contractor_id` INT(6) NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL,
+        `email` VARCHAR(255) NOT NULL UNIQUE,
+        `address` VARCHAR(255) DEFAULT NULL,
+        `phone_no` BIGINT DEFAULT NULL,
+        `company_id` INT(6) NOT NULL,
+        PRIMARY KEY (`contractor_id`),
+        FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`)
+        )""")
+
+        cursor.execute("""CREATE TABLE IF NOT EXISTS `products`(
+        `p_uid` INT(6) NOT NULL AUTO_INCREMENT,
+        `location_id` INT(6) NOT NULL,
+        `category_id` INT(6) NOT NULL,
+        `product_img_url` VARCHAR(255) DEFAULT NULL, 
+        `product_description` VARCHAR(255) DEFAULT NULL,
+        `contractor_id` INT(6) NOT NULL,
+        PRIMARY KEY (`p_uid`),
+        FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
+        FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+        FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`contractor_id`)        
+        )""")
+
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `orders`(
+        `id` INT(6) NOT NULL AUTO_INCREMENT,
+        `cus_uid` INT(6) NOT NULL,
+        `p_uid` INT(6) NOT NULL,
+        `order_date_time` VARCHAR(255) DEFAULT NULL,
+        `message` VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`cus_uid`) REFERENCES `customers` (`cus_uid`),
+        FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
+        )""")
+
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `bookmarks`(
+        `id` INT(6) NOT NULL AUTO_INCREMENT,
+        `cus_uid` INT(6) NOT NULL,
+        `p_uid` INT(6) NOT NULL,
+        PRIMARY KEY(`id`),
+        FOREIGN KEY (`cus_uid`) REFERENCES `customers` (cus_uid),
+        FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
+        )""")
+
+        cursor.execute(""" CREATE TABLE IF NOT EXISTS `reviews`(
+        `id` INT(6) NOT NULL AUTO_INCREMENT,
+        `cus_uid` INT(6) NOT NULL,
+        `p_uid` INT(6) NOT NULL,
+        `review` VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`cus_uid`) REFERENCES `customers` (`cus_uid`),
+        FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
+        )""")
+
+
+#CUSTOMERS
+def getpassword_fromemail(emailid : str) -> str:
     """fetch password from users database by email_id , return None if not there"""
-    sql = """SELECT `password` from `customer` WHERE `email`=%s"""
+    sql = """SELECT `password` from `customers` WHERE `email`=%s"""
     with connection.cursor() as cursor:
-        cursor.execute(sql,(email_id))
+        cursor.execute(sql,(emailid))
         r = cursor.fetchone()
         if r is not None:
             password = r['password']
             return password
         return None
-def getcusid_fromemail(email_id : str) -> str:
+    
+def getcusid_fromemail(emailid : str) -> str:
     """fetch cus_id from users database by email id, return None if not there"""
-    sql = """SELECT `cus_uid` from `customer` WHERE `email`=%s"""
+    sql = """SELECT `cus_uid` from `customers` WHERE `email`=%s"""
     with connection.cursor() as cursor:
-        cursor.execute(sql,(email_id))
+        cursor.execute(sql,(emailid))
         r = cursor.fetchone()
         if r is not None:
-            password = r["cus_uid"]
-            return password
+            cusid = r['cus_uid']
+            return cusid
         return None
     
-def getusername_fromemail(email_id:str) ->str:
+def getusername_fromemail(emailid:str) ->str:
     """fetch"""
-    sql = """SELECT `username` from `customer` WHERE `email`=%s"""
+    sql = """SELECT `name` from `customers` WHERE `email`=%s"""
     with connection.cursor() as cursor:
-        cursor.execute(sql,(email_id))
+        cursor.execute(sql,(emailid))
         r = cursor.fetchone()
         if r is not None:
             username = r
             return username 
         return None
     
-    pass
-def delete_contractor(id : str) -> None:
-
-    """delete contractor with contractor id = id"""
-    pass
-def get_username_fromcontractor(id : str) -> str:
-    """get username as string from database"""
-    pass
-def get_email_fromcontractor(id : str) -> str:
-    """get email of contractor from contractor id"""
-    pass
-
-def get_phone_fromcontractor(id : str) -> int:
-    """get phone of contractor from contractor id"""
-    pass
-
-def get_address_fromcontractor(id : str) -> str:
-    """get contractor adress from contractor id"""
-    pass
-def get_companies_fromcontractor(id : str) -> Companies:
-    """get company from contractor id """
-    pass
-def get_apis_fromcontractor(id: str) -> list[ProductApiResponse]:
-    """get list of ProductApiResponses from contractor id"""
-    pass
-def get_orders_fromcontractor(id : str) -> list[Orders]:
-    """get list of Orders from contractor id"""
-    pass
-def patch_username_contractorid(username : str,id : str) -> None:
-    """patch the username of the contractor with contractor_id = id to username"""
-    pass
-def patch_email_contractorid(email : str,id : str) -> None:
-    pass
-def patch_phone_contractorid(phone : int,id : str) -> None:
-    pass
-def patch_address_contractorid(address: str,id : str) -> None:
-    pass
-def patch_company_contractorid(company: Companies,id : str) -> None:
-    pass
-def patch_product_contractorid(products: list[ProductApiResponse],id : str) -> None:
-    pass
-def patch_orders_contractorid(orders: list[Orders],id : str) -> None:
-    pass
-def post_contractor(body : ContractorApiResponse) -> None:
-    """adds contractor to the database"""
-    pass
-def delete_customer(id : str)-> None:
-    pass
-def get_customers()-> list[Customers]:
-    """return list of all customers"""
-    pass
-def get_customer(id : str) -> Customers:
-    """return Customer given customer_id"""
-    pass
-def patch_username_customerid(username:str,id:str)->None:
-
-    pass
-def patch_email_customerid(email:str,id:str)->None:
-    pass
-def patch_googleid_customerid(googleid:str,id:str)-> None:
-    pass
-def patch_facebookid_customerid(facebook:str,id:str) -> None:
-    pass
-def patch_phone_customerid(phone_number:int,id:str)->None:
-    pass
-
-def patch_password_customerid(password:str,id:str)->None:
-    pass
-def delete_customer_order(cus_id:str,orderid:str)->None:
-    """delets order of customer having customer id cus_id and orderid = orderid"""
-
-    pass
-def get_customer_order(cus_id:str,orderid:str)->Orders:
-
-    """get order from cus_id, orderid"""
-    pass
-def get_customer_orders(cus_id:str) -> list[Orders]:
-    
-    """get all orders of a particular customer"""
-    pass
-
-def patch_orderdate_orderid(orderdate : datetime,cusid:str,orderid:str)->None:
-    pass
-def patch_scheduling_status_orderid(schedulingstates : str ,cusid:str,orderid:str)->None:
-    pass
-def patch_payment_status_orderid(payment_status: str,cusid:str,orderid:str)->None:
-    pass
-def patch_exchangemail_orderid(exchangemail:str,cusid:str,orderid:str)->None:
-    pass
-def post_order(order : Orders,cus_id:str) -> Orders:
-    pass
-    """adds order to the database with given cus_id"""
-def delete_product(ord_id:str)->None:
-    """delete order from database with given order_id"""
-
-    pass
-def get_product(product_id:str)->ProductApiResponse:
-    with cursor.connection() as cursor:
-    #"""get order from database with given order_id"""
-        p_uid = product_id
-        sql = """SELECT * from `products` WHERE `p_uid`=%s"""
-        cursor.execute(sql,(product_id))
-        result = cursor.fetchone()
-        if result is None:
-            raise NameError
-        ploc_id = result['p_location_id']
-        pcat_id = result['p_category_id']
-        sql = """SELECT * FROM `product_location` WHERE `id`=%s"""
-        cursor.execute(sql,ploc_id)
-        result = cursor.fetchone()
-        location = ProductLocations.from_dict(result)
-        sql="""SELECT * FROM `product_category` WHERE `id`=%s"""
-        cursor.execute(sql,pcat_id)
-        result=cursor.fetchone()
-        category = ProductCategories.from_dict(result)
-        sql="""SELECT * FROM `product_list` WHERE `p_uid`=%s"""
-        cursor.execute(sql,(p_uid))
-        result = cursor.fetchone()
-        product_list = ProductLists.from_dict(result)
-        return ProductApiResponse(p_uid=p_uid,location=location,category=category,product_list=product_list)
-
-
-def get_product_by_tags(location:str,category:str) ->ProductApiResponse:
-    if location is None:
-        sql2 = """SELECT `id` FROM `product_location` WHERE `name`=%s"""
-
-    pass
-
-def get_products()->list[ProductApiResponse]:
-    """return all products of a given order_id"""
-    lr=[]
-    with connection.cursor() as cursor:
-        sql="""SELECT * FROM `products`"""
-        cursor.execute(sql)
-        results = cursor.fetchall()
-        for result in results:
-            p_uid = result['p_uid']
-            ploc_id = result['p_location_id']
-            pcat_id = result['p_category_id']
-            sql = """SELECT * FROM `product_location` WHERE `id`=%s"""
-            cursor.execute(sql,ploc_id)
-            result = cursor.fetchone()
-            location = ProductLocations.from_dict(result)
-            sql="""SELECT * FROM `product_category` WHERE `id`=%s"""
-            cursor.execute(sql,pcat_id)
-            result=cursor.fetchone()
-            category = ProductCategories.from_dict(result)
-            sql="""SELECT * FROM `product_list` WHERE `p_uid`=%s"""
-            cursor.execute(sql,(p_uid))
-            result = cursor.fetchone()
-
-            product_list = ProductLists.from_dict(result)
-            lr.append(ProductApiResponse(p_uid=p_uid,location=location,category=category,product_list=product_list)
-)
-    return lr
-def patch_product(product:ProductApiResponse,order_id:str)->None:
-    pass
-def post_product(product:ProductApiResponse) -> ProductApiResponse:
-    return "hi"
 def add_customer(customer : Customers) -> None:
     with connection.cursor() as cursor:
         cusid = getcusid_fromemail(customer.emailid)
         
         if cusid is not None:
            raise NameError 
-        query = "INSERT INTO customer (google_id, facebook_id, username, email, password, phone) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (customer.googleid,customer.facebookid, customer.username, customer.emailid, customer.password, customer.phone_number)
+        query = "INSERT INTO customers (name,email,password,phone_no) VALUES (%s, %s, %s, %s)"
+        values = (customer.name,customer.emailid, customer.password, customer.phone_number)
         cursor.execute(query, values)
         connection.commit()
         customer.cus_id=str(cursor.lastrowid)
+
+
 def addotp(otp:str,email : str) -> None:
     """adds otp to cutomer with given email"""
     with connection.cursor() as cursor:
-        sql = """UPDATE `customer` SET `otp`=%s WHERE `email`=%s"""
+        sql = """UPDATE `customers` SET `otp`=%s WHERE `email`=%s"""
         cursor.execute(sql, (otp, email))
     connection.commit()
+
+
 def getotp_frommail(email : str) -> str :
     with connection.cursor() as cursor:
-        sql ="""SELECT `otp` FROM `customer` WHERE `email`=%s"""
+        sql ="""SELECT `otp` FROM `customers` WHERE `email`=%s"""
         cursor.execute(sql,(email))
         result = cursor.fetchone()
         if result is None:
             return None
         otp = result["otp"]
         return otp
-def get_passwd_frommail(email : str) -> None:
+    
+def check_customer_exists(cusid:str)->None:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `customers` WHERE `cus_uid`=%s""",cusid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
 
-    pass
+
+def get_customer_by_id(cusid:str) ->Optional[Customers]:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `customers` WHERE `cus_uid`=%s""",cusid)
+        element=cursor.fetchone()
+        if element is None:
+            raise NameError
+        customer=Customers(cus_id=element['cus_uid'],name=element['name'],emailid=element['email'],
+                            phone_number=element['phone_no'],password=element['password'])
+        return customer
+        
+        
+def get_all_customers() -> list[Customers]:
+    cm=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `customers`""")
+        result=cursor.fetchall()
+        for element in result:
+            customer=Customers(cus_id=element['cus_uid'],name=element['name'],emailid=element['email'],
+                               phone_number=element['phone_no'],password=element['password'])
+            cm.append(customer)
+    return cm
+    
+#COMPANIES
+#company name is assumed to be unique to every company
+def getcompanyid_fromcompany(company:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `company_id` FROM `companies` WHERE `name`=%s""",company)
+        r=cursor.fetchone()
+        if r is not None:
+            companyid=r['company_id']
+            return companyid
+        return None
+    
+def getcompanyname_fromcompanyid(companyid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `name` FROM `companies` WHERE `company_id`=%s""",companyid)
+        r=cursor.fetchone()
+        if r is not None:
+            name=r['name']
+            return name
+        return None
+        
+def getcompanyimgurl_fromcompanyid(companyid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `company_img_url` FROM `companies` WHERE `company_id`=%s""",companyid)
+        r=cursor.fetchone()
+        if r is not None:
+            company_img_url=r['company_img_url']
+            return company_img_url
+        return None
+    
+def check_company_exists(companyid:str)->None:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `companies` WHERE `company_id` = %s""",companyid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
+        
+def add_companies(company:Companies) -> None:
+    with connection.cursor() as cursor:
+        companyid=getcompanyid_fromcompany(company.name)
+        if(companyid is not None):
+            raise NameError
+        query="""INSERT INTO companies(name,company_img_url,about_us,website_link) VALUES (%s,%s,%s,%s)"""
+        values=(company.name,company.company_img_url,company.about_us,company.website_link)
+        cursor.execute(query,values)
+        connection.commit()
+        company.company_id=str(cursor.lastrowid)
+
+def get_all_companies() ->list[Companies]:
+    cp=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `companies`""")
+        results=cursor.fetchall()
+        for element in results:
+            company=Companies(company_id=element['company_id'],name=element['name'],company_img_url=element['company_img_url'],
+                              about_us=element['about_us'],website_link=element['website_link'])
+            cp.append(company)
+    return cp
+
+def get_company_by_id(companyid:str)->Optional[Companies]:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
+        company=Companies(company_id=r['company_id'],name=r['name'],company_img_url=r['company_img_url'],
+                          about_us=r['about_us'],website_link=r['website_link'])
+        return company
+        
+
+#CONTRACTORS
+#contractor email-id is assumed to be unique for every contractor
+def getcontractorid_fromcontractoremail(contractoremail:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `contractor_id` FROM `contractors` WHERE `email`=%s""",contractoremail)
+        r=cursor.fetchone()
+        if r is not None:
+            contractor_id=r['contractor_id']
+            return contractor_id
+        return None
+    
+def getcompanyid_fromcontractorid(contractorid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `company_id` FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
+        r=cursor.fetchone()
+        if r is not None:
+            companyid=r['company_id']
+            return companyid
+        return None
+
+def add_contractors(contractor:Contractors) -> None:
+    with connection.cursor() as cursor:
+        contractorid=getcontractorid_fromcontractoremail(contractor.email)
+        if(contractorid is not None):
+            raise NameError
+        query="""INSERT INTO contractors(name,email,address,phone_no,company_id) VALUES (%s,%s,%s,%s,%s)"""
+        values=(contractor.name,contractor.email,contractor.address,contractor.phone_no,contractor.company_id)
+        cursor.execute(query,values)
+        connection.commit()
+        contractor.contractor_id=str(cursor.lastrowid)
+
+def check_contractor_exists(contractorid:str)->None:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
+        
+
+def get_all_contractors() -> list[Contractors]:
+
+    cr=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `contractors`""")
+        results=cursor.fetchall()
+        for element in results:
+            contractor=Contractors(contractor_id=element['contractor_id'], name=element['name'],email=element['email'],
+                                   address=element['address'],phone_no=element['phone_no'],company_id=element['company_id'])
+            cr.append(contractor)
+    return cr
+
+def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
+        contractor=Contractors(contractor_id=r['contractor_id'],name=r['name'],email=r['email'],
+                               address=r['address'],phone_no=r['phone_no'],company_id=r['company_id'])       
+        return contractor
+
+#BOOKMARKS
+def add_bookmarks(bookmark:BookmarkRequest) -> None:
+    with connection.cursor() as cursor:
+        query="""INSERT INTO bookmarks (cus_uid,p_uid) VALUES (%s,%s)"""
+        values=(bookmark.cus_uid,bookmark.p_uid)
+        cursor.execute(query,values)
+        connection.commit()
+        bookmark.id=str(cursor.lastrowid)
+
+def getbookmarks_fromcusid(cusid:str)->list[Bookmarks]:
+    bk=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `bookmarks` WHERE `cus_uid`=%s""",cusid)
+        results=cursor.fetchall()
+        for element in results:
+            product=getproduct_frompuid(element['p_uid'])
+            bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)
+            bk.append(bookmark)
+    return bk
+
+def getbookmark_fromid(bookmarkid:str)->Optional[Bookmarks]:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
+        element=cursor.fetchone()
+        if element is None:
+            raise NameError
+        product=getproduct_frompuid(element['p_uid'])
+        bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)    
+        return bookmark
+
+def deletebookmark_fromid(bookmarkid:str)->None:
+    with connection.cursor() as cursor:
+        cursor.execute("""DELETE FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
+        connection.commit()
+
+#LOCATIONS
+
+def getlocationid_fromlocation(location:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `id` FROM `locations` WHERE `name`=%s""",location)
+        r=cursor.fetchone()
+        if r is not None:
+            locationid=r['id']
+            return locationid
+        return None
+    
+def getlocation_fromlocationid(locationid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `locations` WHERE `id`=%s""",locationid)
+        r=cursor.fetchone()
+        if r is not None:
+            location=r['name']
+            return location
+        return None
+
+def add_locations(location:Locations) -> None:
+    with connection.cursor() as cursor:
+        locationid=getlocationid_fromlocation(location.name)
+        if locationid is not None:
+            return
+        query="INSERT INTO locations(name) VALUES (%s)"
+        values=(location.name)
+        cursor.execute(query,values)
+        connection.commit()
+        location.id=str(cursor.lastrowid)
+
+def get_all_locations() -> list[Locations]:
+
+    lc=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `locations`""")
+        results=cursor.fetchall()
+        for element in results:
+            location=Locations(id=element['id'],name=element['name'])
+            lc.append(location)
+    return lc
+
+#CATEGORIES
+
+def getcategoryid_fromcategory(category:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `id` FROM `categories` WHERE `name`=%s""",category)
+        r=cursor.fetchone()
+        if r is not None:
+            categoryid=r['id']
+            return categoryid
+        return None
+    
+def getcategory_fromcategoryid(categoryid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `name` FROM `categories` WHERE `id`=%s""",categoryid)
+        r=cursor.fetchone()
+        if r is not None:
+            category=r['name']
+            return category
+        return None
+
+def add_categories(category:Categories) -> None:
+     with connection.cursor() as cursor:
+        categoryid=getcategoryid_fromcategory(category.name)
+        if categoryid is not None:
+            return
+        query="INSERT INTO categories(name) VALUES (%s)"
+        values=(category.name)
+        cursor.execute(query,values)
+        connection.commit()
+        category.id=str(cursor.lastrowid)
+
+def get_all_categories() -> list[Categories]:
+    cg=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM categories""")
+        results=cursor.fetchall()
+        for element in results:
+            category=Categories(id=element['id'],name=element['name'])
+            cg.append(category)
+    return cg    
+
+#PRODUCTS     
+
+def getpuid_fromcontractorid(contractor_id:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `p_uid` FROM `products` WHERE `contractor_id`=%s""",contractor_id)
+        r=cursor.fetchone()
+        if r is not None:
+            puid=r['p_uid']
+            return puid
+        return None
+    
+def getcontractorid_frompuid(puid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `contractor_id` FROM `products` WHERE `p_uid`=%s""",puid)
+        element=cursor.fetchone()
+        if element is not None:
+            contractorid=element['contractor_id']
+            return contractorid
+        return None
+    
+def getproductimgurl_frompuid(puid:str)->str:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT `product_img_url` FROM `products` WHERE `p_uid`=%s""",puid)
+        element=cursor.fetchone()
+        if element is not None:
+            productimgurl=element['product_img_url']
+            return productimgurl
+        return None
+            
+def add_products(product:Products) -> None:
+    with connection.cursor() as cursor:
+        puid=getpuid_fromcontractorid(product.contractor_id)
+        if(puid is not None):
+            raise NameError
+        locationid=getlocationid_fromlocation(product.location)
+        categoryid=getcategoryid_fromcategory(product.category)
+        query = "INSERT INTO products (location_id,category_id,product_img_url,product_description,contractor_id) VALUES (%s,%s,%s,%s,%s)"
+        values = (locationid,categoryid,product.product_img_url,product.product_description,product.contractor_id)
+        cursor.execute(query,values)
+        connection.commit()
+        product.p_uid=str(cursor.lastrowid)
+
+def check_product_exists(puid:str)->None:
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `products` WHERE `p_uid`=%s""",puid)
+        r=cursor.fetchone()
+        if r is None:
+            raise NameError
+        
+def get_all_products()->list[Products]:
+    pr=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `products`""")
+        results=cursor.fetchall()
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id']) #get object Contractor from contractorid
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,contractor_id=element['contractor_id'],
+                             contractor_name=contractor.name)
+            pr.append(product)
+    return pr
+               
+def getproduct_frompuid(puid:str)->Optional[Products]:
+
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `products` WHERE `p_uid`=%s""",puid)
+        element=cursor.fetchone()
+        if element is None:
+            raise NameError
+        
+        location=getlocation_fromlocationid(element['location_id'])
+        category=getcategory_fromcategoryid(element['category_id'])
+        companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+        company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+        company_name=getcompanyname_fromcompanyid(companyid)
+        contractor=get_contractor_by_id(element['contractor_id'])
+        product=Products(p_uid=element['p_uid'],location=location,category=category,
+                            product_img_url=element['product_img_url'],product_description=element['product_description'],
+                            company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                            contractor_id=element['contractor_id'],contractor_name=contractor.name)
+        return product
+
+def getproduct_fromlocationandcategory(location:str,category:str)->list[Products]:
+
+    pr=[]
+    with connection.cursor() as cursor:
+        locationid=getlocationid_fromlocation(location)
+        categoryid=getcategoryid_fromcategory(category)
+        cursor.execute("""SELECT * FROM `products` WHERE `location_id`=%s AND `category_id`=%s""",(locationid,categoryid))
+        results=cursor.fetchall()
+
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
+            pr.append(product)
+
+    return pr
+
+def getproduct_fromlocation(location:str)->list[Products]:
+
+    pr=[]
+    with connection.cursor() as cursor:
+        locationid=getlocationid_fromlocation(location)
+        cursor.execute("""SELECT * FROM `products` WHERE `location_id`=%s""",locationid)
+        results=cursor.fetchall()
+
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
+            pr.append(product)
+
+    return pr
+
+def getproduct_fromcategory(category:str)->list[Products]:
+
+    pr=[]
+    with connection.cursor() as cursor:
+        categoryid=getcategoryid_fromcategory(category)
+        cursor.execute("""SELECT * FROM `products` WHERE `category_id`=%s""",categoryid)
+        results=cursor.fetchall()
+
+        for element in results:
+            location=getlocation_fromlocationid(element['location_id'])
+            category=getcategory_fromcategoryid(element['category_id'])
+            companyid=getcompanyid_fromcontractorid(element['contractor_id'])
+            company_img_url=getcompanyimgurl_fromcompanyid(companyid)
+            company_name=getcompanyname_fromcompanyid(companyid)
+            contractor=get_contractor_by_id(element['contractor_id'])
+            product=Products(p_uid=element['p_uid'],location=location,category=category,
+                             product_img_url=element['product_img_url'],product_description=element['product_description'],
+                             company_name=company_name,company_id=companyid,company_img_url=company_img_url,
+                             contractor_id=element['contractor_id'],contractor_name=contractor.name)
+            pr.append(product)
+
+    return pr
+
+#ORDERS
+def add_orders(order:Orders) -> None:
+    with connection.cursor() as cursor:
+        query="""INSERT INTO orders(cus_uid,order_date_time,p_uid,message) VALUES (%s,%s,%s,%s)"""
+        values=(order.cus_uid,order.order_date_time,order.p_uid,order.message)
+        cursor.execute(query,values)
+        connection.commit()
+        order.id=str(cursor.lastrowid)
+
+def getorders_fromcusid(cusid:str)->list[Orders]:
+
+    od=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `orders` WHERE `cus_uid`=%s""",cusid)
+        results=cursor.fetchall()
+        for element in results:
+            productimgurl=getproductimgurl_frompuid(element['p_uid'])
+            contractorid=getcontractorid_frompuid(element['p_uid'])
+            companyid=getcompanyid_fromcontractorid(contractorid)
+            companyname=getcompanyname_fromcompanyid(companyid)
+            companyimgurl=getcompanyimgurl_fromcompanyid(companyid)
+
+            order=Orders(id=element['id'],cus_uid=element['cus_uid'],order_date_time=element['order_date_time'],
+                        p_uid=element['p_uid'],product_img_url=productimgurl,company_name=companyname,
+                        company_img_url=companyimgurl,message=element['message'])
+            
+            od.append(order)
+
+    return od
+
+def getorder_fromid(orderid:str)->Optional[Orders]:
+
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `orders` WHERE `id`=%s""",orderid)
+        element=cursor.fetchone()
+
+        if(element is None):
+            raise NameError
+        
+        productimgurl=getproductimgurl_frompuid(element['p_uid'])
+        contractorid=getcontractorid_frompuid(element['p_uid'])
+        companyid=getcompanyid_fromcontractorid(contractorid)
+        companyname=getcompanyname_fromcompanyid(companyid)
+        companyimgurl=getcompanyimgurl_fromcompanyid(companyid)
+
+        order=Orders(id=element['id'],cus_uid=element['cus_uid'],order_date_time=element['order_date_time'],
+                    p_uid=element['p_uid'],product_img_url=productimgurl,company_name=companyname,
+                    company_img_url=companyimgurl,message=element['message'])
+    
+        return order    
+
+ #REVIEWS
+def add_reviews(review:Reviews) -> None:
+    with connection.cursor() as cursor:
+
+        query="""INSERT INTO reviews(cus_uid,p_uid,review) VALUES (%s,%s,%s)"""
+        values=(review.cus_uid,review.p_uid,review.review)
+        cursor.execute(query,values)
+        connection.commit()
+        review.id=str(cursor.lastrowid)       
+        
+def getreviews_frompuid(puid:str)->list[Reviews]:
+
+    rw=[]
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM `reviews` WHERE `p_uid`=%s""",puid)
+        results=cursor.fetchall()
+        for element in results:
+                customer=get_customer_by_id(element['cus_uid'])
+                review=Reviews(name=customer.name,id=element['id'],cus_uid=element['cus_uid'],p_uid=element['p_uid'],review=element['review'])
+                rw.append(review)
+    return rw
+
+def deletereviews_fromreviewid(puid:str,reviewid:str)->Optional[Reviews]:
+
+    with connection.cursor() as cursor:
+        cursor.execute("""DELETE FROM `reviews` WHERE `id`=%s AND `p_uid`=%s""",reviewid,puid)
+        connection.commit()

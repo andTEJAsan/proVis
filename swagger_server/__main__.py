@@ -5,6 +5,7 @@ import connexion
 from swagger_server import encoder,db
 from flask_cors import CORS
 
+
 def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     CORS(app.app)

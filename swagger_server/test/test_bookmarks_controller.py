@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
+from swagger_server.models.bookmark_request import BookmarkRequest  # noqa: E501
 from swagger_server.models.bookmarks import Bookmarks  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -18,7 +19,7 @@ class TestBookmarksController(BaseTestCase):
         deletes a specific customer's bookmark by id of both
         """
         response = self.client.open(
-            '/api//customers/{id}/bookmarks/{bookmarkid}'.format(id='id_example', bookmarkid='bookmarkid_example'),
+            '/api//customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid='queryid_example', bookmarkid='bookmarkid_example'),
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,7 +30,7 @@ class TestBookmarksController(BaseTestCase):
         get a customer's specific bookmark by id of both
         """
         response = self.client.open(
-            '/api//customers/{id}/bookmarks/{bookmarkid}'.format(id='id_example', bookmarkid='bookmarkid_example'),
+            '/api//customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid='queryid_example', bookmarkid='bookmarkid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -40,7 +41,7 @@ class TestBookmarksController(BaseTestCase):
         get a list of all bookmarks of a specific customer
         """
         response = self.client.open(
-            '/api//customers/{id}/bookmarks'.format(id='id_example'),
+            '/api//customers/{queryid}/bookmarks'.format(queryid='queryid_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -50,9 +51,9 @@ class TestBookmarksController(BaseTestCase):
 
         create a new bookmark for a customer with given id
         """
-        body = Bookmarks()
+        body = BookmarkRequest()
         response = self.client.open(
-            '/api//customers/{id}/bookmarks'.format(id='id_example'),
+            '/api//customers/{queryid}/bookmarks'.format(queryid='queryid_example'),
             method='POST',
             data=json.dumps(body),
             content_type='application/json')

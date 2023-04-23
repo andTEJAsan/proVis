@@ -5,7 +5,8 @@ from email.message import EmailMessage
 import ssl
 import pyotp
 import smtplib
-passwdorda="mzncgdqxrcwnojah"
+emaila="copcop290@gmail.com"
+passworda="aghyyhrihpeedmft"
 from swagger_server.models.customers import Customers
 from swagger_server.models.register_response import RegisterResponse,RegisterResponseInfo  # noqa: E501
 from swagger_server.models.user_login import UserLogin  # noqa: E501
@@ -14,6 +15,7 @@ from swagger_server.models.verify_email import VerifyEmail  # noqa: E501
 from swagger_server import util,db
 from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
+
 def email_login(body):  # noqa: E501
     """email login
 
@@ -43,7 +45,7 @@ def email_login(body):  # noqa: E501
             secret_key = "mysecretkey"
             token = jwt.encode(tokdict,secret_key,"HS256")
             #response = RegisterResponse(token,info)
-            response = {"info":{"cus_uid":cusid,"username":name["username"]},"token":token,"status":200}
+            response = {"info":{"cus_uid":cusid,"username":name},"token":token,"status":200}
             return response
         return "Invalid Password"
 
@@ -68,7 +70,7 @@ def email_register(body):  # noqa: E501
         tokdict = {'user_id':name,'email':email}
         secret_key = "mysecretkey"
         token = jwt.encode(tokdict,secret_key,algorithm="HS256")
-        customer = Customers(username=name,emailid=email,password=hashedpasswd)
+        customer = Customers(name=name,emailid=email,password=hashedpasswd)
         try:
             db.add_customer(customer)
         except NameError:
@@ -77,18 +79,18 @@ def email_register(body):  # noqa: E501
         secret = pyotp.random_base32()
         totp = pyotp.TOTP(secret)
         otp = totp.now()
-        print("otp :" ,otp )
+        print("otp :" ,otp)
         msg = EmailMessage()
-        email_sender = "7provis7@gmail.com"
+        email_sender = "copcop290@gmail.com"
         email_receiver = email
-        msg['From'] = "7provis7@gmail.com"
+        msg['From'] = "copcop290@gmail.com"
         msg['To'] = email
         msg['Subject'] = "OTP!! Here is your OTP generated OTP"
         body ="Here is your generated OTP "+ otp
         msg.set_content(body)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
-            smtp.login(email_sender,passwdorda)
+            smtp.login(email_sender,passworda)
             smtp.sendmail(email_sender,email_receiver,msg.as_string())
         db.addotp(otp,email)
 
@@ -118,6 +120,7 @@ def verify_email(body):  # noqa: E501
 
     :rtype: str
     """
+
     if connexion.request.is_json:
         body = (connexion.request.get_json())  # noqa: E501
         token = body["token"]
