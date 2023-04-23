@@ -1,12 +1,48 @@
 import React from "react" 
 import st from "../../../styles/listing_pg/card.module.css"
-import Link from "next/link";
+import { alertService } from "../../../services/alert.service"  ;
 import { useDispatch, useSelector } from "react-redux";
+import {RootState} from "../../../redux/reducers"
+import config from "config"; 
+
+
 export default function Card(props) { 
-    // const { isLoggedIn} = useSelector(
-    //     (state: RootState) => state.storage
-    //   );
+    
+
+    const { isLoggedIn} = useSelector(
+        (state: RootState) => state.storage
+      );
     let obj = props.obj 
+    let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
+
+    async function  bookmark_handler() {
+        const { apiUrl } = config;
+        if (!isLoggedIn) {
+            alertService.error('Please Login First!!', {autoClose : true})
+            return 
+        }
+        else {
+            const queryid = useSelector((state : RootState) => state.storage.userID)
+
+            const request_obj = {
+                "cus_uid" : queryid , 
+                "p_uid" : props.id  
+            }
+            const response = await fetch(`${apiUrl}/api/customers/${queryid}/bookmarks`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(request_obj)  
+              } ) ;
+            
+              if (response.ok) {
+                alertService.success('Bookmarked', {autoClose : true})
+                set_bookmark_url("/listing_pg/yellow_bookmark.png") 
+              } 
+              else console.log(response) 
+    }
+    }
     return (
                 
     //     <Link href={"/about"} passHref>
@@ -25,7 +61,8 @@ export default function Card(props) {
                             
                         </div>
                         <button className= {st.btn} onClick={props.clicker}>Connect</button>
-                    </div>
+                        <img src = {bookmark_url} onClick = {bookmark_handler} />  
+                </div>
                     <div className={st.details2}>
                         {obj.description}
                     </div>

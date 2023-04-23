@@ -62,8 +62,8 @@ export default function Request_Btn(props) {
       const response = await fetch(`${apiUrl}/api/customer/orders`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json"
+          // Authorization: `Bearer ${jwt}`,
         },
         body: JSON.stringify(request_body) 
       });
