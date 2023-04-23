@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React from "react"
+import React from "react" 
 import PageTemplate from "@components/reusable/template/PageTemplate.tsx";
 import st from "../../styles/product_pg/App.module.css"
 import project_data from "./data/projects";

@@ -1,6 +1,6 @@
 // import React from "react" 
 import st from "../../../styles/listing_pg/listing_box.module.css"
-import { Alert } from "../Alert";
+import { Alert } from "../../Alert";
 
 export default function Listing_Box() { 
     return (

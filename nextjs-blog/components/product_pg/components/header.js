@@ -2,7 +2,7 @@
 
 import st from "../../../styles/product_pg/header.module.css"
 
-export default function Header({header_image_url, company_img_url,no_of_reviews,rating,contractor,category}){  
+export default function Header({header_image_url, company_img_url,no_of_reviews,contractor,category}){  
     return (
         <div className={st.header}>
             <div className={st.header_img}>
@@ -15,10 +15,7 @@ export default function Header({header_image_url, company_img_url,no_of_reviews,
                 <div className={st.contractor_name}>
                     {contractor}
                 </div>
-                <div className={st.rating_reviews}>
-                    <img src = "" />    {/* rating component will come here */} 
-                    <div className={st.reviews} >{no_of_reviews}</div>
-                </div>
+               
                 <div className={st.category}>
                     {category} 
                 </div>
