@@ -47,8 +47,16 @@
   
   
   .contractor_div{
+    width : 100%;
+    /* border-color : black ; 
+    border-width: 2px;
+    border-style: solid ; */
+    display : flex ; 
+    flex-direction: row ;
+    align-content: center; 
     margin-right : auto ;
     padding: 10px ; 
+    justify-content: space-between;
     /* background-color: #6C63FF; */
   }
   
@@ -58,22 +66,32 @@
   }
   
   .btn{
-    height: 33px;
-    width: 87px;
+    /* height: 33px;
+    width: 87px; */
     background-color: #000000; /* Green */
     border-radius : 10px;
-    color: white;
+   
     /* padding: 15px 32px; */
-    text-align: center;
-    text-decoration: none;
+    
     display: block;
-    font-size: 16px;
+    
     margin: auto 10px;
     cursor: pointer;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 			        rgba(0,0,0,0.19);
   }  
   
+  .btntext{
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    margin : auto ; 
+  }
   
   
   
-  
+  .bookmarkimg{
+    cursor: pointer;
+    height : 45px ; 
+    width :  38px ; 
+  }

@@ -4,10 +4,13 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import st from "../../../styles/product_pg/request_btn.module.css"
 import { useDispatch, useSelector } from "react-redux";
 import config from "../../../config";
-import { request } from "http";
+import {RootState} from "../../../redux/reducers"
 
 export default function Request_Btn(props) {
   let [msgState, statehandler] = React.useState("") 
+
+
+
 
   function getCurrentDateTimeString() {
     const now = new Date();
@@ -36,52 +39,66 @@ export default function Request_Btn(props) {
 
   const request_body = {
     
-    "order_date": "2023-04-07T13:13:20.235Z",
+    "order_date_time": "2023-04-07T13:13:20.235Z",
     "p_uid": props.p_id, 
-    "scheduling_status": "pending",
-    "payment_status": "meeting pending",
-    "exchange_emails": "string"
+    "cus_uid" : "ff" ,  
+    "message" : "string"
   }
+
+  // {
+  //   "id": "vycs78",
+  //   "cus_uid": "vycs78",
+  //   "order_date_time": "2023-04-23T14:07:45.946Z",
+  //   "p_uid": "vycs78",
+  //   "message": "string"
+  // }
 
   function handleChange(event) {
-    let msg = event.target.value ;
-   
-    statehandler(msg)  
-
+    let msg = event.target.value ;statehandler(msg) 
   }
 
+  const { isLoggedIn} = useSelector(
+    (state: RootState) => state.storage
+  );
   
   // const jwt = useSelector((state) => state.storage.jwt);
-  async function handleSubmit(event) { 
-      
-      const { apiUrl } = config;
+  async function handleSubmit(event){ 
+    if (isLoggedIn){
+              const queryid = useSelector((state : RootState) => state.storage.userID)
 
-      request_body.order_date =  getCurrentDateTimeString()
-      request_body.exchange_emails = msgState ;
+                const { apiUrl } = config;
 
-      const response = await fetch(`${apiUrl}/api/customer/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-          // Authorization: `Bearer ${jwt}`,
-        },
-        body: JSON.stringify(request_body) 
-      });
+                request_body.order_date_time =  getCurrentDateTimeString()
+                request_body.message = msgState ;
+                request_body.cus_uid = queryid 
+                const response = await fetch(`${apiUrl}/api/customers/${queryid}/orders`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                    // Authorization: `Bearer ${jwt}`,
+                  },
+                  body: JSON.stringify(request_body) 
+                });
 
-      if (response.ok) {
-        console.log("response worked!");
-        statehandler("") 
+                if (response.ok) {
+                  console.log("response worked!");
+                  statehandler("") 
+                }
+      }
+      else{
+        alert("log in first")
       }
     }
+
   
 
   return (
-    <>
-      <Dialog.Root className={st.DialogRoot}>
+    <div className={st.DialogRoot}>
+      <Dialog.Root  >
         <Dialog.Trigger asChild>
           <div className={st.button_wrapper}>
             <h3>Connect with the contractor</h3>
-            <button className={st.Button} violet>
+            <button className={st.Button}>
               {props.btn_text}
             </button>
           </div>
@@ -110,7 +127,7 @@ export default function Request_Btn(props) {
               }}
             >
               <Dialog.Close asChild>
-                <button className={st.Button} onClick={handleSubmit} green>
+                <button className={st.Button} onClick={handleSubmit} >
                   {props.modal_btn_text}
                 </button>
               </Dialog.Close>
@@ -123,6 +140,6 @@ export default function Request_Btn(props) {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-    </>
+    </div>
   );
 }

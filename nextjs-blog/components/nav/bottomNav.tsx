@@ -20,6 +20,7 @@ export default function BottomNav({ search = true, createListing = true }) {
   const modalOpened = useSelector((state:RootState) => state.ux.modalType !== modalTypes.INVALID );
   
   return <React.Fragment>
+    <div className="fixbottom">
     <div className={filterMenuActiveOnMobile ||  modalOpened ? classNames(st.filterMenuActiveOnMobile, st.bottomNav):st.bottomNav } data-cy='btmNav' >
       <div className={st.appNavRow } >
         <Link href={"/"}>
@@ -64,5 +65,6 @@ export default function BottomNav({ search = true, createListing = true }) {
 
       </div>
     </div>
+  </div>
   </React.Fragment>
 }

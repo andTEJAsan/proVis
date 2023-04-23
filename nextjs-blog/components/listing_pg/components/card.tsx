@@ -13,6 +13,7 @@ export default function Card(props) {
         (state: RootState) => state.storage
       );
     let obj = props.obj 
+    obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
     let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
 
     async function  bookmark_handler() {
@@ -59,9 +60,14 @@ export default function Card(props) {
                                 {obj.contractor_name} 
                             </div>
                             
+                                <img className={st.bookmarkimg} src = {bookmark_url} onClick = {bookmark_handler} />
+                            
+                            
                         </div>
-                        <button className= {st.btn} onClick={props.clicker}>Connect</button>
-                        <img src = {bookmark_url} onClick = {bookmark_handler} />  
+                        <button className= {st.btn} onClick={props.clicker}>
+                            <div className={st.btntext}>Connect</div>
+                        </button>
+                          
                 </div>
                     <div className={st.details2}>
                         {obj.description}

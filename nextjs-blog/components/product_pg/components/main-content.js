@@ -4,16 +4,24 @@ import * as Separator from '@radix-ui/react-separator';
 
 export default function MainContent(props){
     let obj = props.obj 
-    let project_cards = obj.projects.map( (x) => <Project project = {x} /> ) 
+    // let project_cards = obj.projects.map( (x) => <Project project = {x} /> ) 
 
     return(
+
+        // {
+        //     about_us : "", 
+        //     company_name : "", 
+        //     contractor_name : "", 
+        //     phone_no : "", 
+        //     website : "", 
+        //     address : ""
+        //    }
         
         <div className={st.main_content}>
             <header>
                 <nav className={st.nav}>
                     <a href="#aboutus">About Us</a>
                     <a href="#business">Business</a>
-                    <a href="#projects">Projects</a>
                     <a href="">Reviews</a>
                 </nav>
             </header>
@@ -30,19 +38,6 @@ export default function MainContent(props){
             </div>
 
             <Separator.Root className={st.SeparatorRoot} style={{ margin: '15px 0' }} />
-            
-            <div id = "projects">
-                <div className={st.heading}>
-                        Projects
-                    </div>
-                    <p>{obj.projects.length} Projects</p>
-                    <div className={st.projects}>
-                        {project_cards}
-                    </div>
-            </div> 
-            
-
-            <Separator.Root className={st.SeparatorRoot} style={{ margin: '15px 0' }} /> 
 
             <div id = "business" className={st.business_details}>
             <div className={st.heading}>
@@ -54,7 +49,7 @@ export default function MainContent(props){
                         Business Name
                     </label>
                     <div className={st.business_text}>
-                        {obj.business_details.name} 
+                        {obj.company_name} 
                     </div>
                 </div>
                 
@@ -63,7 +58,7 @@ export default function MainContent(props){
                         Phone Number
                     </label>
                     <div className={st.business_text}>
-                        {obj.business_details.phone_number} 
+                        {obj.phone_number} 
                     </div>
                 </div>
                 
@@ -72,8 +67,8 @@ export default function MainContent(props){
                         Website
                     </label>
                     <div className={st.website_link}>
-                        <a href={obj.business_details.website} >
-                        {obj.business_details.website}
+                        <a href={obj.website} >
+                        {obj.website}
                         </a>
                     </div>
                 </div>
@@ -83,7 +78,7 @@ export default function MainContent(props){
                         Address
                     </label>
                     <div className={st.business_text}>
-                        {obj.business_details.address} 
+                        {obj.address} 
                     </div>
                 </div>
 

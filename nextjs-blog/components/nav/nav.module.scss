@@ -6,6 +6,12 @@ $content-color: black;
 $background-color: white;
 $border-color: black;
 
+.fixbottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
 .appNavLeft {
   display: flex;
   flex-direction: row;
