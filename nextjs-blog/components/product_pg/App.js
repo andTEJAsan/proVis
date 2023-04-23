@@ -44,7 +44,7 @@ function App() {
     p_uid : "", 
     projects : [{ id : "", project_name : "", project_address : "", project_img_url : ""}],
     business: {id : "", contractor_id : "", website_link : "", address : "",},
-    aboutus : {is : "", description : ""}
+    aboutus : {id : "", description : ""}
   })
 
   useEffect( () => {

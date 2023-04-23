@@ -39,7 +39,7 @@ export default function MainContent(props){
                     <div className={st.projects}>
                         {project_cards}
                     </div>
-            </div>
+            </div> 
             
 
             <Separator.Root className={st.SeparatorRoot} style={{ margin: '15px 0' }} /> 

@@ -11,49 +11,15 @@ import products from "./data/products"
 import Dropdown from "./components/dropdown"
 import st from "../../styles/listing_pg/app.module.css"
 import cross from "../../public/listing_pg/cross.png" 
-
-// {
-//   id : 1 , 
-//   company_name: "Denotation Design",
-//   category: "Interior Designers & Decorators",
-//   location : "North Delhi", 
-//   company_img_url : "https://s3.amazonaws.com/cdn.designcrowd.com/blog/100-Famous-Brand%20Logos-From-The-Most-Valuable-Companies-of-2020/apple-logo.png",
-//   product_img_url : "https://img.staticmb.com/mbcontent//images/uploads/2022/12/Most-Beautiful-House-in-the-World.jpg",
-//   contractor_name:"Aaveg",
-//   description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
-//   rating : "4" (not implemented in ER) 
-// }
-
-// {
+        // {
 //   "p_uid": "vycs78",
-//   "location": {
-//     "id": "vycs78",
-//     "name": "Noida"
-//   },
-//   "category": {
-//     "id": "vycs78",
-//     "name": "Interior design"
-//   },
-//   "product_list": {
-//     "id": "vycs78",
-//     "p_uid": "vycs78",
-//     "p_img_url": "string",
-//     "p_description": "string",
-//     "company": {
-//       "company_uid": "string",
-//       "name": "string",
-//       "company_img_url": "string",
-//       "address": "string"
-//     },
-//     "p_contractor": {
-//       "contractor_id": "vycs78",
-//       "username": "Aaveg",
-//       "emailid": "aavegj1904@gmail.com",
-//       "phone_number": 9205231951,
-//       "address": "string",
-//       "company_uid": "string"
-//     }
-//   }
+//   "location": "Delhi",
+//   "category": "interior design",
+//   "product_img_url": "https://www.youtube.com/",
+//   "product_description": "this is the worst",
+//   "company_name": "proVis",
+//   "company_img_url": "https://www.youtube.com/",
+//   "contractor_id": "82390kf"
 // }
 
 
@@ -116,14 +82,16 @@ useEffect(() => {
     response.json().then(data => {
       function gen_obj(data){
         let id = data.p_uid 
-        let company_name = data.product_list.company.name
-        let category = data.category.name 
-        let location = data.location.name 
-        let company_img_url = data.product_list.company.company_img_url
-        let product_img_url = data.product_list.p_img_url
-        let contractor_name = data.p_contractor.username 
-        let description = data.product_list.p_description
-        let obj = {id,company_name,category,location,company_img_url,product_img_url,contractor_name,description}
+        let location = data.location
+        let category = data.category
+        let product_img_url = data.product_img_url
+        let description = data.product_description 
+        let company_name = data.company_name 
+        let company_img_url = data.company_img_url
+        let contractor_id = data.contractor_id 
+        let contractor_name = data.contractor_name
+         
+        let obj = {id,location,category,product_img_url,description, company_name,company_img_url, contractor_id,contractor_name} 
         return obj 
       }
       let query_obj = {company_img_url, product_img_url, description, contractor_name,
@@ -136,11 +104,46 @@ useEffect(() => {
 }, [newState]);
  
 
- 
 
-  const locations = ["Delhi","New Delhi", "South Delhi", "West Delhi"] 
-  const categories = ["Interior Designers & Decorators", "Architects & Building Designers", "Civil Engineers & Contractors",
-                      "Design-Build Firms"]
+let [locationarr, setlocationarr] = React.SetState(["Delhi","New Delhi", "South Delhi", "West Delhi"] ) 
+let [categoryarr, setcategoryarr] = React.SetState(["Interior Designers & Decorators", "Architects & Building Designers", "Civil Engineers & Contractors",
+                                                    "Design-Build Firms"] ) 
+useEffect(() => {
+    fetch(`${apiURL}/api/locations` , {
+      method : 'GET', 
+        headers: {
+          "Content-Type": "application/json" 
+            // Authorization: `Bearer ${jwt}`,
+        }
+    }).
+    then((res) => res.json().then(
+      (data) => {
+                  let newlocations = data.map(x => x.name) 
+                  setlocationarr(newlocations) 
+                }
+    ) ).
+    catch((err) => console.log(err))
+    }, []) ; 
+
+  
+  useEffect(() => {
+    fetch(`${apiURL}/api/categories` , {
+      method : 'GET', 
+        headers: {
+          "Content-Type": "application/json" 
+            // Authorization: `Bearer ${jwt}`,
+        }
+    }).
+    then((res) => res.json().then(
+      (data) => {
+                  let newcategories = data.map(x => x.name) 
+                  setcategoryarr(newcategories) 
+                }
+    ) ).
+    catch((err) => console.log(err))
+    }, []) ; 
+
+ 
   return (
     <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter>
    <div>
@@ -151,7 +154,7 @@ useEffect(() => {
                           <h3>Location</h3>
                           <Dropdown 
                                   trigger_text = "Select Location" 
-                                  values = {locations}
+                                  values = {locationarr} 
                                   f = { locationHandler }
                           />
                         </div>
@@ -159,7 +162,7 @@ useEffect(() => {
                           <h3>Category</h3>
                           <Dropdown 
                                   trigger_text = "Select Category" 
-                                  values = {categories}
+                                  values = {categoryarr}
                                   f = { categoryHandler }
                           />
                         </div>
