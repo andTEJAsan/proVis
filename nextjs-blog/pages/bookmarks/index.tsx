@@ -20,7 +20,7 @@ export default function Bookmarks() {
   const userId = useSelector((state: RootState) => state.storage.userID);
 
   useEffect(() => {
-    let url_fetch = `${apiUrl}/api/customers/${userId}bookmarks`; //!maybe wrong url
+    let url_fetch = `${apiUrl}/api/customers/${userId}/bookmarks`; //!maybe wrong url
 
     // [
     //   {
@@ -129,7 +129,7 @@ export default function Bookmarks() {
 
   return (
     <PageTemplate outsideApp>
-      <div className={st.cards}>
+      <div className={st.cards} style={{width:"100%", display:"flex",justifyContent:"center",alignItems:"center", flexDirection:"column"}}>
         {loader == true ? <Spinner /> : cardsState}
       </div>
     </PageTemplate>
