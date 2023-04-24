@@ -111,7 +111,9 @@ input {
   color: var(_violet11);
   position: absolute;
   top: 10px;
+  color:#e91e63;
   right: 10px;
+  border: 2px solid #e91e63;
 }
 .IconButton:hover {
   background-color: var(_violet4);
@@ -125,6 +127,7 @@ input {
   gap: 20px;
   align-items: center;
   margin-bottom: 15px;
+  border: 2px solid #e91e63;
 }
 
 .Label {
@@ -132,6 +135,7 @@ input {
   color: var(_violet11);
   width: 90px;
   text-align: right;
+  /* border: 2px solid #e91e63; */
 }
 
 .Input {
@@ -143,10 +147,12 @@ input {
   border-radius: 4px;
   padding: 0 10px;
   font-size: 15px;
+  border:0;
   line-height: 1;
   color: var(_violet11);
   box-shadow: 0 0 0 1px var(_violet7);
-  height: 35px;
+  height: 100px;
+
 }
 .Input:focus {
   box-shadow: 0 0 0 2px var(_violet8);

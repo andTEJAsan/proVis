@@ -175,7 +175,7 @@ function App() {
             btn_text="Make a Request"
             modal_header="Make a Request"
             modal_description="Send a message to this pro to meet them"
-            label="Message"
+            label="Message: "
             modal_btn_text="Send"
             className={st.request_btn}
             p_uid = {slug.id} 

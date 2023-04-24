@@ -100,7 +100,7 @@ export default function Nav({
                 <div>
                   <button
                     className={st.viewInfoTab}
-                    onClick={() => router.push("/app/bookmarks")}
+                    onClick={() => router.push("/bookmarks")}
                     style={{ cursor: "pointer" }}
                   >
                     <IoHeartCircleOutline color={"#999"} size={32} />

@@ -37,10 +37,10 @@ export default function ProfileModal() {
           </div>
           <button
             className={styles.buttonRow}
-            onClick={() => router.push("/app/bookmarks")}
+            onClick={() => router.push("/dashboard")}
           >
             <IoHeartOutline color={"#777"} size={"30px"} />
-            <h4 className={styles.viewInfoTabTxt}>{"Bookmarks"}</h4>
+            <h4 className={styles.viewInfoTabTxt}>{"Dashboard"}</h4>
           </button>
 
           <button

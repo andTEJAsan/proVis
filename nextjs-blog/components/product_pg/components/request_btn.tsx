@@ -152,15 +152,16 @@ export default function Request_Btn(props) {
               {props.modal_description}
             </Dialog.Description>
             <fieldset className={st.Fieldset}>
-              <label className={st.Label} htmlFor="msg">
+              {/* <label className={st.Label} htmlFor="msg" >
                 {props.label}
-              </label>
+              </label> */}
               <input
                 className={st.Input}
                 id="name"
                 defaultValue=""
                 value={msgState}
                 onChange={handleChange}
+                placeholder="Enter Message..."
               />
             </fieldset>
 
