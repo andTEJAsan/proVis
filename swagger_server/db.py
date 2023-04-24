@@ -27,7 +27,7 @@ def setup():
         `name`  VARCHAR(255) NOT NULL,      
         `email` VARCHAR(255) NOT NULL UNIQUE,
         `password` VARCHAR(255) NOT NULL,
-        `phone_no` BIGINT DEFAULT NULL,
+        `phone_no` VARCHAR(255) DEFAULT NULL,
         `otp` VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (`cus_uid`)
         )""")
@@ -35,8 +35,8 @@ def setup():
         cursor.execute(""" CREATE TABLE IF NOT EXISTS `companies`(
         `company_id` INT(6) NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(255) NOT NULL UNIQUE,
-        `company_img_url` VARCHAR(255) DEFAULT NULL,
-        `about_us` VARCHAR(255) DEFAULT NULL,
+        `company_img_url` VARCHAR(2000) DEFAULT NULL,
+        `about_us` VARCHAR(5000) DEFAULT NULL,
         `website_link` VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (`company_id`)
         )""")
@@ -58,8 +58,8 @@ def setup():
         `contractor_id` INT(6) NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(255) NOT NULL,
         `email` VARCHAR(255) NOT NULL UNIQUE,
-        `address` VARCHAR(255) DEFAULT NULL,
-        `phone_no` BIGINT DEFAULT NULL,
+        `address` VARCHAR(5000) DEFAULT NULL,
+        `phone_no` VARCHAR(255) DEFAULT NULL,
         `company_id` INT(6) NOT NULL,
         PRIMARY KEY (`contractor_id`),
         FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`)
@@ -69,8 +69,8 @@ def setup():
         `p_uid` INT(6) NOT NULL AUTO_INCREMENT,
         `location_id` INT(6) NOT NULL,
         `category_id` INT(6) NOT NULL,
-        `product_img_url` VARCHAR(255) DEFAULT NULL, 
-        `product_description` VARCHAR(255) DEFAULT NULL,
+        `product_img_url` VARCHAR(2000) DEFAULT NULL, 
+        `product_description` VARCHAR(5000) DEFAULT NULL,
         `contractor_id` INT(6) NOT NULL,
         PRIMARY KEY (`p_uid`),
         FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
@@ -83,7 +83,7 @@ def setup():
         `cus_uid` INT(6) NOT NULL,
         `p_uid` INT(6) NOT NULL,
         `order_date_time` VARCHAR(255) DEFAULT NULL,
-        `message` VARCHAR(255) DEFAULT NULL,
+        `message` VARCHAR(5000) DEFAULT NULL,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`cus_uid`) REFERENCES `customers` (`cus_uid`),
         FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)
@@ -102,7 +102,7 @@ def setup():
         `id` INT(6) NOT NULL AUTO_INCREMENT,
         `cus_uid` INT(6) NOT NULL,
         `p_uid` INT(6) NOT NULL,
-        `review` VARCHAR(255) DEFAULT NULL,
+        `review` VARCHAR(5000) DEFAULT NULL,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`cus_uid`) REFERENCES `customers` (`cus_uid`),
         FOREIGN KEY (`p_uid`) REFERENCES `products` (`p_uid`)

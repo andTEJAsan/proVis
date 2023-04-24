@@ -14,7 +14,7 @@ class Customers(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, cus_id: str=None, name: str=None, emailid: str=None, phone_number: int=None, password: str=None):  # noqa: E501
+    def __init__(self, cus_id: str=None, name: str=None, emailid: str=None, phone_number: str=None, password: str=None):  # noqa: E501
         """Customers - a model defined in Swagger
 
         :param cus_id: The cus_id of this Customers.  # noqa: E501
@@ -24,7 +24,7 @@ class Customers(Model):
         :param emailid: The emailid of this Customers.  # noqa: E501
         :type emailid: str
         :param phone_number: The phone_number of this Customers.  # noqa: E501
-        :type phone_number: int
+        :type phone_number: str
         :param password: The password of this Customers.  # noqa: E501
         :type password: str
         """
@@ -32,7 +32,7 @@ class Customers(Model):
             'cus_id': str,
             'name': str,
             'emailid': str,
-            'phone_number': int,
+            'phone_number': str,
             'password': str
         }
 
@@ -126,22 +126,22 @@ class Customers(Model):
         self._emailid = emailid
 
     @property
-    def phone_number(self) -> int:
+    def phone_number(self) -> str:
         """Gets the phone_number of this Customers.
 
 
         :return: The phone_number of this Customers.
-        :rtype: int
+        :rtype: str
         """
         return self._phone_number
 
     @phone_number.setter
-    def phone_number(self, phone_number: int):
+    def phone_number(self, phone_number: str):
         """Sets the phone_number of this Customers.
 
 
         :param phone_number: The phone_number of this Customers.
-        :type phone_number: int
+        :type phone_number: str
         """
 
         self._phone_number = phone_number

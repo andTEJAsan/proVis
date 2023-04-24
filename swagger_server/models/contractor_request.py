@@ -14,7 +14,7 @@ class ContractorRequest(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, name: str=None, email: str=None, address: str=None, phone_no: int=None, company_id: str=None):  # noqa: E501
+    def __init__(self, name: str=None, email: str=None, address: str=None, phone_no: str=None, company_id: str=None):  # noqa: E501
         """ContractorRequest - a model defined in Swagger
 
         :param name: The name of this ContractorRequest.  # noqa: E501
@@ -24,7 +24,7 @@ class ContractorRequest(Model):
         :param address: The address of this ContractorRequest.  # noqa: E501
         :type address: str
         :param phone_no: The phone_no of this ContractorRequest.  # noqa: E501
-        :type phone_no: int
+        :type phone_no: str
         :param company_id: The company_id of this ContractorRequest.  # noqa: E501
         :type company_id: str
         """
@@ -32,7 +32,7 @@ class ContractorRequest(Model):
             'name': str,
             'email': str,
             'address': str,
-            'phone_no': int,
+            'phone_no': str,
             'company_id': str
         }
 
@@ -124,22 +124,22 @@ class ContractorRequest(Model):
         self._address = address
 
     @property
-    def phone_no(self) -> int:
+    def phone_no(self) -> str:
         """Gets the phone_no of this ContractorRequest.
 
 
         :return: The phone_no of this ContractorRequest.
-        :rtype: int
+        :rtype: str
         """
         return self._phone_no
 
     @phone_no.setter
-    def phone_no(self, phone_no: int):
+    def phone_no(self, phone_no: str):
         """Sets the phone_no of this ContractorRequest.
 
 
         :param phone_no: The phone_no of this ContractorRequest.
-        :type phone_no: int
+        :type phone_no: str
         """
 
         self._phone_no = phone_no
