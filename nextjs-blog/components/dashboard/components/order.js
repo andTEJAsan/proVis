@@ -14,7 +14,7 @@
 // }  
 
 
-export default function Card(props){
+export default function Order(props){
     let obj = props.obj 
 
     let query_obj = {company_img_url : obj.company_img_url, product_img_url : obj.product_img_url, 

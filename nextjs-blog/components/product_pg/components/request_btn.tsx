@@ -40,7 +40,7 @@ export default function Request_Btn(props) {
   const request_body = {
     
     "order_date_time": "2023-04-07T13:13:20.235Z",
-    "p_uid": props.p_id, 
+    "p_uid": props.p_uid, 
     "cus_uid" : "ff" ,  
     "message" : "string"
   }
@@ -67,10 +67,6 @@ export default function Request_Btn(props) {
   // const jwt = useSelector((state) => state.storage.jwt);
   async function handleSubmit(event){ 
     if (isLoggedIn){
-              
-
-              
-
                 request_body.order_date_time =  getCurrentDateTimeString()
                 request_body.message = msgState ;
                 request_body.cus_uid = queryid.toString() ;  

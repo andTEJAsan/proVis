@@ -7,3 +7,16 @@
     height : 100% ; 
     width : 100% ;
 }
+
+.space{
+    margin : 10px  ;
+}
+.card{
+    background-color: #e0ddda;
+    font-size: 1.2em;
+}
+
+.label {
+    /* background-color: white; */
+    margin-left : 20px ; 
+}

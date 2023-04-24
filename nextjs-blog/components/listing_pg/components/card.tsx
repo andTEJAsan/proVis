@@ -26,7 +26,7 @@ export default function Card(props) {
         else {
             
 
-            const request_obj = {
+            const request_obj = { 
                 "cus_uid" : queryid.toString() , 
                 "p_uid" : props.obj.id.toString()   
             }
