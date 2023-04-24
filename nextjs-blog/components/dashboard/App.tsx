@@ -41,27 +41,11 @@ export default function App(){
     )).catch((err) => console.error(err))
     }, []) 
 
-
-
-
-    // useEffect(() => {
-    //     fetch(`${apiUrl}/api/customers/${id}/orders`, {
-    //             method : "GET",
-    //             headers : {
-    //                 "Content-Type": "application/json" 
-    //             }
-    //     }).then((response) => response.json().then((data) => {
-    //         setOrderState(genarr(data))
-    //     })).catch((err) => console.error(err))
-    // }, []) 
-
-
-
     let dashboard_url = "https://img.freepik.com/free-photo/brown-wooden-flooring_53876-90802.jpg?w=996&t=st=1680938897~exp=1680939497~hmac=d5bfaf1218dcd7b4c1c96e2696088de57dc236aa8f4fb73e46df65a56e51fda8" 
     return (
         <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter>
             <div className="container">
-                <div className="header">
+                <div className= {st.header}>
                     <img src = {dashboard_url} className={st.dashboard_img} />
                 </div>
 

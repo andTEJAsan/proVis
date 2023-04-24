@@ -62,7 +62,7 @@ export default function MainContent(props){
                         Phone Number
                     </label>
                     <div className={st.business_text}>
-                        {contractor_obj.phone_number} 
+                        {contractor_obj.phone_no} 
                     </div>
                 </div>
                 
