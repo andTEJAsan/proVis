@@ -99,7 +99,7 @@ function App() {
             address : contractor_data.address
         }
       }) 
-      
+      ; 
       SetcompanyState((prevState) => {
         return { ...prevState, 
           company_name : company_data.name, 
