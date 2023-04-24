@@ -39,37 +39,37 @@ function App() {
 
   let { apiUrl } = config;
 
-  function gen_obj(data) {
-    let id = data.p_uid;
-    let location = data.location;
-    let category = data.category;
-    let product_img_url = data.product_img_url;
-    let description = data.product_description;
-    let company_name = data.company_name;
-    let company_img_url = data.company_img_url;
-    let contractor_id = data.contractor_id;
-    let contractor_name = data.contractor_name;
+  // function gen_obj(data) {
+  //   let id = data.p_uid;
+  //   let location = data.location;
+  //   let category = data.category;
+  //   let product_img_url = data.product_img_url;
+  //   let description = data.product_description;
+  //   let company_name = data.company_name;
+  //   let company_img_url = data.company_img_url;
+  //   let contractor_id = data.contractor_id;
+  //   let contractor_name = data.contractor_name;
 
-    let obj = {
-      id,
-      location,
-      category,
-      product_img_url,
-      description,
-      company_name,
-      company_img_url,
-      contractor_id,
-      contractor_name,
-    };
-    return obj;
-  }
-  let new_card_array = products.map((obj) => (
-    <Card
-      clicker={() => router.push({ pathname: "/product_pg", query: query_obj })}
-      obj={gen_obj(obj)}
-      key={obj.p_uid}
-    />
-  ));
+  //   let obj = {
+  //     id,
+  //     location,
+  //     category,
+  //     product_img_url,
+  //     description,
+  //     company_name,
+  //     company_img_url,
+  //     contractor_id,
+  //     contractor_name,
+  //   };
+  //   return obj;
+  // }
+  // let new_cards = products.map((obj) => (
+  //   <Card
+  //     clicker={() => router.push({ pathname: "/product_pg", query: query_obj })}
+  //     obj={gen_obj(obj)}
+  //     key={obj.p_uid}
+  //   />
+  // ));
 
   function locationHandler(location) {
     SetState((prevState) => {
@@ -175,14 +175,6 @@ function App() {
               />
             );
           }
-
-          // let new_card_array = data.map((obj) => (
-          //   <Card
-          //     clicker={() => router.push({pathname:"/product_pg",  query:  })}
-          //     obj={gen_obj(obj)}
-          //     key={obj.p_uid}
-          //   />
-          // ));
 
           setCardsState(new_card_array);
         })

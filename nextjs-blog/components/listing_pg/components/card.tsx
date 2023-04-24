@@ -48,9 +48,7 @@ export default function Card(props) {
     }
     return (
                 
-    //     <Link href={"/about"} passHref>
-    //     <div className={st.dropbtn}><p className={st.navText}>{"About Us"}</p></div>
-    //   </Link>
+
                 
                 <div className= {st.card_container} >
                     <img src = {obj.product_img_url} className= {st.card_img1} />
