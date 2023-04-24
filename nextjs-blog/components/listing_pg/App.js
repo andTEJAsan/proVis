@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-// import Footer from "@components/reusable/template/Footer";
+import Spinner from "./components/spinner"
 import "react-js-dropdavn/dist/index.css";
 import { useRouter } from "next/router";
 import config from "../../config";
@@ -34,6 +34,7 @@ function App() {
 
   let [newState, SetState] = React.useState({ location: "", category: "" });
   let [cardsState, setCardsState] = React.useState([]);
+  let [loader,setLoader]=React.useState(true);
 
   let cross = "/listing_pg/cross.png";
 
@@ -94,7 +95,7 @@ function App() {
       return { ...prevState, location: "" };
     });
   }
-
+  let new_card_array = [];
   useEffect(() => {
     console.log("product fetch");
     let url_fetch = `${apiUrl}/api/products/findByTags`;
@@ -163,7 +164,7 @@ function App() {
           let query_arr = gen_query(data);
           console.log("query_arr");
           console.log(query_arr);
-          let new_card_array = [];
+          
           for (let i = 0; i < data.length; i++) {
             new_card_array.push(
               <Card
@@ -176,10 +177,22 @@ function App() {
             );
           }
 
+          if(new_card_array.length==0)
+          {
+            new_card_array.push(
+            <div>No data to show!</div>
+              )
+          }
+          setLoader(false);
           setCardsState(new_card_array);
         })
       )
-      .catch((err) => console.error(err));
+      .catch((err) => {setLoader(false);new_card_array.push(
+        
+        <div style={{width:"700px",justifyContent:"center",display:"flex"}}>No data to show!</div>
+          )
+        
+          setCardsState(new_card_array);} );
   }, [newState]);
 
   let [locationarr, setlocationarr] = React.useState(["Delhi","Mumbai","Pune","Bangalore","Kolkata","Hyderabad","Chennai","Ahmedabad","Surat","Vishakhapatnam","Jaipur"]);
@@ -233,7 +246,7 @@ function App() {
               </div>
             )}
           </div>
-          <div className={st.cards}>{cardsState}</div>
+          <div className={st.cards}>{loader==true?<Spinner/>:cardsState}</div>
         </div>
       </div>
       
