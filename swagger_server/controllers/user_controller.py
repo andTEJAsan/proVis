@@ -2,11 +2,11 @@ import connexion
 import six
 from email.message import EmailMessage
 # create message object instance
+from dotenv.main import load_dotenv
+import os
 import ssl
 import pyotp
 import smtplib
-emaila="copcop290@gmail.com"
-passworda="aghyyhrihpeedmft"
 from swagger_server.models.customers import Customers
 from swagger_server.models.register_response import RegisterResponse,RegisterResponseInfo  # noqa: E501
 from swagger_server.models.user_login import UserLogin  # noqa: E501
@@ -15,6 +15,11 @@ from swagger_server.models.verify_email import VerifyEmail  # noqa: E501
 from swagger_server import util,db
 from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
+load_dotenv()
+our_secret_key = os.environ['JWTKEY']
+our_id = os.environ['EMAIL']
+our_pass = os.environ['MASTERPASSWORD']
+algorithm = os.environ['ALGO']
 
 def email_login(body):  # noqa: E501
     """email login
@@ -42,8 +47,8 @@ def email_login(body):  # noqa: E501
             name = db.getusername_fromemail(email)
             info = RegisterResponseInfo(cusid,name)
             tokdict = {'username':name,'email':email}
-            secret_key = "mysecretkey"
-            token = jwt.encode(tokdict,secret_key,"HS256")
+            secret_key = our_secret_key
+            token = jwt.encode(tokdict,secret_key,algorithm)
             #response = RegisterResponse(token,info)
             response = {"info":{"cus_uid":cusid,"username":name},"token":token,"status":200}
             return response
@@ -68,8 +73,8 @@ def email_register(body):  # noqa: E501
         password = body._password
         hashedpasswd = generate_password_hash(password)
         tokdict = {'user_id':name,'email':email}
-        secret_key = "mysecretkey"
-        token = jwt.encode(tokdict,secret_key,algorithm="HS256")
+        secret_key = our_secret_key
+        token = jwt.encode(tokdict,secret_key,algorithm=algorithm)
         customer = Customers(name=name,emailid=email,password=hashedpasswd)
         try:
             db.add_customer(customer)
@@ -81,16 +86,16 @@ def email_register(body):  # noqa: E501
         otp = totp.now()
         print("otp :" ,otp)
         msg = EmailMessage()
-        email_sender = "copcop290@gmail.com"
+        email_sender = our_id
         email_receiver = email
-        msg['From'] = "copcop290@gmail.com"
+        msg['From'] = email_sender
         msg['To'] = email
         msg['Subject'] = "OTP!! Here is your OTP generated OTP"
         body ="Here is your generated OTP "+ otp
         msg.set_content(body)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
-            smtp.login(email_sender,passworda)
+            smtp.login(email_sender,our_pass)
             smtp.sendmail(email_sender,email_receiver,msg.as_string())
         db.addotp(otp,email)
 
@@ -125,7 +130,7 @@ def verify_email(body):  # noqa: E501
         body = (connexion.request.get_json())  # noqa: E501
         token = body["token"]
         otp = body["otp"]
-        tokdict= jwt.decode(token,key="mysecretkey",algorithms=["HS256"])
+        tokdict= jwt.decode(token,key=our_secret_key,algorithms=[algorithm])
         mail= tokdict["email"]
         requiredotp = db.getotp_frommail(mail)
         if (otp == requiredotp):
