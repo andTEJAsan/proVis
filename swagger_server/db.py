@@ -239,7 +239,7 @@ def check_company_exists(companyid:str)->None:
     print("This is debugging of check_company_exists")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id` = %s""",companyid)
-        print("query executed")
+        print("query executed for check_company_exists function")
         r=cursor.fetchone()
         print("this is r:",r)
         if (not r):
@@ -271,6 +271,7 @@ def get_company_by_id(companyid:str)->Optional[Companies]:
     print("Debugging for get_company_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
+        print("query executed for get_company_by_id function")
         r=cursor.fetchone()
         print("type:",r)
         print("this is r:",r)
@@ -320,7 +321,7 @@ def check_contractor_exists(contractorid:str)->None:
     print("Debugging for check_contractor_exists function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
-        print("query executed")
+        print("query executed for check_contractor_exists function")
         r=cursor.fetchone()
         print("this is r:",r)
         if (not r):
@@ -343,6 +344,7 @@ def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
     print("Debugging for getcontractor_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
+        print("query executed for get_contractor_by_id function")
         r=cursor.fetchone()
         print("type:",type(r))
         print("this is r:",r)
