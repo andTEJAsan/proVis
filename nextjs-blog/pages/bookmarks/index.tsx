@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import PageTemplate from "../../components/reusable/template/PageTemplate.jsx";
-import Card from "../../components/listing_pg/components/card.jsx";
-import Spinner from "../../components/authModal/components/spinner/index.jsx";
+import PageTemplate from "../../components/reusable/template/PageTemplate";
+import Card from "../../components/listing_pg/components/card";
+import Spinner from "../../components/authModal/components/spinner";
 import st from "../../styles/listing_pg/card.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
