@@ -20,36 +20,47 @@ export default function App(){
     const { apiUrl } = config;
 
     useEffect(() => {
-        fetch(`${apiUrl}/api/customers/${id}` , {
+        Promise.all([ fetch(`${apiUrl}/api/customers/${id}` , {
             method : 'GET', 
               headers: {
                 "Content-Type": "application/json" 
                   // Authorization: `Bearer ${jwt}`,
               }
-    }).then((response) => response.json().then((data) => {
-        setUserState({name : data.name, emailid : data.emailid, phone_no: data.phone_number})
-    })).catch((err) => console.error(err))
+    }), fetch(`${apiUrl}/api/customers/${id}/orders`, {
+        method : "GET",
+        headers : {
+            "Content-Type": "application/json" 
+        }
+})])
+
+    .then(([cus_response, order_response]) => Promise.all([cus_response.json(),order_response.json()])
+    .then(([customer_data,order_data]) => {
+        setUserState({name : customer_data.name, emailid : customer_data.emailid, phone_no: customer_data.phone_number})
+        setOrderState(genarr(order_data))
+    }
+    )).catch((err) => console.error(err))
     }, []) 
 
-    useEffect(() => {
-        fetch(`${apiUrl}/api/customers/${id}/orders`, {
-                method : "GET",
-                headers : {
-                    "Content-Type": "application/json" 
-                }
-        }).then((response) => response.json().then((data) => {
-            setOrderState(genarr(data))
-        })).catch((err) => console.error(err))
-    }, []) 
+
+
+
+    // useEffect(() => {
+    //     fetch(`${apiUrl}/api/customers/${id}/orders`, {
+    //             method : "GET",
+    //             headers : {
+    //                 "Content-Type": "application/json" 
+    //             }
+    //     }).then((response) => response.json().then((data) => {
+    //         setOrderState(genarr(data))
+    //     })).catch((err) => console.error(err))
+    // }, []) 
 
 
 
     let dashboard_url = "https://img.freepik.com/free-photo/brown-wooden-flooring_53876-90802.jpg?w=996&t=st=1680938897~exp=1680939497~hmac=d5bfaf1218dcd7b4c1c96e2696088de57dc236aa8f4fb73e46df65a56e51fda8" 
     return (
         <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter>
-
             <div className="container">
-
                 <div className="header">
                     <img src = {dashboard_url} className={st.dashboard_img} />
                 </div>
@@ -59,12 +70,12 @@ export default function App(){
                     {/* <h5><button>Edit profile</button></h5> */}
                     <div className="details">
                         <label htmlFor = "name" className="label">Name</label>
-                        <p id = "name" className="info">Aaveg</p>
+                        <p id = "name" className="info">{userState.name}</p>
                         {/* {userState.name} {userState.emailid} */}
                         <label htmlFor = "email" className="label">Email</label>
-                        <p id = "email" className="info">aavegj1904@gmail.com</p>
+                        <p id = "email" className="info">{userState.emailid}</p>
                         <label htmlFor = "phoneno" className="label">Phone Number</label>
-                        <p id = "email" className="info">9205231951</p>
+                        <p id = "email" className="info">{userState.phone_no}</p>
                     </div>
                 </div>
 

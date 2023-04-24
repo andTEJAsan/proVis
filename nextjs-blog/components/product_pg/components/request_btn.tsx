@@ -61,16 +61,19 @@ export default function Request_Btn(props) {
     (state: RootState) => state.storage
   );
   
+  const queryid = useSelector((state : RootState) => state.storage.userID)
+  const { apiUrl } = config;
+
   // const jwt = useSelector((state) => state.storage.jwt);
   async function handleSubmit(event){ 
     if (isLoggedIn){
-              const queryid = useSelector((state : RootState) => state.storage.userID)
+              
 
-                const { apiUrl } = config;
+              
 
                 request_body.order_date_time =  getCurrentDateTimeString()
                 request_body.message = msgState ;
-                request_body.cus_uid = queryid 
+                request_body.cus_uid = queryid.toString() ;  
                 const response = await fetch(`${apiUrl}/api/customers/${queryid}/orders`, {
                   method: "POST",
                   headers: {

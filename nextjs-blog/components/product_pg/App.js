@@ -51,66 +51,92 @@ function App() {
 
 
   let slug = router.query 
+  console.log("slug is ") ; console.log(slug) ; 
   let url1 = slug.product_img_url 
   let url2 = slug.company_img_url 
+  console.log(url1) ; 
   
   const jwt = useSelector((state) => state.storage.jwt);
 
   const { apiUrl } = config;
 
-  let [profileState, SetState] = React.useState({
-   about_us : "", 
-   company_name : "", 
+  let [contractorState, SetcontractorState] = React.useState({
    contractor_name : "", 
    phone_no : "", 
-   website : "", 
    address : ""
   })
 
+  let [companyState, SetcompanyState] = React.useState({
+    company_name : "", 
+    website : "",
+    about_us : ""
+   })
   
 
 
   useEffect( () => {
-    fetch(`${apiUrl}/api/contractors/${slug.contractor_id}`, {
-      method : 'GET', 
-      headers: {
-        "Content-Type": "application/json" 
-          // Authorization: `Bearer ${jwt}`,
-      },
-    }).then((response) => response.json().then(
-      (data) => 
-        SetState((prevState) => {
-          return { ...prevState, 
-            contractor_name : data.name, 
-            phone_no : data.phone_no,
-            address : data.address
-        }
+    Promise.all([
+      fetch(`${apiUrl}/api/contractors/${slug.contractor_id}`, {
+        method : 'GET', 
+        headers: {
+          "Content-Type": "application/json" 
+            // Authorization: `Bearer ${jwt}`,
+        },
+      }),
+      
+      fetch(`${apiUrl}/api/companies/${slug.company_id}`, {
+        method : 'GET', 
+        headers: {
+          "Content-Type": "application/json" 
+            // Authorization: `Bearer ${jwt}`,
+        },
       })
-    )).catch((err) => console.error(err));
+      
+    ])
+    .then(([contractor_res,company_res]) => Promise.all([contractor_res.json(), company_res.json()])
+    .then(
+      ([contractor_data, company_data]) =>{ 
+        SetcontractorState((prevState) => {
+          return { ...prevState, 
+            contractor_name : contractor_data.name, 
+            phone_no : contractor_data.phone_no,
+            address : contractor_data.address
+        }
+      }) 
+      
+      SetcompanyState((prevState) => {
+        return { ...prevState, 
+          company_name : company_data.name, 
+          website :  company_data.website_link,
+          about_us :  company_data.about_us
+      }
+    })
+    })
+    ).catch((err) => console.error(err));
   }, []) 
 
 
   
 
 
- useEffect( () => {
-    fetch(`${apiUrl}/api/companies/${slug.company_id}`, {
-      method : 'GET', 
-      headers: {
-        "Content-Type": "application/json" 
-          // Authorization: `Bearer ${jwt}`,
-      },
-    }).then((response) => response.json().then(
-      (data) => 
-        SetState((prevState) => {
-          return { ...prevState, 
-            company_name : data.name, 
-            website : data.website_link,
-            about_us : data.about_us
-        }
-      })
-    )).catch((err) => console.error(err));
-  }, []) 
+//  useEffect( () => {
+//     fetch(`${apiUrl}/api/companies/${slug.company_id}`, {
+//       method : 'GET', 
+//       headers: {
+//         "Content-Type": "application/json" 
+//           // Authorization: `Bearer ${jwt}`,
+//       },
+//     }).then((response) => response.json().then(
+//       (data) => 
+//         SetcompanyState((prevState) => {
+//           return { ...prevState, 
+//             company_name : data.name, 
+//             website : data.website_link,
+//             about_us : data.about_us
+//         }
+//       })
+//     )).catch((err) => console.error(err));
+//   }, [companyState]) 
   
 
 
@@ -160,7 +186,7 @@ function App() {
           />
         </div>
 
-        <MainContent obj={profileState} className={st.main_content} />
+        <MainContent company_obj={companyState} contractor_obj = {contractorState} className={st.main_content} />
       </div>
     </div>
   </PageTemplate>

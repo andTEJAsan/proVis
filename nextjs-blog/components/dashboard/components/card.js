@@ -22,7 +22,8 @@ export default function Card(props){
         category : obj.category, id : obj.p_uid } 
 
     return (
-        <div className= {st.card_container} onClick={() => router.push('/product_pg' , {query : query_obj}) }>
+        <div className= {st.card_container} 
+        onClick={() => router.push({pathname:"/product_pg",  query: query_obj })}> 
             <div className={st.img}>
                 <img src = {obj.product_img_url} /> 
             </div> 

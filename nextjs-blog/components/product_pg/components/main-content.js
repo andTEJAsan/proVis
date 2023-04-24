@@ -3,8 +3,12 @@ import st from "../../../styles/product_pg/main_content.module.css"
 import * as Separator from '@radix-ui/react-separator';
 
 export default function MainContent(props){
-    let obj = props.obj 
+    let company_obj = props.company_obj
+    let contractor_obj = props.contractor_obj
     // let project_cards = obj.projects.map( (x) => <Project project = {x} /> ) 
+
+
+    
 
     return(
 
@@ -32,7 +36,7 @@ export default function MainContent(props){
                     About Us
                 </div>
                 <div className={st.greybg}>
-                    {obj.about_us}
+                    {company_obj.about_us}
                 </div>
                 
             </div>
@@ -49,7 +53,7 @@ export default function MainContent(props){
                         Business Name
                     </label>
                     <div className={st.business_text}>
-                        {obj.company_name} 
+                        {company_obj.company_name} 
                     </div>
                 </div>
                 
@@ -58,7 +62,7 @@ export default function MainContent(props){
                         Phone Number
                     </label>
                     <div className={st.business_text}>
-                        {obj.phone_number} 
+                        {contractor_obj.phone_number} 
                     </div>
                 </div>
                 
@@ -67,8 +71,8 @@ export default function MainContent(props){
                         Website
                     </label>
                     <div className={st.website_link}>
-                        <a href={obj.website} >
-                        {obj.website}
+                        <a href={company_obj.website} >
+                        {company_obj.website}
                         </a>
                     </div>
                 </div>
@@ -78,19 +82,24 @@ export default function MainContent(props){
                         Address
                     </label>
                     <div className={st.business_text}>
-                        {obj.address} 
+                        {contractor_obj.address} 
                     </div>
                 </div>
 
+
             </div>
+
+            
+            {/* <Separator.Root className={st.SeparatorRoot} style={{ margin: '15px 0' }} /> 
+
+            <div className={st.reviews}>
+                <div className={st.review_btn} >
+                    <button className={st.btn} onClick={review_handler}>Add Review</button>
+                </div>
+            </div> */}
 
             {/* <Footer />  */}
 
-            {/* <Separator.Root className={st.SeparatorRoot" style={{ margin: '15px 0' }} />  */}
-
-            {/* <div className={st.reviews">
-
-            </div> */}
         </div>
         
     )
