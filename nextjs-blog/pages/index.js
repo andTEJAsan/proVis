@@ -56,7 +56,7 @@ export default function Home() {
           {/* can change the name to something better later? */}
           <ThreeItemContainer
             dataToShow={comparisonData}
-            link="/product-comparison"
+            link="/listing_pg"
           />
 
           {/* <ThreeItemContainer

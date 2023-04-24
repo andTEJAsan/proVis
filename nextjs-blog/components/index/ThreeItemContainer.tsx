@@ -49,7 +49,7 @@ export default function ThreeItemContainer({
             </Animation>
           ))}
           {/* // ? maybe can add some localization later */}
-          <Link href={link}><p className={styles.tItemBtn}>Learn More</p></Link>
+          <Link href={link}><p className={styles.tItemBtn}>Try proVis &#8599;</p></Link>
         </div>
         <div style={{ flexDirection: reverseOrder ? "row-reverse" : "row" }}>
           <img src={dataToShow.mainImageUrl} className={styles.tItemImage} />
