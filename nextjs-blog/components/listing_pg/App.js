@@ -197,7 +197,7 @@ function App() {
 
   let [locationarr, setlocationarr] = React.useState(["Delhi","Mumbai","Pune","Bangalore","Kolkata","Hyderabad","Chennai","Ahmedabad","Surat","Vishakhapatnam","Jaipur"]);
 
-  let [categoryarr, setcategoryarr] = React.useState(["Design-Build Firms","Architects and Building Designers","Interior Designers and Decorators","Civil Engineers and Contractors","Home Builders and Construction Companies","Kitchen and Bath Designers","Landscape Architects and Contractors","Tile,Stone and Countertops","Furniture and Accessories","Flooring and Carpet"]);
+  let [categoryarr, setcategoryarr] = React.useState(["Design Build Firms","Architects and Building Designers","Interior Designers and Decorators","Civil Engineers and Contractors","Home Builders and Construction Companies","Kitchen and Bath Designers","Landscape Architects and Contractors","TileStone and Countertops","Furniture and Accessories","Flooring and Carpet"]);
 
   const defaultOptionLocation = locationarr[0];
   const defaultOptionCategory = categoryarr[0];

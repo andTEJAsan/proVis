@@ -1,16 +1,58 @@
-import React from "react" 
+import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import st from "../../../styles/product_pg/request_btn.module.css"
+import st from "../../../styles/product_pg/request_btn.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import config from "../../../config";
-import {RootState} from "../../../redux/reducers"
+import { RootState } from "../../../redux/reducers";
+import styled from "styled-components";
 
 export default function Request_Btn(props) {
-  let [msgState, statehandler] = React.useState("") 
+  let [msgState, statehandler] = React.useState("");
 
+  const theme = {
+    blue: {
+      default: "#3f51b5",
+      hover: "#283593",
+    },
+    pink: {
+      default: "#e91e63",
+      hover: "#ad1457",
+    },
+  };
 
+  const Button = styled.button`
+    background-color: ${(props) => theme[props.theme].default};
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    outline: 0;
+    text-transform: uppercase;
+    margin: 10px 0px;
+    cursor: pointer;
+    box-shadow: 0px 2px 2px lightgray;
+    transition: ease background-color 250ms;
+    &:hover {
+      background-color: ${(props) => theme[props.theme].hover};
+    }
+    &:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+  `;
 
+  Button.defaultProps = {
+    theme: "blue",
+  };
+
+  const ButtonToggle = styled(Button)`
+    opacity: 0.7;
+    ${({ active }) =>
+      active &&
+      `
+    opacity: 1; 
+  `}
+  `;
 
   function getCurrentDateTimeString() {
     const now = new Date();
@@ -21,29 +63,27 @@ export default function Request_Btn(props) {
     const minutes = now.getUTCMinutes();
     const seconds = now.getUTCSeconds();
     const milliseconds = now.getUTCMilliseconds();
-  
+
     // Zero-pad month, day, hours, minutes, and seconds to two digits
-    const zeroPad = (num) => num.toString().padStart(2, '0');
+    const zeroPad = (num) => num.toString().padStart(2, "0");
     const monthStr = zeroPad(month);
     const dayStr = zeroPad(day);
     const hoursStr = zeroPad(hours);
     const minutesStr = zeroPad(minutes);
     const secondsStr = zeroPad(seconds);
-  
+
     // Format the date-time string
     const dateTimeStr = `${year}-${monthStr}-${dayStr}T${hoursStr}:${minutesStr}:${secondsStr}.${milliseconds}Z`;
-    
+
     return dateTimeStr;
   }
 
-
   const request_body = {
-    
-    "order_date_time": "2023-04-07T13:13:20.235Z",
-    "p_uid": props.p_uid, 
-    "cus_uid" : "ff" ,  
-    "message" : "string"
-  }
+    order_date_time: "2023-04-07T13:13:20.235Z",
+    p_uid: props.p_uid,
+    cus_uid: "ff",
+    message: "string",
+  };
 
   // {
   //   "id": "vycs78",
@@ -54,52 +94,52 @@ export default function Request_Btn(props) {
   // }
 
   function handleChange(event) {
-    let msg = event.target.value ;statehandler(msg) 
+    let msg = event.target.value;
+    statehandler(msg);
   }
 
-  const { isLoggedIn} = useSelector(
-    (state: RootState) => state.storage
-  );
-  
-  const queryid = useSelector((state : RootState) => state.storage.userID)
+  const { isLoggedIn } = useSelector((state: RootState) => state.storage);
+
+  const queryid = useSelector((state: RootState) => state.storage.userID);
   const { apiUrl } = config;
 
   // const jwt = useSelector((state) => state.storage.jwt);
-  async function handleSubmit(event){ 
-    if (isLoggedIn){
-                request_body.order_date_time =  getCurrentDateTimeString()
-                request_body.message = msgState ;
-                request_body.cus_uid = queryid.toString() ;  
-                const response = await fetch(`${apiUrl}/api/customers/${queryid}/orders`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                    // Authorization: `Bearer ${jwt}`,
-                  },
-                  body: JSON.stringify(request_body) 
-                });
+  async function handleSubmit(event) {
+    if (isLoggedIn) {
+      request_body.order_date_time = getCurrentDateTimeString();
+      request_body.message = msgState;
+      request_body.cus_uid = queryid.toString();
+      const response = await fetch(
+        `${apiUrl}/api/customers/${queryid}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(request_body),
+        }
+      );
 
-                if (response.ok) {
-                  console.log("response worked!");
-                  statehandler("") 
-                }
+      if (response.ok) {
+        console.log("response worked!");
+        statehandler("");
       }
-      else{
-        alert("log in first")
-      }
+    } else {
+      alert("Please log in first!");
     }
-
-  
+  }
 
   return (
     <div className={st.DialogRoot}>
-      <Dialog.Root  >
+      <Dialog.Root>
         <Dialog.Trigger asChild>
           <div className={st.button_wrapper}>
             <h3>Connect with the contractor</h3>
-            <button className={st.Button}>
-              {props.btn_text}
-            </button>
+            {/* <button className={st.Button}>{props.btn_text}</button> */}
+            <Button theme="pink" onClick={handleSubmit}>
+            {props.btn_text}
+                </Button>
           </div>
         </Dialog.Trigger>
         <Dialog.Portal>
@@ -115,7 +155,13 @@ export default function Request_Btn(props) {
               <label className={st.Label} htmlFor="msg">
                 {props.label}
               </label>
-              <input className={st.Input} id="name" defaultValue="" value = {msgState} onChange={handleChange}/>
+              <input
+                className={st.Input}
+                id="name"
+                defaultValue=""
+                value={msgState}
+                onChange={handleChange}
+              />
             </fieldset>
 
             <div
@@ -126,14 +172,15 @@ export default function Request_Btn(props) {
               }}
             >
               <Dialog.Close asChild>
-                <button className={st.Button} onClick={handleSubmit} >
+             
+                <Button theme="pink" onClick={handleSubmit}>
                   {props.modal_btn_text}
-                </button>
+                </Button>
               </Dialog.Close>
             </div>
             <Dialog.Close asChild>
               <button className={st.IconButton} aria-label="Close">
-                <Cross2Icon />
+                X
               </button>
             </Dialog.Close>
           </Dialog.Content>

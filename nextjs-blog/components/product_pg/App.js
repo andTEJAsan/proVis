@@ -1,13 +1,10 @@
-// import logo from './logo.svg';
 import React from "react" 
 import PageTemplate from "@components/reusable/template/PageTemplate.tsx";
 import st from "../../styles/product_pg/App.module.css"
-import project_data from "./data/projects";
 import { useRouter } from 'next/router'
 import config from "../../config";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {useEffect} from "react"
-import Navbar from "./components/navbar";
 import Header from "./components/header";
 import Request_Btn from "./components/request_btn";
 import MainContent from "./components/main-content";
@@ -50,11 +47,10 @@ function App() {
   
 
 
-  let slug = router.query 
-  console.log("slug is ") ; console.log(slug) ; 
+  let slug = router.query  
   let url1 = slug.product_img_url 
   let url2 = slug.company_img_url 
-  console.log(url1) ; 
+ 
   
   const jwt = useSelector((state) => state.storage.jwt);
 
