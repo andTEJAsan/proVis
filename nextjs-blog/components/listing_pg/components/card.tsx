@@ -4,7 +4,7 @@ import { alertService } from "../../../services/alert.service"  ;
 import { useDispatch, useSelector } from "react-redux";
 import {RootState} from "../../../redux/reducers"
 import config from "config"; 
-
+import { Alert } from 'antd'; 
 
 export default function Card(props) { 
     
@@ -12,6 +12,10 @@ export default function Card(props) {
     const { isLoggedIn} = useSelector(
         (state: RootState) => state.storage
       );
+    
+    const [BookmarkVisible, SetVisibility] = React.useState(0) 
+    // if bookmark alert not visible, 0 ; if successfully bookmarked , then 1 ; if not logged in then 2.
+
     let obj = props.obj 
     // obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
     let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
@@ -20,12 +24,13 @@ export default function Card(props) {
     async function  bookmark_handler() {
         const { apiUrl } = config;
         if (!isLoggedIn) {
-            alertService.error('Please Login First!!', {autoClose : true})
-            return 
+            // alertService.error('Please Login First!!', {autoClose : true})
+            // return  
+            SetVisibility(2) 
         }
         else {
             
-
+            SetVisibility(1) ; 
             const request_obj = { 
                 "cus_uid" : queryid.toString() , 
                 "p_uid" : props.obj.id.toString()   
@@ -48,8 +53,12 @@ export default function Card(props) {
     }
     return (
                 
+        <div>
+        <div className={st.alert} >
+           
+            
+            </div>
 
-                
                 <div className= {st.card_container} >
                     <img src = {obj.product_img_url} className= {st.card_img1} />
                     
@@ -72,5 +81,6 @@ export default function Card(props) {
                         {obj.description}
                     </div>
                 </div>
+    </div>
     )
 } 

@@ -1,5 +1,5 @@
-// import st from "../../../styles/dashboard/card.module.css"
-
+import st from "../../../styles/dashboard/card.module.css"
+import { useRouter } from "next/router";
 
 // obj = {company_img_url : data.company_img_url , 
 //     //   product_img_url : data.product_img_url,
@@ -16,7 +16,8 @@
 
 export default function Order(props){
     let obj = props.obj 
-
+    let router = useRouter() ; 
+    
     let query_obj = {company_img_url : obj.company_img_url, product_img_url : obj.product_img_url, 
         description : obj.description, contractor_id : obj.contractor_id, company_id : obj.company_id,
         category : obj.category, id : obj.p_uid } 
@@ -25,39 +26,49 @@ export default function Order(props){
         <div className= {st.card_container} 
         onClick={() => router.push({pathname:"/product_pg",  query: query_obj })}> 
             <div className={st.img}>
-                <img src = {obj.product_img_url} /> 
+                <img src = {obj.product_img_url} className={st.img2} /> 
             </div> 
 
             <div className={st.details} >
-                <label htmlFor = "companyname" className="label">
-                    Company Name
-                </label>
-                <div id = "companyname" className="item">
-                    {obj.company_name}
-                </div>
-
-              
-
-                <label htmlFor = "location" className="label">
-                    Location
-                </label>
-                <div id = "location" className="item">
-                    {obj.location}
-                </div>
-
-                <label htmlFor = "category" className="label">
-                    Category
-                </label>
-                <div id = "category" className="item">
-                    {obj.category} 
+                <div className={st.infocontainer} >
+                    <label htmlFor = "companyname" className={st.label}>
+                        <strong>Company Name</strong>
+                    </label>
+                    <span id = "companyname" className={st.item}>
+                        {obj.company_name}
+                    </span>
                 </div>
                 
-                <label htmlFor = "datetime" className="label">
-                    Order Date 
-                </label>
-                <div id = "datetime" className="item">
-                    {obj.order_date_time} 
+
+              
+                <div className={st.infocontainer}  >
+                    <label htmlFor = "location" className={st.label}>
+                    <strong>Location</strong>
+                    </label>
+                    <span id = "location" className={st.item}>
+                        {obj.location}
+                    </span>
                 </div>
+                
+                <div className={st.infocontainer}  >
+                    <label htmlFor = "category" className={st.label}>
+                    <strong>Category</strong>
+                    </label>
+                    <span id = "category" className={st.item}>
+                        {obj.category} 
+                    </span>
+                </div>
+                
+                
+                <div className={st.infocontainer} >
+                    <label htmlFor = "datetime" className={st.label}>
+                    <strong>Order Date</strong>
+                    </label>
+                    <span id = "datetime" className={st.item}>
+                        {obj.order_date_time} 
+                    </span>
+                </div>
+                
 
             </div>
         </div>
