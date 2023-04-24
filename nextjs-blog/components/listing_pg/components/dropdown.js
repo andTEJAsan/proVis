@@ -1,17 +1,7 @@
-import { useState } from 'react';
-// import Select from 'react-select';
 import st from "../../../styles/listing_pg/dropdown.module.css"
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {ArrowDownIcon} from '@radix-ui/react-icons';
-import {ArrowUpIcon} from '@radix-ui/react-icons';
-
-
-// import { useState } from 'react'
-// import { Dialog } from '@headlessui/react'
-
-
-
 
 
 export default function Dropdown(props) {
@@ -22,7 +12,7 @@ export default function Dropdown(props) {
                             value = {x}>
             {x} 
           </DropdownMenu.Item >)
-    // console.log(new_arr) ;
+    
     function handleChange(value){ 
         (props.f)(value)
     }

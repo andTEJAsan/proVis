@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
+
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+
+import "react-js-dropdavn/dist/index.css";
 import { useRouter } from "next/router";
 import config from "../../config";
 import PageTemplate from "@components/reusable/template/PageTemplate.tsx";
 import Listing_Box from "./components/listing_box";
 import Card from "./components/card";
 import products from "./data/products";
-import Dropdown from "./components/dropdown";
+// import Dropdown from "./components/dropdown";
 import st from "../../styles/listing_pg/app.module.css";
 // import cross from "../../public/listing_pg/cross.png"
 // {
@@ -60,29 +65,21 @@ function App() {
   }
   let new_card_array = products.map((obj) => (
     <Card
-    clicker={() => router.push({pathname:"/product_pg",  query: query_obj })}
-    obj={gen_obj(obj)}
-    key={obj.p_uid}
+      clicker={() => router.push({ pathname: "/product_pg", query: query_obj })}
+      obj={gen_obj(obj)}
+      key={obj.p_uid}
     />
   ));
-  
-  // useEffect(()=>{
-  //   setCardsState(new_card_array);
-  // })
 
-  let ct=0;
   function locationHandler(location) {
-    ct++;
     SetState((prevState) => {
-      
-      return { ...prevState, location: location };
+      return { ...prevState, location: location.value };
     });
   }
 
   function categoryHandler(category) {
-    ct++;
     SetState((prevState) => {
-      return { ...prevState, category: category };
+      return { ...prevState, category: category.value };
     });
   }
 
@@ -97,64 +94,61 @@ function App() {
       return { ...prevState, location: "" };
     });
   }
- 
-  useEffect(() => {
-    console.log("product fetch")
-      let url_fetch = `${apiUrl}/api/products/findByTags`
-      let loc_fetch = `?location=${newState.location}`
-      let cat_fetch = `&category=${newState.category}`
 
-      if (newState.location == "")  {
-        loc_fetch = "" ; cat_fetch = "?" + cat_fetch ; 
-      } 
-      
-      if (newState.category == "") {
-        cat_fetch = ""
-      }
-      url_fetch = url_fetch + loc_fetch + cat_fetch ;  
-      
-      fetch(
-        url_fetch,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${jwt}`,
-          },
-        }
-      )
-        .then((response) =>
-        
-          response.json().then((data) => {
-            console.log("printing data")
-            console.log(data) 
-            console.log("entered json method") 
-                                      function gen_obj(data) {
-                                        let id = data.p_uid;
-                                        let location = data.location;
-                                        let category = data.category;
-                                        let product_img_url = data.product_img_url;
-                                        let description = data.product_description;
-                                        let company_name = data.company_name;
-                                        let company_img_url = data.company_img_url;
-                                        let contractor_id = data.contractor_id;
-                                        let contractor_name = data.contractor_name;
-                            
-                                        let obj = {
-                                          id,
-                                          location,
-                                          category,
-                                          product_img_url,
-                                          description,
-                                          company_name,
-                                          company_img_url,
-                                          contractor_id,
-                                          contractor_name,
-                                        };
-                                        return obj;
-                                      }
-            
-          function gen_query(data_arr){ 
+  useEffect(() => {
+    console.log("product fetch");
+    let url_fetch = `${apiUrl}/api/products/findByTags`;
+    let loc_fetch = `?location=${newState.location}`;
+    let cat_fetch = `&category=${newState.category}`;
+
+    if (newState.location == "") {
+      loc_fetch = "";
+      cat_fetch = "?" + cat_fetch;
+    }
+
+    if (newState.category == "") {
+      cat_fetch = "";
+    }
+    url_fetch = url_fetch + loc_fetch + cat_fetch;
+
+    fetch(url_fetch, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((response) =>
+        response.json().then((data) => {
+          console.log("printing data");
+          console.log(data);
+          console.log("entered json method");
+          function gen_obj(data) {
+            let id = data.p_uid;
+            let location = data.location;
+            let category = data.category;
+            let product_img_url = data.product_img_url;
+            let description = data.product_description;
+            let company_name = data.company_name;
+            let company_img_url = data.company_img_url;
+            let contractor_id = data.contractor_id;
+            let contractor_name = data.contractor_name;
+
+            let obj = {
+              id,
+              location,
+              category,
+              product_img_url,
+              description,
+              company_name,
+              company_img_url,
+              contractor_id,
+              contractor_name,
+            };
+            return obj;
+          }
+
+          function gen_query(data_arr) {
             return data_arr.map((x) => ({
               company_img_url: x.company_img_url,
               product_img_url: x.product_img_url,
@@ -162,92 +156,56 @@ function App() {
               contractor_name: x.contractor_name,
               category: x.category,
               id: x.p_uid,
-              company_id : x.company_id, 
-              contractor_id : x.contractor_id
-          })
-          ) 
-        }   
-            let query_arr = gen_query(data) 
-            console.log("query_arr") 
-            console.log(query_arr) 
-            let new_card_array = [] 
-            for(let i = 0 ; i < data.length ; i ++){
-              new_card_array.push(
-                <Card
-                clicker={() => router.push({pathname:"/product_pg",  query: query_arr[i] })}
+              company_id: x.company_id,
+              contractor_id: x.contractor_id,
+            }));
+          }
+          let query_arr = gen_query(data);
+          console.log("query_arr");
+          console.log(query_arr);
+          let new_card_array = [];
+          for (let i = 0; i < data.length; i++) {
+            new_card_array.push(
+              <Card
+                clicker={() =>
+                  router.push({ pathname: "/product_pg", query: query_arr[i] })
+                }
                 obj={gen_obj(data[i])}
-                key={ (data[i]).p_uid }
+                key={data[i].p_uid}
               />
-              )
-            }
+            );
+          }
 
-            // let new_card_array = data.map((obj) => (
-            //   <Card
-            //     clicker={() => router.push({pathname:"/product_pg",  query:  })}
-            //     obj={gen_obj(obj)}
-            //     key={obj.p_uid}
-            //   />
-            // ));
-            
-            setCardsState(new_card_array);
-          })
-        )
-        .catch((err) => console.error(err));
-    
+          // let new_card_array = data.map((obj) => (
+          //   <Card
+          //     clicker={() => router.push({pathname:"/product_pg",  query:  })}
+          //     obj={gen_obj(obj)}
+          //     key={obj.p_uid}
+          //   />
+          // ));
+
+          setCardsState(new_card_array);
+        })
+      )
+      .catch((err) => console.error(err));
   }, [newState]);
 
   let [locationarr, setlocationarr] = React.useState([
     "Delhi",
     "Mumbai",
-    "Pune"
+    "Pune",
   ]);
 
   let [categoryarr, setcategoryarr] = React.useState([
-   "interior design", 
-   "bathroom designing", 
-   "kitchen designing", 
-   "wardrobe designing",
-   "wardrobe design"
+    "interior design",
+    "bathroom designing",
+    "kitchen designing",
+    "wardrobe designing",
+    "wardrobe design",
   ]);
 
- 
-  // useEffect(() => {
-  //   console.log("location fetch")
-
-  //   fetch(`${apiUrl}/api/locations`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // Authorization: `Bearer ${jwt}`,
-  //     },
-  //   })
-  //     .then((res) =>
-  //       res.json().then((data) => {
-  //         let newlocations = data.map((x) => x.name);
-  //         setlocationarr(newlocations);
-  //       })
-  //     )
-  //     .catch((err) => console.log(err));
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("category fetch")
-
-  //   fetch(`${apiUrl}/api/categories`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // Authorization: `Bearer ${jwt}`,
-  //     },
-  //   })
-  //     .then((res) =>
-  //       res.json().then((data) => {
-  //         let newcategories = data.map((x) => x.name);
-  //         setcategoryarr(newcategories);
-  //       })
-  //     )
-  //     .catch((err) => console.log(err));
-  // }, []);
+  const defaultOptionLocation = locationarr[0];
+  const defaultOptionCategory = categoryarr[0];
 
   return (
     <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter>
@@ -256,19 +214,21 @@ function App() {
         <div className={st.container}>
           <div className={st.search_bars}>
             <div className={st.location}>
-              <h3>Location</h3>
+              <h3 style={{ margin: "1rem 0 0.5rem 0" }}>Location</h3>
               <Dropdown
-                trigger_text="Select Location"
-                values={locationarr}
-                f={locationHandler}
+                options={locationarr}
+                onChange={locationHandler}
+                value={defaultOptionLocation}
+                placeholder="Select an option"
               />
             </div>
             <div className={st.category}>
-              <h3>Category</h3>
+              <h3 style={{ margin: "1rem 0 0.5rem 0" }}>Category</h3>
               <Dropdown
-                trigger_text="Select Category"
-                values={categoryarr}
-                f={categoryHandler}
+                options={categoryarr}
+                onChange={categoryHandler}
+                value={defaultOptionCategory}
+                placeholder="Select an option"
               />
             </div>
           </div>
@@ -298,4 +258,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
