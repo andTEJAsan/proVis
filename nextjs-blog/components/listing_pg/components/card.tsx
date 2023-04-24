@@ -13,7 +13,7 @@ export default function Card(props) {
         (state: RootState) => state.storage
       );
     let obj = props.obj 
-    obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
+    // obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
     let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
     const queryid = useSelector((state : RootState) => state.storage.userID)
 
@@ -41,7 +41,7 @@ export default function Card(props) {
               if (response.ok) {
                 alertService.success('Bookmarked', {autoClose : true})
                 set_bookmark_url("/listing_pg/yellow_bookmark.png") 
-                
+
               } 
               else console.log(response) 
     }
