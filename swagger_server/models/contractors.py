@@ -14,7 +14,7 @@ class Contractors(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, contractor_id: str=None, name: str=None, email: str=None, address: str=None, phone_no: int=None, company_id: str=None):  # noqa: E501
+    def __init__(self, contractor_id: str=None, name: str=None, email: str=None, address: str=None, phone_no: str=None, company_id: str=None):  # noqa: E501
         """Contractors - a model defined in Swagger
 
         :param contractor_id: The contractor_id of this Contractors.  # noqa: E501
@@ -35,7 +35,7 @@ class Contractors(Model):
             'name': str,
             'email': str,
             'address': str,
-            'phone_no': int,
+            'phone_no': str,
             'company_id': str
         }
 
@@ -150,7 +150,7 @@ class Contractors(Model):
         self._address = address
 
     @property
-    def phone_no(self) -> int:
+    def phone_no(self) -> str:
         """Gets the phone_no of this Contractors.
 
 
@@ -160,7 +160,7 @@ class Contractors(Model):
         return self._phone_no
 
     @phone_no.setter
-    def phone_no(self, phone_no: int):
+    def phone_no(self, phone_no: str):
         """Sets the phone_no of this Contractors.
 
 
