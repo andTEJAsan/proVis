@@ -116,9 +116,9 @@ def getpassword_fromemail(emailid : str) -> str:
     with connection.cursor() as cursor:
         cursor.execute(sql,(emailid))
         r = cursor.fetchone()
-        if r is not None:
+        if (r):
             password = r['password']
-            return password
+            return password      
         return None
     
 def getcusid_fromemail(emailid : str) -> str:
@@ -127,7 +127,7 @@ def getcusid_fromemail(emailid : str) -> str:
     with connection.cursor() as cursor:
         cursor.execute(sql,(emailid))
         r = cursor.fetchone()
-        if r is not None:
+        if (r):
             cusid = r['cus_uid']
             return cusid
         return None
@@ -138,7 +138,7 @@ def getusername_fromemail(emailid:str) ->str:
     with connection.cursor() as cursor:
         cursor.execute(sql,(emailid))
         r = cursor.fetchone()
-        if r is not None:
+        if (r):
             username = r
             return username 
         return None
@@ -146,8 +146,7 @@ def getusername_fromemail(emailid:str) ->str:
 def add_customer(customer : Customers) -> None:
     with connection.cursor() as cursor:
         cusid = getcusid_fromemail(customer.emailid)
-        
-        if cusid is not None:
+        if (cusid is not None):
            raise NameError 
         query = "INSERT INTO customers (name,email,password,phone_no) VALUES (%s, %s, %s, %s)"
         values = (customer.name,customer.emailid, customer.password, customer.phone_number)
@@ -169,7 +168,7 @@ def getotp_frommail(email : str) -> str :
         sql ="""SELECT `otp` FROM `customers` WHERE `email`=%s"""
         cursor.execute(sql,(email))
         result = cursor.fetchone()
-        if result is None:
+        if (not result):
             return None
         otp = result["otp"]
         return otp
@@ -178,7 +177,7 @@ def check_customer_exists(cusid:str)->None:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `customers` WHERE `cus_uid`=%s""",cusid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
 
 
@@ -186,7 +185,7 @@ def get_customer_by_id(cusid:str) ->Optional[Customers]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `customers` WHERE `cus_uid`=%s""",cusid)
         element=cursor.fetchone()
-        if element is None:
+        if (not element):
             raise NameError
         customer=Customers(cus_id=element['cus_uid'],name=element['name'],emailid=element['email'],
                             phone_number=element['phone_no'],password=element['password'])
@@ -210,40 +209,44 @@ def getcompanyid_fromcompany(company:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `company_id` FROM `companies` WHERE `name`=%s""",company)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             companyid=r['company_id']
             return companyid
-        return None
+        ##print("Empty string is returned from companyid_fromcompany")
+        return ""
     
 def getcompanyname_fromcompanyid(companyid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `name` FROM `companies` WHERE `company_id`=%s""",companyid)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             name=r['name']
             return name
-        return None
+        ##print("Empty string is returned from companyname_fromcompanyid")
+        return ""
         
 def getcompanyimgurl_fromcompanyid(companyid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `company_img_url` FROM `companies` WHERE `company_id`=%s""",companyid)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             company_img_url=r['company_img_url']
             return company_img_url
-        return None
+        ##print("Empty string is returned from companyimgurl_fromcompanyid")
+        return ""
     
 def check_company_exists(companyid:str)->None:
     with connection.cursor() as cursor:
+
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id` = %s""",companyid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
         
-def add_companies(company:Companies) -> None:
+def add_companies(company:Companies)->None:
     with connection.cursor() as cursor:
         companyid=getcompanyid_fromcompany(company.name)
-        if(companyid is not None):
+        if(companyid != ""):
             raise NameError
         query="""INSERT INTO companies(name,company_img_url,about_us,website_link) VALUES (%s,%s,%s,%s)"""
         values=(company.name,company.company_img_url,company.about_us,company.website_link)
@@ -266,7 +269,7 @@ def get_company_by_id(companyid:str)->Optional[Companies]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
         company=Companies(company_id=r['company_id'],name=r['name'],company_img_url=r['company_img_url'],
                           about_us=r['about_us'],website_link=r['website_link'])
@@ -279,24 +282,26 @@ def getcontractorid_fromcontractoremail(contractoremail:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `contractor_id` FROM `contractors` WHERE `email`=%s""",contractoremail)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             contractor_id=r['contractor_id']
             return contractor_id
-        return None
+        ##print("Empty string is returned from getcontractor_fromcontractoremail")
+        return ""
     
 def getcompanyid_fromcontractorid(contractorid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `company_id` FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             companyid=r['company_id']
             return companyid
-        return None
+        ##print("getcontractor_fromcontractorid is not returning anything")
+        return ""
 
 def add_contractors(contractor:Contractors) -> None:
     with connection.cursor() as cursor:
         contractorid=getcontractorid_fromcontractoremail(contractor.email)
-        if(contractorid is not None):
+        if(contractorid != ""):
             raise NameError
         query="""INSERT INTO contractors(name,email,address,phone_no,company_id) VALUES (%s,%s,%s,%s,%s)"""
         values=(contractor.name,contractor.email,contractor.address,contractor.phone_no,contractor.company_id)
@@ -308,7 +313,7 @@ def check_contractor_exists(contractorid:str)->None:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
         
 
@@ -328,7 +333,7 @@ def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
         contractor=Contractors(contractor_id=r['contractor_id'],name=r['name'],email=r['email'],
                                address=r['address'],phone_no=r['phone_no'],company_id=r['company_id'])       
@@ -358,7 +363,7 @@ def getbookmark_fromid(bookmarkid:str)->Optional[Bookmarks]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
         element=cursor.fetchone()
-        if element is None:
+        if (not element):
             raise NameError
         product=getproduct_frompuid(element['p_uid'])
         bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)    
@@ -375,24 +380,26 @@ def getlocationid_fromlocation(location:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `id` FROM `locations` WHERE `name`=%s""",location)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             locationid=r['id']
             return locationid
-        return None
+        ##print("Empty string is returned from getlocationid_fromlocation")
+        return ""
     
 def getlocation_fromlocationid(locationid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `locations` WHERE `id`=%s""",locationid)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             location=r['name']
             return location
-        return None
+        ##print("Empty string is returned from getlocation_fromlocationid")
+        return ""
 
 def add_locations(location:Locations) -> None:
     with connection.cursor() as cursor:
         locationid=getlocationid_fromlocation(location.name)
-        if locationid is not None:
+        if (locationid != ""):
             return
         query="INSERT INTO locations(name) VALUES (%s)"
         values=(location.name)
@@ -417,24 +424,26 @@ def getcategoryid_fromcategory(category:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `id` FROM `categories` WHERE `name`=%s""",category)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             categoryid=r['id']
             return categoryid
-        return None
+        ##print("Empty string is returned from getcategoryid_fromcategory")
+        return ""
     
 def getcategory_fromcategoryid(categoryid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `name` FROM `categories` WHERE `id`=%s""",categoryid)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             category=r['name']
             return category
-        return None
+        ##print("Empty string is returned from getcategory_fromcategoryid")
+        return ""
 
 def add_categories(category:Categories) -> None:
      with connection.cursor() as cursor:
         categoryid=getcategoryid_fromcategory(category.name)
-        if categoryid is not None:
+        if (categoryid != ""):
             return
         query="INSERT INTO categories(name) VALUES (%s)"
         values=(category.name)
@@ -458,33 +467,37 @@ def getpuid_fromcontractorid(contractor_id:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `p_uid` FROM `products` WHERE `contractor_id`=%s""",contractor_id)
         r=cursor.fetchone()
-        if r is not None:
+        if (r):
             puid=r['p_uid']
             return puid
-        return None
+        ##print("Empty string is returned from getpuid_fromcontractorid")
+        return ""
     
 def getcontractorid_frompuid(puid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `contractor_id` FROM `products` WHERE `p_uid`=%s""",puid)
         element=cursor.fetchone()
-        if element is not None:
+        if (element):
             contractorid=element['contractor_id']
             return contractorid
-        return None
+        ##print("Empty string is returned from getcontractorid_frompuid")
+        return ""
     
 def getproductimgurl_frompuid(puid:str)->str:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT `product_img_url` FROM `products` WHERE `p_uid`=%s""",puid)
         element=cursor.fetchone()
-        if element is not None:
+        if (element):
             productimgurl=element['product_img_url']
             return productimgurl
-        return None
+        ##print("Empty string is returned from getproductimgurl_frompuid")
+        return ""
+    
             
 def add_products(product:Products) -> None:
     with connection.cursor() as cursor:
         puid=getpuid_fromcontractorid(product.contractor_id)
-        if(puid is not None):
+        if(puid != ""):
             raise NameError
         locationid=getlocationid_fromlocation(product.location)
         categoryid=getcategoryid_fromcategory(product.category)
@@ -498,7 +511,7 @@ def check_product_exists(puid:str)->None:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `products` WHERE `p_uid`=%s""",puid)
         r=cursor.fetchone()
-        if r is None:
+        if (not r):
             raise NameError
         
 def get_all_products()->list[Products]:
@@ -525,7 +538,7 @@ def getproduct_frompuid(puid:str)->Optional[Products]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `products` WHERE `p_uid`=%s""",puid)
         element=cursor.fetchone()
-        if element is None:
+        if (not element):
             raise NameError
         
         location=getlocation_fromlocationid(element['location_id'])
@@ -646,7 +659,7 @@ def getorder_fromid(orderid:str)->Optional[Orders]:
         cursor.execute("""SELECT * FROM `orders` WHERE `id`=%s""",orderid)
         element=cursor.fetchone()
 
-        if(element is None):
+        if(not element):
             raise NameError
         
         productimgurl=getproductimgurl_frompuid(element['p_uid'])
