@@ -1,5 +1,5 @@
 import PageTemplate from "../../components/reusable/template/PageTemplate.tsx";
-import st from "./contact.module.scss";
+import st from "../contact/contact.module.scss";
 
 export default function Bookmarks() {
   return (

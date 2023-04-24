@@ -8,9 +8,25 @@ import st from "../../styles/dashboard/app.module.css"
 import { Card, Space } from 'antd';
 
 export default function App(){
+    let obj  = {
+        company_img_url : "", 
+        product_img_url : "", description : "", company_name : "", location : "", category : "", order_date_time : "",
+        company_id :"", p_uid : ""
+    }
+    let com_img_url  = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
+    let prod_img_url = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
+    let desc = "Perhaps duty is the death of love" 
+    let com_name = "Watson and Holmes" 
+    let loc = "Noida" ; let cat = "Interior Design " ;
+    let date_time = "19/04/2003" 
+
+    obj.company_img_url = com_img_url ; obj.product_img_url = prod_img_url ; obj.description = desc ; 
+    obj.company_name = com_name ; obj.location = loc ; obj.category  = cat ; obj.order_date_time = date_time ; 
+    obj.company_id = "1" ; obj.p_uid = "1" ; 
+
     const id = useSelector((state : RootState) => state.storage.userID)
     // get user id from state
-    let [userState, setUserState] = React.useState({name : "", emailid: "", phone_no : ""})
+    let [userState, setUserState] = React.useState({name : "", emailid: "", phone_number : ""})
 
     let [orderState, setOrderState] = React.useState([]) 
 
@@ -19,30 +35,37 @@ export default function App(){
     }
 
     const { apiUrl } = config;
-
-    useEffect(() => {
-        Promise.all([ fetch(`${apiUrl}/api/customers/${id}` , {
-            method : 'GET', 
-              headers: {
-                "Content-Type": "application/json" 
-                  // Authorization: `Bearer ${jwt}`,
-              }
-    }), fetch(`${apiUrl}/api/customers/${id}/orders`, {
-        method : "GET",
-        headers : {
-            "Content-Type": "application/json" 
-        }
-})])
-
-    .then(([cus_response, order_response]) => Promise.all([cus_response.json(),order_response.json()])
-    .then(([customer_data,order_data]) => {
-        setUserState({name : customer_data.name, emailid : customer_data.emailid, phone_no: customer_data.phone_number})
-        setOrderState(genarr(order_data))
-        console.log("printing order_data") 
-        console.log(genarr(order_data))
+    let temp_arr = [] 
+    for (let i = 0 ; i  < 10 ; i ++){
+        temp_arr.push(<Order obj = {obj} />) 
     }
-    )).catch((err) => console.error(err))
-    }, []) 
+    useEffect(() => {
+        setOrderState(temp_arr) 
+    }, [orderState])  
+
+//     useEffect(() => {
+//         Promise.all([ fetch(`${apiUrl}/api/customers/${id}` , {
+//             method : 'GET', 
+//               headers: {
+//                 "Content-Type": "application/json" 
+//                   // Authorization: `Bearer ${jwt}`,
+//               }
+//     }), fetch(`${apiUrl}/api/customers/${id}/orders`, {
+//         method : "GET",
+//         headers : {
+//             "Content-Type": "application/json" 
+//         }
+// })])
+
+//     .then(([cus_response, order_response]) => Promise.all([cus_response.json(),order_response.json()])
+//     .then(([customer_data,order_data]) => {
+//         setUserState({name : customer_data.name, emailid : customer_data.emailid, phone_number: customer_data.phone_number})
+//         setOrderState(genarr(order_data))
+//         console.log("printing order_data") 
+//         console.log(genarr(order_data))
+//     }
+//     )).catch((err) => console.error(err))
+//     }, []) 
 
 
    
@@ -56,20 +79,32 @@ export default function App(){
             <div className= {st.header}>
                     <img src = {dashboard_url} className={st.dashboard_img} />
            </div>
-        <Space direction="vertical" size={16} className={st.space}>
-            
-          <Card title="User Dashboard"  style={{ width: 400 , height : 200}} className={st.card}>
-          
-            <p><strong>Name</strong> <span className={st.label}>{userState.name}</span> </p>
-            <p><strong>Phone Number</strong><span className={st.label}>{userState.phone_no}</span> </p>
-            <p><strong>Email Address</strong><span className={st.label}> {userState.emailid} </span></p>
-          </Card>
-          {/* <Card size="small" title="Small size card" extra={<a href="#">More</a>} style={{ width: 300 }}>
-            <p>Card content</p>
-            <p>Card content</p>
-            <p>Card content</p>
-          </Card> */}
-        </Space>
+        <div className={st.detailscontainer}>
+                <Space direction="vertical" size={16} className={st.space}>
+                    
+                    <Card title="User Dashboard"  style={{ width: 400 , height : 200}} className={st.card}>
+                    
+                    {/* <p><strong>Name</strong> <span className={st.label}>{userState.name}</span> </p>
+                    <p><strong>Phone Number</strong><span className={st.label}>{userState.phone_number}</span> </p>
+                    <p><strong>Email Address</strong><span className={st.label}> {userState.emailid} </span></p> */}
+
+                    <p><strong>Name</strong> <span className={st.label}>Aaveg Jain</span> </p>
+                    <p><strong>Phone Number</strong><span className={st.label}>9205231951</span> </p>
+                    <p><strong>Email Address</strong><span className={st.label}>aavegj1904@gmail.com</span></p>
+
+                    </Card>
+
+                    {/* <Card size="small" title="Small size card" extra={<a href="#">More</a>} style={{ width: 300 }}>
+                    <p>Card content</p>
+                    <p>Card content</p>
+                    <p>Card content</p>
+                    </Card> */}
+                </Space>
+            <div className={st.orderdetails} >
+                <div className={st.ordertext}>Your Orders</div>
+                {orderState} 
+            </div>
+        </div>
     </PageTemplate>
     )
 

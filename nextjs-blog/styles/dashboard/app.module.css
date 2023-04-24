@@ -9,6 +9,7 @@
 }
 
 .space{
+    grid-column: 1/2;
     margin : 10px  ;
 }
 .card{
@@ -19,4 +20,24 @@
 .label {
     /* background-color: white; */
     margin-left : 20px ; 
+}
+
+.orderdetails{
+    margin-top : 10px ; 
+    grid-column: 2/-1; 
+}
+
+.detailscontainer{
+    display: grid ; 
+    grid-template-columns: 1fr 2fr ; 
+    column-gap: 30px;
+
+    font-family: 'Inria Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Oswald', sans-serif;
+    font-family: 'Outfit', sans-serif;
+}
+.ordertext{
+    
+    font-weight: 700;
 }
