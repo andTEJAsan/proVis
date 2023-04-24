@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-
+// import Footer from "@components/reusable/template/Footer";
 import "react-js-dropdavn/dist/index.css";
 import { useRouter } from "next/router";
 import config from "../../config";
@@ -198,8 +198,8 @@ function App() {
   const defaultOptionCategory = categoryarr[0];
 
   return (
-    <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter>
-      <div>
+    <PageTemplate transparentNav={false} outsideApp darkBg={true} noFilter noFooter={true}>
+      <div style={{display:"block"}}>
         <Listing_Box />
         <div className={st.container}>
           <div className={st.search_bars}>
@@ -244,7 +244,9 @@ function App() {
           <div className={st.cards}>{cardsState}</div>
         </div>
       </div>
-    </PageTemplate>
+      
+      {/* <Footer /> */}
+    </PageTemplate> 
   );
 }
 
