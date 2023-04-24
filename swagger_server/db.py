@@ -236,10 +236,12 @@ def getcompanyimgurl_fromcompanyid(companyid:str)->str:
         return ""
     
 def check_company_exists(companyid:str)->None:
+    print("This is debugging of check_company_exists")
     with connection.cursor() as cursor:
-
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id` = %s""",companyid)
+        print("query executed")
         r=cursor.fetchone()
+        print("this is r:",r)
         if (not r):
             raise NameError
         
@@ -266,13 +268,18 @@ def get_all_companies() ->list[Companies]:
     return cp
 
 def get_company_by_id(companyid:str)->Optional[Companies]:
+    print("Debugging for get_company_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
         r=cursor.fetchone()
+        print("type:",r)
+        print("this is r:",r)
         if (not r):
             raise NameError
         company=Companies(company_id=r['company_id'],name=r['name'],company_img_url=r['company_img_url'],
                           about_us=r['about_us'],website_link=r['website_link'])
+        print("type:",type(company))
+        print("this is company:",company)
         return company
         
 
@@ -310,9 +317,12 @@ def add_contractors(contractor:Contractors) -> None:
         contractor.contractor_id=str(cursor.lastrowid)
 
 def check_contractor_exists(contractorid:str)->None:
+    print("Debugging for check_contractor_exists function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
+        print("query executed")
         r=cursor.fetchone()
+        print("this is r:",r)
         if (not r):
             raise NameError
         
@@ -330,13 +340,18 @@ def get_all_contractors() -> list[Contractors]:
     return cr
 
 def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
+    print("Debugging for getcontractor_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
         r=cursor.fetchone()
+        print("type:",type(r))
+        print("this is r:",r)
         if (not r):
             raise NameError
         contractor=Contractors(contractor_id=r['contractor_id'],name=r['name'],email=r['email'],
-                               address=r['address'],phone_no=r['phone_no'],company_id=r['company_id'])       
+                               address=r['address'],phone_no=r['phone_no'],company_id=r['company_id']) 
+        print("type:",type(contractor))  
+        print("this is contractor:",contractor)    
         return contractor
 
 #BOOKMARKS

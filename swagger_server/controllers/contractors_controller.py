@@ -20,7 +20,6 @@ def get_contractor(queryid:str):  # noqa: E501
         db.check_contractor_exists(queryid)
     except NameError:
         return  {"error":"Contractor with given contractor_id doesn't exist","status":400}
-    
     return db.get_contractor_by_id(queryid)
 
 
