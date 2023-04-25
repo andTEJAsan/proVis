@@ -109,7 +109,7 @@ export default function Request_Btn(props) {
   }
   else if (visible == 1){
       console.log("in state 1") ; 
-      AlertComponent = <Alert message="Please log in first" type="warning" /> 
+      AlertComponent = <Alert message="Please log in first" type="error" /> 
   }
   else{
       console.log("in state 2") ; 
@@ -149,7 +149,7 @@ export default function Request_Btn(props) {
       }
     } else {
       SetVisibility(1) ;
-      alert("Please log in first!");
+      // alert("Please log in first!");
     }
   }
 
@@ -161,7 +161,7 @@ export default function Request_Btn(props) {
           <div className={st.button_wrapper}>
             <h3>Connect with the contractor</h3>
             {/* <button className={st.Button}>{props.btn_text}</button> */}
-            <Button theme="pink" onClick={handleSubmit}>
+            <Button theme="pink" >
             {props.btn_text}
                 </Button>
           </div>
