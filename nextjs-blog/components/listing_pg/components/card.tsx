@@ -5,10 +5,42 @@ import { useDispatch, useSelector } from "react-redux";
 import {RootState} from "../../../redux/reducers"
 import config from "config"; 
 import { Alert } from 'antd'; 
+import axios from 'axios' 
 
 export default function Card(props) { 
     
-    console.log(props) 
+    // ml api code 
+    let obj = props.obj 
+    const [translationText, setTranslationText] = React.useState(obj.description) 
+    const [displayLang, setdisplayLang] = React.useState(0)  
+    const translateText = () => {
+        console.log("hey")
+        let data = {
+            q : translationText, 
+            source : (displayLang == 0) ? "en" : "hi" ,
+            target : (displayLang == 0) ? "hi" : "en" 
+        }
+        axios.post(`https://libretranslate.de/translate`, data)
+        .then((response) => {
+            setTranslationText(response.data.translatedText) 
+            console.log(response.data.translatedText) ; 
+            setdisplayLang((prevState) => {
+                if (prevState == 0) {return 1} else {return 0} 
+            })
+        })
+
+    }
+
+
+
+
+
+
+
+
+
+
+    // console.log(props) 
     const { isLoggedIn} = useSelector(
         (state: RootState) => state.storage
       );
@@ -16,7 +48,7 @@ export default function Card(props) {
     const [BookmarkVisible, SetVisibility] = React.useState(0) 
     // if bookmark alert not visible, 0 ; if successfully bookmarked , then 1 ; if not logged in then 2.
 
-    let obj = props.obj 
+    
     // obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
     let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
     const queryid = useSelector((state : RootState) => state.storage.userID)
@@ -88,13 +120,16 @@ export default function Card(props) {
                                 <img className={st.bookmarkimg} src = {bookmark_url} onClick = {bookmark_handler} />
                             
                         </div>
+                        <button className= {st.btn} onClick={translateText}>
+                            <div className={st.btntext}>Translate</div>
+                        </button>
                         <button className= {st.btn} onClick={props.clicker}>
                             <div className={st.btntext}>Connect</div>
                         </button>
                           
                 </div>
                     <div className={st.details2}>
-                        {obj.description}
+                        {translationText} 
                     </div>
                 </div>
     </div>
