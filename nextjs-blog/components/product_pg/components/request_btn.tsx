@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import config from "../../../config";
 import { RootState } from "../../../redux/reducers";
 import styled from "styled-components";
+import { Alert } from 'antd'; 
 
 export default function Request_Btn(props) {
   let [msgState, statehandler] = React.useState("");
@@ -62,7 +63,7 @@ export default function Request_Btn(props) {
     const hours = now.getUTCHours();
     const minutes = now.getUTCMinutes();
     const seconds = now.getUTCSeconds();
-    const milliseconds = now.getUTCMilliseconds();
+    // const milliseconds = now.getUTCMilliseconds();
 
     // Zero-pad month, day, hours, minutes, and seconds to two digits
     const zeroPad = (num) => num.toString().padStart(2, "0");
@@ -73,13 +74,13 @@ export default function Request_Btn(props) {
     const secondsStr = zeroPad(seconds);
 
     // Format the date-time string
-    const dateTimeStr = `${year}-${monthStr}-${dayStr}T${hoursStr}:${minutesStr}:${secondsStr}.${milliseconds}Z`;
+    const dateTimeStr = `${year}-${monthStr}-${dayStr}   ${hoursStr}:${minutesStr}:${secondsStr}`;
 
     return dateTimeStr;
   }
 
   const request_body = {
-    order_date_time: "2023-04-07T13:13:20.235Z",
+    order_date_time: "2023-04-07   13:13:20",
     p_uid: props.p_uid,
     cus_uid: "ff",
     message: "string",
@@ -98,10 +99,30 @@ export default function Request_Btn(props) {
     statehandler(msg);
   }
 
+  const [visible, SetVisibility] = React.useState(0) ; 
+
+  let AlertComponent ; 
+    
+  if (visible == 0) {
+      console.log("in state 0") ; 
+      <div></div>
+  }
+  else if (visible == 1){
+      console.log("in state 1") ; 
+      AlertComponent = <Alert message="Please log in first" type="warning" /> 
+  }
+  else{
+      console.log("in state 2") ; 
+      AlertComponent = <Alert message="Order Succesfully placed" type="success" />
+  }
+
+  // 0 if not visible, 1 if not looged in, 2 if logged in and successful . 
   const { isLoggedIn } = useSelector((state: RootState) => state.storage);
 
   const queryid = useSelector((state: RootState) => state.storage.userID);
   const { apiUrl } = config;
+
+  // AlertComponent = <Alert message="Bookmarked" type="warning" />
 
   // const jwt = useSelector((state) => state.storage.jwt);
   async function handleSubmit(event) {
@@ -122,16 +143,19 @@ export default function Request_Btn(props) {
       );
 
       if (response.ok) {
+        SetVisibility(2) ; 
         console.log("response worked!");
         statehandler("");
       }
     } else {
+      SetVisibility(1) ;
       alert("Please log in first!");
     }
   }
 
   return (
     <div className={st.DialogRoot}>
+      {AlertComponent} 
       <Dialog.Root>
         <Dialog.Trigger asChild>
           <div className={st.button_wrapper}>
