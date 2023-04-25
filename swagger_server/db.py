@@ -649,22 +649,36 @@ def add_orders(order:Orders) -> None:
         connection.commit()
         order.id=str(cursor.lastrowid)
 
-def getorders_fromcusid(cusid:str)->list[Orders]:
+def getorders_fromcusid(cusid:str):
 
     od=[]
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `orders` WHERE `cus_uid`=%s""",cusid)
         results=cursor.fetchall()
         for element in results:
+            puid = element['p_uid']
+            cursor.execute("""SELECT `location_id` FROM `products` WHERE `p_uid`=%s""",puid)
+            result = cursor.fetchone()
+            locid = result['location_id']
+            cursor.execute("""SELECT `category_id` FROM `products` WHERE `p_uid`=%s""",puid)
+            result = cursor.fetchone()
+            catid = result['category_id']
+            cursor.execute("""SELECT `name` FROM `locations` WHERE `id`=%s""",locid)
+            location = (cursor.fetchone())['name']
+            cursor.execute("""SELECT `name` FROM `categories` WHERE `id`=%s""",catid)
+            category=(cursor.fetchone())['name']
+
             productimgurl=getproductimgurl_frompuid(element['p_uid'])
             contractorid=getcontractorid_frompuid(element['p_uid'])
             companyid=getcompanyid_fromcontractorid(contractorid)
             companyname=getcompanyname_fromcompanyid(companyid)
             companyimgurl=getcompanyimgurl_fromcompanyid(companyid)
 
-            order=Orders(id=element['id'],cus_uid=element['cus_uid'],order_date_time=element['order_date_time'],
-                        p_uid=element['p_uid'],product_img_url=productimgurl,company_name=companyname,
-                        company_img_url=companyimgurl,message=element['message'])
+            order={"id":element['id'],"cus_uid":element['cus_uid'],"order_date_time":element['order_date_time'],
+                        "p_uid":element['p_uid'],"product_img_url":productimgurl,"company_name":companyname,
+                        "company_img_url":companyimgurl,"message":element['message'],"location":location,"category":category,
+                        "contractor_id":contractorid,"company_id":companyid}
+            
             
             od.append(order)
 
