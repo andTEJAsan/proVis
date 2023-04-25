@@ -26,7 +26,6 @@ export default function MainContent(props){
                 <nav className={st.nav}>
                     <a href="#aboutus">About Us</a>
                     <a href="#business">Business</a>
-                    <a href="">Reviews</a>
                 </nav>
             </header>
 
