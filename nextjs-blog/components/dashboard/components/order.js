@@ -27,13 +27,13 @@ export default function Order(props){
         <div className= {st.card_container} 
         onClick={() => router.push({pathname:"/product_pg",  query: query_obj })}> 
             <div className={st.img}>
-                <img src = {obj.product_img_url} className={st.img2} /> 
+                <img src = {obj.product_img_url} className={st.img2}/> 
             </div> 
 
             <div className={st.details} >
                 <div className={st.infocontainer} >
                     <label htmlFor = "companyname" className={st.label}>
-                        <strong>Company Name</strong>
+                        <strong>Company Name:</strong>
                     </label>
                     <span id = "companyname" className={st.item}>
                         {obj.company_name}
@@ -44,7 +44,7 @@ export default function Order(props){
               
                 <div className={st.infocontainer}  >
                     <label htmlFor = "location" className={st.label}>
-                    <strong>Location</strong>
+                    <strong>Location:</strong>
                     </label>
                     <span id = "location" className={st.item}>
                         {obj.location}
@@ -53,7 +53,7 @@ export default function Order(props){
                 
                 <div className={st.infocontainer}  >
                     <label htmlFor = "category" className={st.label}>
-                    <strong>Category</strong>
+                    <strong>Category:</strong>
                     </label>
                     <span id = "category" className={st.item}>
                         {obj.category} 
@@ -63,7 +63,7 @@ export default function Order(props){
                 
                 <div className={st.infocontainer} >
                     <label htmlFor = "datetime" className={st.label}>
-                    <strong>Order Date</strong>
+                    <strong>Order Date:</strong>
                     </label>
                     <span id = "datetime" className={st.item}>
                         {obj.order_date_time} 
@@ -72,7 +72,7 @@ export default function Order(props){
 
                 <div className={st.infocontainer} >
                     <label htmlFor = "companyname" className={st.label}>
-                        <strong>Message</strong>
+                        <strong>Message:</strong>
                     </label>
                     <span id = "companyname" className={st.item}>
                         {obj.message}
