@@ -3,6 +3,7 @@ import st from "../../../styles/listing_pg/card.module.css"
 import { alertService } from "../../../services/alert.service"  ;
 import { useDispatch, useSelector } from "react-redux";
 import {RootState} from "../../../redux/reducers"
+import Spinner from "./spinner";
 import config from "config"; 
 import { Alert } from 'antd'; 
 import axios from 'axios' 
@@ -13,31 +14,28 @@ export default function Card(props) {
     let obj = props.obj 
     const [translationText, setTranslationText] = React.useState(obj.description) 
     const [displayLang, setdisplayLang] = React.useState(0)  
+    const [loader,setLoader]=React.useState(false);
+
     const translateText = () => {
-        console.log("hey")
+        
         let data = {
             q : translationText, 
             source : (displayLang == 0) ? "en" : "hi" ,
             target : (displayLang == 0) ? "hi" : "en" 
         }
+
+        setLoader(true);
         axios.post(`https://libretranslate.de/translate`, data)
         .then((response) => {
             setTranslationText(response.data.translatedText) 
             console.log(response.data.translatedText) ; 
+            setLoader(false);
             setdisplayLang((prevState) => {
                 if (prevState == 0) {return 1} else {return 0} 
             })
         })
 
     }
-
-
-
-
-
-
-
-
 
 
     // console.log(props) 
@@ -101,7 +99,7 @@ export default function Card(props) {
     }
     return (
                 
-        <div>
+        loader==true?<Spinner/>:<div>
         <div className={st.alert} > 
         {AlertComponent} 
             
