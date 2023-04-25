@@ -60,13 +60,13 @@ export default function EmailAuth() {
   const emailRegister = async () => {
     setLoading(true);
     if (email === "" || password === "" || rePassword === "") {
-      alert("register_warn_1");
+      alert("Please enter all the details!");
     } else if (reg.test(email) === false) {
-      alert("login_warn_2");
+      alert("Please enter correct email!");
     } else if (password.length < 4) {
-      alert("register_warn_3");
+      alert("Password must be at least 4 characters");
     } else if (password !== rePassword) {
-      alert("register_warn_4");
+      alert("Password and rePassword must be the same");
     } else {
       // const name = email.replace(/@.*$/, "");
       setLoading(true);
