@@ -6,25 +6,26 @@ import Order from "./components/order"
 import PageTemplate from "@components/reusable/template/PageTemplate";
 import st from "../../styles/dashboard/app.module.css" 
 import { Card, Space } from 'antd';
+import axios from 'axios' 
 
 export default function App(){
     let obj  = {
         company_img_url : "", 
         product_img_url : "", description : "", company_name : "", location : "", category : "", order_date_time : "",
-        company_id :"", p_uid : ""
+        company_id :"", p_uid : "", message : ""
     }
-    let com_img_url  = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
-    let prod_img_url = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
-    let desc = "Perhaps duty is the death of love" 
-    let com_name = "Watson and Holmes" 
-    let loc = "Noida" ; let cat = "Interior Design " ;
-    let date_time = "19/04/2003" 
+    // let com_img_url  = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
+    // let prod_img_url = "https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg"
+    // let desc = "Perhaps duty is the death of love" 
+    // let com_name = "Watson and Holmes" 
+    // let loc = "Noida" ; let cat = "Interior Design " ;
+    // let date_time = "19/04/2003" 
 
-    obj.company_img_url = com_img_url ; obj.product_img_url = prod_img_url ; obj.description = desc ; 
-    obj.company_name = com_name ; obj.location = loc ; obj.category  = cat ; obj.order_date_time = date_time ; 
-    obj.company_id = "1" ; obj.p_uid = "1" ; 
+    // obj.company_img_url = com_img_url ; obj.product_img_url = prod_img_url ; obj.description = desc ; 
+    // obj.company_name = com_name ; obj.location = loc ; obj.category  = cat ; obj.order_date_time = date_time ; 
+    // obj.company_id = "1" ; obj.p_uid = "1" ; 
 
-    const id = useSelector((state : RootState) => state.storage.userID)
+    const id = useSelector((state) => state.storage.userID)
     // get user id from state
     let [userState, setUserState] = React.useState({name : "", emailid: "", phone_number : ""})
 
@@ -35,14 +36,16 @@ export default function App(){
     }
 
     const { apiUrl } = config;
-    let temp_arr = [] 
-    for (let i = 0 ; i  < 10 ; i ++){
-        temp_arr.push(<Order obj = {obj} />) 
-    }
-    useEffect(() => {
-        setOrderState(temp_arr) 
-    }, [orderState])  
+    // let temp_arr = [] 
+    // for (let i = 0 ; i  < 10 ; i ++){
+    //     temp_arr.push(<Order obj = {obj} />) 
+    // }
+    // useEffect(() => {
+    //     setOrderState(temp_arr) 
+    // }, [orderState])  
 
+
+    
 //     useEffect(() => {
 //         Promise.all([ fetch(`${apiUrl}/api/customers/${id}` , {
 //             method : 'GET', 
@@ -68,6 +71,23 @@ export default function App(){
 //     }, []) 
 
 
+    useEffect(() =>{
+        const fetchData = async ()=>{
+            const customer_response   = await axios(`${apiUrl}/api/customers/${id}`) ;
+            const order_response = await axios(`${apiUrl}/api/customers/${id}/orders`); 
+            const customer_data = customer_response.data 
+            const order_data = order_response.data 
+            console.log("logging..")
+            console.log(customer_data) ; 
+            console.log(order_data) 
+            setUserState({name : customer_data.name, emailid : customer_data.emailid, phone_number: customer_data.phone_number});
+            setOrderState(genarr(order_data));
+           
+        };
+       
+        fetchData() 
+    } , []) ; 
+
    
       
 
@@ -84,13 +104,13 @@ export default function App(){
                     
                     <Card title="User Dashboard"  style={{ width: 400 , height : 200}} className={st.card}>
                     
-                    {/* <p><strong>Name</strong> <span className={st.label}>{userState.name}</span> </p>
+                    <p><strong>Name</strong> <span className={st.label}>{userState.name}</span> </p>
                     <p><strong>Phone Number</strong><span className={st.label}>{userState.phone_number}</span> </p>
-                    <p><strong>Email Address</strong><span className={st.label}> {userState.emailid} </span></p> */}
+                    <p><strong>Email Address</strong><span className={st.label}> {userState.emailid} </span></p>
 
-                    <p><strong>Name</strong> <span className={st.label}>Aaveg Jain</span> </p>
+                    {/* <p><strong>Name</strong> <span className={st.label}>Aaveg Jain</span> </p>
                     <p><strong>Phone Number</strong><span className={st.label}>9205231951</span> </p>
-                    <p><strong>Email Address</strong><span className={st.label}>aavegj1904@gmail.com</span></p>
+                    <p><strong>Email Address</strong><span className={st.label}>aavegj1904@gmail.com</span></p> */}
 
                     </Card>
 

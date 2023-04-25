@@ -20,7 +20,22 @@ export default function Card(props) {
     // obj.description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged"
     let [bookmark_url, set_bookmark_url] = React.useState("/listing_pg/bookmark.png")  
     const queryid = useSelector((state : RootState) => state.storage.userID)
+    
 
+    let AlertComponent ; 
+    
+    if (BookmarkVisible == 0) {
+        console.log("in state 0") ; 
+        <div></div>
+    }
+    else if (BookmarkVisible == 1){
+        console.log("in state 1") ; 
+        AlertComponent = <Alert message="Bookmarked" type="warning" /> 
+    }
+    else{
+        console.log("in state 2") ; 
+        AlertComponent = <Alert message="Login First" type="error" />
+    }
     async function  bookmark_handler() {
         const { apiUrl } = config;
         if (!isLoggedIn) {
@@ -30,7 +45,7 @@ export default function Card(props) {
         }
         else {
             
-            SetVisibility(1) ; 
+             
             const request_obj = { 
                 "cus_uid" : queryid.toString() , 
                 "p_uid" : props.obj.id.toString()   
@@ -44,7 +59,8 @@ export default function Card(props) {
               } ) ;
             
               if (response.ok) {
-                alertService.success('Bookmarked', {autoClose : true})
+                // alertService.success('Bookmarked', {autoClose : true})
+                SetVisibility(1) ; 
                 set_bookmark_url("/listing_pg/yellow_bookmark.png") 
 
               } 
@@ -54,8 +70,8 @@ export default function Card(props) {
     return (
                 
         <div>
-        <div className={st.alert} >
-           
+        <div className={st.alert} > 
+        {AlertComponent} 
             
             </div>
 

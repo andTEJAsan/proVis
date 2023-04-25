@@ -180,7 +180,7 @@ function App() {
           if(new_card_array.length==0)
           {
             new_card_array.push(
-            <div>No data to show!</div>
+              <div style={{width:"700px",justifyContent:"center",display:"flex"}}>No data to show!</div>
               )
           }
           setLoader(false);

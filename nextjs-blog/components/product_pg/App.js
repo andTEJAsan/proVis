@@ -8,7 +8,7 @@ import {useEffect} from "react"
 import Header from "./components/header";
 import Request_Btn from "./components/request_btn";
 import MainContent from "./components/main-content";
-
+import axios from 'axios' 
 
 
 // 
@@ -50,7 +50,8 @@ function App() {
   let slug = router.query  
   let url1 = slug.product_img_url 
   let url2 = slug.company_img_url 
- 
+  
+  console.log(slug) 
   
   const jwt = useSelector((state) => state.storage.jwt);
 
@@ -70,48 +71,75 @@ function App() {
   
 
 
-  useEffect( () => {
-    Promise.all([
-      fetch(`${apiUrl}/api/contractors/${slug.contractor_id}`, {
-        method : 'GET', 
-        headers: {
-          "Content-Type": "application/json" 
-            // Authorization: `Bearer ${jwt}`,
-        },
-      }),
+  // useEffect( () => {
+  //   Promise.all([
+  //     fetch(`${apiUrl}/api/contractors/${slug.contractor_id}`, {
+  //       method : 'GET', 
+  //       headers: {
+  //         "Content-Type": "application/json" 
+  //           // Authorization: `Bearer ${jwt}`,
+  //       },
+  //     }),
       
-      fetch(`${apiUrl}/api/companies/${slug.company_id}`, {
-        method : 'GET', 
-        headers: {
-          "Content-Type": "application/json" 
-            // Authorization: `Bearer ${jwt}`,
-        },
-      })
+  //     fetch(`${apiUrl}/api/companies/${slug.company_id}`, {
+  //       method : 'GET', 
+  //       headers: {
+  //         "Content-Type": "application/json" 
+  //           // Authorization: `Bearer ${jwt}`,
+  //       },
+  //     })
       
-    ])
-    .then(([contractor_res,company_res]) => Promise.all([contractor_res.json(), company_res.json()])
-    .then(
-      ([contractor_data, company_data]) =>{ 
-        SetcontractorState((prevState) => {
-          return { ...prevState, 
-            contractor_name : contractor_data.name, 
-            phone_no : contractor_data.phone_no,
-            address : contractor_data.address
-        }
-      }) 
-      ; 
-      SetcompanyState((prevState) => {
-        return { ...prevState, 
-          company_name : company_data.name, 
-          website :  company_data.website_link,
-          about_us :  company_data.about_us
-      }
-    })
-    })
-    ).catch((err) => console.error(err));
-  }, []) 
+  //   ])
+  //   .then(([contractor_res,company_res]) => Promise.all([contractor_res.json(), company_res.json()])
+  //   .then(
+  //     ([contractor_data, company_data]) =>{ 
+    //     SetcontractorState((prevState) => {
+    //       return { ...prevState, 
+    //         contractor_name : contractor_data.name, 
+    //         phone_no : contractor_data.phone_no,
+    //         address : contractor_data.address
+    //     }
+    //   }) 
+    //   ; 
+    //   SetcompanyState((prevState) => {
+    //     return { ...prevState, 
+    //       company_name : company_data.name, 
+    //       website :  company_data.website_link,
+    //       about_us :  company_data.about_us
+    //   }
+    // })
+  //   })
+  //   ).catch((err) => console.error(err));
+  // }, []) 
 
+   useEffect( () => {
+    const fetchData = async () => {
+      const contractor_response  = await axios(`${apiUrl}/api/contractors/${slug.company_id}`) ; 
+      const company_response = await axios(`${apiUrl}/api/companies/${slug.company_id}`) ; 
+      const contractor_data = contractor_response.data ; 
+      const company_data = company_response.data ; 
+      console.log("logging ...") 
+      console.log(contractor_data) ; console.log(company_data) ; 
+            SetcontractorState((prevState) => {
+              return { ...prevState, 
+                contractor_name : contractor_data.name, 
+                phone_no : contractor_data.phone_no,
+                address : contractor_data.address
+            }
+          }) ; 
+            SetcompanyState((prevState) => {
+              return { ...prevState, 
+                company_name : company_data.name, 
+                website :  company_data.website_link,
+                about_us :  company_data.about_us
+            }
+          })
+    } ; 
 
+    fetchData() ;
+  }
+   , []
+    )
   
 
 

@@ -17,7 +17,8 @@ import { useRouter } from "next/router";
 export default function Order(props){
     let obj = props.obj 
     let router = useRouter() ; 
-    
+    console.log("printing order")
+    console.log(obj) 
     let query_obj = {company_img_url : obj.company_img_url, product_img_url : obj.product_img_url, 
         description : obj.description, contractor_id : obj.contractor_id, company_id : obj.company_id,
         category : obj.category, id : obj.p_uid } 
@@ -66,6 +67,15 @@ export default function Order(props){
                     </label>
                     <span id = "datetime" className={st.item}>
                         {obj.order_date_time} 
+                    </span>
+                </div>
+
+                <div className={st.infocontainer} >
+                    <label htmlFor = "companyname" className={st.label}>
+                        <strong>Message</strong>
+                    </label>
+                    <span id = "companyname" className={st.item}>
+                        {obj.message}
                     </span>
                 </div>
                 
