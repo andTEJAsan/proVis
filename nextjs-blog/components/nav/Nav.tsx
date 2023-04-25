@@ -118,7 +118,7 @@ export default function Nav({
                   >
                     <button
                       className={styles.viewInfoTab}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", color:"#d8067a" }}
                     >
                       {/* <CircleImage imageUrl={userReady &&"/profilePic.png" }/> */}
 
@@ -148,25 +148,7 @@ export default function Nav({
           )}
         </div>
       </div>
-      {/* <header>
-            <nav className="navbar">
-                
-                <img src = {logo} className="nav--img1" /> 
-                <div className="nav--text">proVis</div>
-                <img src = {search} className="nav--img2" /> 
-                <img src = {user_icon}  className="nav--img3" /> 
-                <h3 >
-                    <ul className="nav--list">
-                        <li className="login">Log In</li>
-                        <li className="signup">Sign Up</li>
-                        <li className="about-us">About Us</li>
-                    </ul>
-                </h3>
-            </nav>
-            
-            
-
-        </header> */}
+    
     </React.Fragment>
   );
 }

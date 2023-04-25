@@ -19,7 +19,8 @@
 
 .label {
     /* background-color: white; */
-    margin-left : 20px ; 
+    margin-left : 0.4em ; 
+    font-size: 0.8em;
 }
 
 .orderdetails{

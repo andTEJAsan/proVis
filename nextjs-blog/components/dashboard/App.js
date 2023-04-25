@@ -61,9 +61,9 @@ export default function App(){
                     
                     <Card title="User Dashboard"  style={{ width: 400 , height : 200}} className={st.card}>
                     
-                    <p><strong>Name</strong> <span className={st.label}>{userState.name}</span> </p>
-                    <p><strong>Phone Number</strong><span className={st.label}>{userState.phone_number}</span> </p>
-                    <p><strong>Email Address</strong><span className={st.label}> {userState.emailid} </span></p>
+                    <p><strong>Name: </strong> <span className={st.label}>{userState.name}</span> </p>
+                    <p><strong>Phone Number: </strong><span className={st.label}>9415468459</span> </p>
+                    <p><strong>Email Address: </strong><span className={st.label}> {userState.emailid} </span></p>
 
        
 
