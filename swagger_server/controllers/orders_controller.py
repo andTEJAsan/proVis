@@ -1,9 +1,21 @@
 import connexion
 import six
+from email.message import EmailMessage
+# create message object instance
+from dotenv.main import load_dotenv
+import os
+import ssl
+import smtplib
 
 from swagger_server.models.order_request import OrderRequest  # noqa: E501
 from swagger_server.models.orders import Orders  # noqa: E501
 from swagger_server import util,db
+
+load_dotenv()
+our_secret_key = os.environ['JWTKEY']
+our_id = os.environ['EMAIL']
+our_pass = os.environ['MASTERPASSWORD']
+algorithm = os.environ['ALGO']
 
 
 def get_customer_order(queryid, orderid):  # noqa: E501
@@ -63,6 +75,25 @@ def post_order(body, queryid):  # noqa: E501
         except NameError:
             return {"error":"Product with given p_uid doesn't exist","status":400}
         
+        contractorid=db.getcontractorid_frompuid(order.p_uid)
+        contractor=db.get_contractor_by_id(contractorid)
+        contractoremail=contractor.email
+        customer=db.get_customer_by_id(order.cus_uid)
+        customeremail=customer.emailid
+
+        msg = EmailMessage()
+        email_sender = our_id
+        email_receiver = contractoremail
+        msg['From'] = email_sender
+        msg['To'] = contractoremail
+        msg['Subject'] = "Request from proVis"
+        body ="You have received a request to meet from user with email address"+customeremail+"\nTheir message is the following\n"+order.message+"\nPlease get in touch with them as soon as possible."
+        msg.set_content(body)
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
+            smtp.login(email_sender,our_pass)
+            smtp.sendmail(email_sender,email_receiver,msg.as_string())
+            
         db.add_orders(order)
 
         return order
