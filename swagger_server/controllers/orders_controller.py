@@ -87,7 +87,7 @@ def post_order(body, queryid):  # noqa: E501
         msg['From'] = email_sender
         msg['To'] = contractoremail
         msg['Subject'] = "Request from proVis"
-        body ="You have received a request to meet from user with email address"+customeremail+"\nTheir message is the following\n"+order.message+"\nPlease get in touch with them as soon as possible."
+        body ="You have received a request to meet from user with email address "+customeremail+"\nTheir message is the following\n"+order.message+"\nPlease get in touch with them as soon as possible."
         msg.set_content(body)
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
