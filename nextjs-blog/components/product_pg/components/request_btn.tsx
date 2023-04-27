@@ -7,9 +7,11 @@ import config from "../../../config";
 import { RootState } from "../../../redux/reducers";
 import styled from "styled-components";
 import { Alert } from 'antd'; 
+import Spinner from "../../authModal/components/spinner";
 
 export default function Request_Btn(props) {
   let [msgState, statehandler] = React.useState("");
+  let [loader,setLoader]=React.useState(false);
 
   const theme = {
     blue: {
@@ -130,6 +132,7 @@ export default function Request_Btn(props) {
       request_body.order_date_time = getCurrentDateTimeString();
       request_body.message = msgState;
       request_body.cus_uid = queryid.toString();
+      setLoader(true);
       const response = await fetch(
         `${apiUrl}/api/customers/${queryid}/orders`,
         {
@@ -141,7 +144,7 @@ export default function Request_Btn(props) {
           body: JSON.stringify(request_body),
         }
       );
-
+        setLoader(false);
       if (response.ok) {
         SetVisibility(2) ; 
         console.log("response worked!");
@@ -154,63 +157,63 @@ export default function Request_Btn(props) {
   }
 
   return (
-    <div className={st.DialogRoot}>
-      {AlertComponent} 
-      <Dialog.Root>
-        <Dialog.Trigger asChild>
-          <div className={st.button_wrapper}>
-            <h3>Connect with the contractor</h3>
-            {/* <button className={st.Button}>{props.btn_text}</button> */}
-            <Button theme="pink" >
-            {props.btn_text}
-                </Button>
-          </div>
-        </Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className={st.DialogOverlay} />
-          <Dialog.Content className={st.DialogContent}>
-            <Dialog.Title className={st.DialogTitle}>
-              {props.modal_header}
-            </Dialog.Title>
-            <Dialog.Description className={st.DialogDescription}>
-              {props.modal_description}
-            </Dialog.Description>
-            <fieldset className={st.Fieldset}>
-              {/* <label className={st.Label} htmlFor="msg" >
-                {props.label}
-              </label> */}
-              <input
-                className={st.Input}
-                id="name"
-                defaultValue=""
-                value={msgState}
-                onChange={handleChange}
-                placeholder="Enter Message..."
-              />
-            </fieldset>
+    loader?<Spinner/>:<div className={st.DialogRoot}>
+    {AlertComponent} 
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <div className={st.button_wrapper}>
+          <h3>Connect with the contractor</h3>
+          {/* <button className={st.Button}>{props.btn_text}</button> */}
+          <Button theme="pink" >
+          {props.btn_text}
+              </Button>
+        </div>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className={st.DialogOverlay} />
+        <Dialog.Content className={st.DialogContent}>
+          <Dialog.Title className={st.DialogTitle}>
+            {props.modal_header}
+          </Dialog.Title>
+          <Dialog.Description className={st.DialogDescription}>
+            {props.modal_description}
+          </Dialog.Description>
+          <fieldset className={st.Fieldset}>
+            {/* <label className={st.Label} htmlFor="msg" >
+              {props.label}
+            </label> */}
+            <input
+              className={st.Input}
+              id="name"
+              defaultValue=""
+              value={msgState}
+              onChange={handleChange}
+              placeholder="Enter Message..."
+            />
+          </fieldset>
 
-            <div
-              style={{
-                display: "flex",
-                marginTop: 25,
-                justifyContent: "flex-end",
-              }}
-            >
-              <Dialog.Close asChild>
-             
-                <Button theme="pink" onClick={handleSubmit}>
-                  {props.modal_btn_text}
-                </Button>
-              </Dialog.Close>
-            </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 25,
+              justifyContent: "flex-end",
+            }}
+          >
             <Dialog.Close asChild>
-              <button className={st.IconButton} aria-label="Close">
-                X
-              </button>
+           
+              <Button theme="pink" onClick={handleSubmit}>
+                {props.modal_btn_text}
+              </Button>
             </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </div>
+          </div>
+          <Dialog.Close asChild>
+            <button className={st.IconButton} aria-label="Close">
+              X
+            </button>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  </div>
   );
 }
