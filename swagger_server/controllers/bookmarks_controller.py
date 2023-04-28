@@ -72,7 +72,7 @@ def post_bookmark(body, queryid):  # noqa: E501
 
         #queryid is same as bookmark.cus_uid
         try:
-            db.check_customer_exists(queryid)
+            db.check_customer_exists(body._cus_uid)
         except NameError:
             return {"error":"Customer with given cus_uid doesn't exist","status":400}
         

@@ -15,14 +15,13 @@ class TestBookmarksController(BaseTestCase):
 
     def test_delete_customer_bookmark(self):
         """Test case for delete_customer_bookmark
-
+~
         deletes a specific customer's bookmark by id of both
         """
         response = self.client.open(
-            '/api//customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid='queryid_example', bookmarkid='bookmarkid_example'),
+            '/api/customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid=1, bookmarkid=29),
             method='DELETE')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(response.status_code,204)
 
     def test_get_customer_bookmark(self):
         """Test case for get_customer_bookmark
@@ -30,7 +29,7 @@ class TestBookmarksController(BaseTestCase):
         get a customer's specific bookmark by id of both
         """
         response = self.client.open(
-            '/api//customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid='queryid_example', bookmarkid='bookmarkid_example'),
+            '/api/customers/{queryid}/bookmarks/{bookmarkid}'.format(queryid=1, bookmarkid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -41,7 +40,7 @@ class TestBookmarksController(BaseTestCase):
         get a list of all bookmarks of a specific customer
         """
         response = self.client.open(
-            '/api//customers/{queryid}/bookmarks'.format(queryid='queryid_example'),
+            '/api/customers/{queryid}/bookmarks'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -51,9 +50,12 @@ class TestBookmarksController(BaseTestCase):
 
         create a new bookmark for a customer with given id
         """
-        body = BookmarkRequest()
+        body = {
+        "cus_uid": "1",
+        "p_uid": "1"
+        }
         response = self.client.open(
-            '/api//customers/{queryid}/bookmarks'.format(queryid='queryid_example'),
+            '/api/customers/{queryid}/bookmarks'.format(queryid='queryid_example'),
             method='POST',
             data=json.dumps(body),
             content_type='application/json')

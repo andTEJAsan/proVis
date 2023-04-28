@@ -19,7 +19,7 @@ class TestContractorsController(BaseTestCase):
         get a contractor by id
         """
         response = self.client.open(
-            '/api//contractors/{queryid}'.format(queryid='queryid_example'),
+            '/api/contractors/{queryid}'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -30,7 +30,7 @@ class TestContractorsController(BaseTestCase):
         get a list of all contractors
         """
         response = self.client.open(
-            '/api//contractors',
+            '/api/contractors',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -40,9 +40,15 @@ class TestContractorsController(BaseTestCase):
 
         create a new contractor
         """
-        body = ContractorRequest()
+        body = {
+        "address": "address4",
+        "company_id": "1",
+        "email": "testemail4",
+        "name": "testcontractor4",
+        "phone_no": 123
+        }
         response = self.client.open(
-            '/api//contractors',
+            '/api/contractors',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
