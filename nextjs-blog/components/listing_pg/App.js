@@ -334,7 +334,7 @@ function App() {
                 <button className={st.tag_button} onClick={remove_location}>
                   <img src={cross} className={st.img_button} />
                 </button>
-              </div>
+              </div> 
             )}
             {newState.category !== "" && (
               <div className={st.tag}>
