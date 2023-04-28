@@ -1,26 +1,26 @@
-import React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import st from "../../../styles/product_pg/request_btn.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import config from "../../../config";
-import { RootState } from "../../../redux/reducers";
-import styled from "styled-components";
-import { Alert } from 'antd'; 
-import Spinner from "../../authModal/components/spinner";
+import React from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import st from '../../../styles/product_pg/request_btn.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import config from '../../../config';
+import { RootState } from '../../../redux/reducers';
+import styled from 'styled-components';
+import { Alert } from 'antd';
+import Spinner from '../../loader';
 
 export default function Request_Btn(props) {
-  let [msgState, statehandler] = React.useState("");
-  let [loader,setLoader]=React.useState(false);
+  let [msgState, statehandler] = React.useState('');
+  let [loader, setLoader] = React.useState(false);
 
   const theme = {
     blue: {
-      default: "#3f51b5",
-      hover: "#283593",
+      default: '#3f51b5',
+      hover: '#283593',
     },
     pink: {
-      default: "#e91e63",
-      hover: "#ad1457",
+      default: '#e91e63',
+      hover: '#ad1457',
     },
   };
 
@@ -45,7 +45,7 @@ export default function Request_Btn(props) {
   `;
 
   Button.defaultProps = {
-    theme: "blue",
+    theme: 'blue',
   };
 
   const ButtonToggle = styled(Button)`
@@ -68,7 +68,7 @@ export default function Request_Btn(props) {
     // const milliseconds = now.getUTCMilliseconds();
 
     // Zero-pad month, day, hours, minutes, and seconds to two digits
-    const zeroPad = (num) => num.toString().padStart(2, "0");
+    const zeroPad = (num) => num.toString().padStart(2, '0');
     const monthStr = zeroPad(month);
     const dayStr = zeroPad(day);
     const hoursStr = zeroPad(hours);
@@ -82,10 +82,10 @@ export default function Request_Btn(props) {
   }
 
   const request_body = {
-    order_date_time: "2023-04-07   13:13:20",
+    order_date_time: '2023-04-07   13:13:20',
     p_uid: props.p_uid,
-    cus_uid: "ff",
-    message: "string",
+    cus_uid: 'ff',
+    message: 'string',
   };
 
   // {
@@ -101,24 +101,24 @@ export default function Request_Btn(props) {
     statehandler(msg);
   }
 
-  const [visible, SetVisibility] = React.useState(0) ; 
+  const [visible, SetVisibility] = React.useState(0);
 
-  let AlertComponent ; 
-    
+  let AlertComponent;
+
   if (visible == 0) {
-      console.log("in state 0") ; 
-      <div></div>
-  }
-  else if (visible == 1){
-      console.log("in state 1") ; 
-      AlertComponent = <Alert message="Please log in first" type="error" /> 
-  }
-  else{
-      console.log("in state 2") ; 
-      AlertComponent = <Alert message="Order Succesfully placed" type="success" />
+    console.log('in state 0');
+    <div></div>;
+  } else if (visible == 1) {
+    console.log('in state 1');
+    AlertComponent = <Alert message="Please log in first" type="error" />;
+  } else {
+    console.log('in state 2');
+    AlertComponent = (
+      <Alert message="Order Succesfully placed" type="success" />
+    );
   }
 
-  // 0 if not visible, 1 if not looged in, 2 if logged in and successful . 
+  // 0 if not visible, 1 if not looged in, 2 if logged in and successful .
   const { isLoggedIn } = useSelector((state: RootState) => state.storage);
 
   const queryid = useSelector((state: RootState) => state.storage.userID);
@@ -136,84 +136,83 @@ export default function Request_Btn(props) {
       const response = await fetch(
         `${apiUrl}/api/customers/${queryid}/orders`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             // Authorization: `Bearer ${jwt}`,
           },
           body: JSON.stringify(request_body),
         }
       );
-        setLoader(false);
+      setLoader(false);
       if (response.ok) {
-        SetVisibility(2) ; 
-        console.log("response worked!");
-        statehandler("");
+        SetVisibility(2);
+        console.log('response worked!');
+        statehandler('');
       }
     } else {
-      SetVisibility(1) ;
+      SetVisibility(1);
       // alert("Please log in first!");
     }
   }
 
   return (
-    loader?<Spinner/>:<div className={st.DialogRoot}>
-    {AlertComponent} 
-    <Dialog.Root>
-      <Dialog.Trigger asChild>
-        <div className={st.button_wrapper}>
-          <h3>Connect with the contractor</h3>
-          {/* <button className={st.Button}>{props.btn_text}</button> */}
-          <Button theme="pink" >
-          {props.btn_text}
-              </Button>
-        </div>
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className={st.DialogOverlay} />
-        <Dialog.Content className={st.DialogContent}>
-          <Dialog.Title className={st.DialogTitle}>
-            {props.modal_header}
-          </Dialog.Title>
-          <Dialog.Description className={st.DialogDescription}>
-            {props.modal_description}
-          </Dialog.Description>
-          <fieldset className={st.Fieldset}>
-            {/* <label className={st.Label} htmlFor="msg" >
+    <div className={st.DialogRoot}>
+      {AlertComponent}
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <div className={st.button_wrapper}>
+            <h3>Connect with the contractor</h3>
+            {/* <button className={st.Button}>{props.btn_text}</button> */}
+            <Button theme="pink">
+              {loader ? <Spinner /> : props.btn_text}
+            </Button>
+          </div>
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Overlay className={st.DialogOverlay} />
+          <Dialog.Content className={st.DialogContent}>
+            <Dialog.Title className={st.DialogTitle}>
+              {props.modal_header}
+            </Dialog.Title>
+            <Dialog.Description className={st.DialogDescription}>
+              {props.modal_description}
+            </Dialog.Description>
+            <fieldset className={st.Fieldset}>
+              {/* <label className={st.Label} htmlFor="msg" >
               {props.label}
             </label> */}
-            <input
-              className={st.Input}
-              id="name"
-              defaultValue=""
-              value={msgState}
-              onChange={handleChange}
-              placeholder="Enter Message..."
-            />
-          </fieldset>
+              <input
+                className={st.Input}
+                id="name"
+                defaultValue=""
+                value={msgState}
+                onChange={handleChange}
+                placeholder="Enter Message..."
+              />
+            </fieldset>
 
-          <div
-            style={{
-              display: "flex",
-              marginTop: 25,
-              justifyContent: "flex-end",
-            }}
-          >
+            <div
+              style={{
+                display: 'flex',
+                marginTop: 25,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Dialog.Close asChild>
+                <Button theme="pink" onClick={handleSubmit}>
+                  {loader ? <Spinner /> : props.modal_btn_text}
+                </Button>
+              </Dialog.Close>
+            </div>
             <Dialog.Close asChild>
-           
-              <Button theme="pink" onClick={handleSubmit}>
-                {props.modal_btn_text}
-              </Button>
+              <button className={st.IconButton} aria-label="Close">
+                X
+              </button>
             </Dialog.Close>
-          </div>
-          <Dialog.Close asChild>
-            <button className={st.IconButton} aria-label="Close">
-              X
-            </button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
-  </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    </div>
   );
 }

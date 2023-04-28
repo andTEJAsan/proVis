@@ -3,7 +3,7 @@ import axios from "axios"
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-import Spinner from "./components/spinner"
+import Spinner from "../loader"
 import "react-js-dropdavn/dist/index.css";
 import { useRouter } from "next/router";
 import config from "../../config";

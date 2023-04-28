@@ -1,14 +1,14 @@
 //*Written by Eklavya Agarwal
 
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SET_AUTH_MODAL_PAGE } from "../../../redux/reducers/ux";
-import authModalPages from "../../../constants/authModalPages";
-import { SET_STORAGE_ITEM } from "../../../redux/reducers/storage";
-import Spinner from "@components/authModal/components/spinner";
-import st from "./EmailAuth.module.scss";
-import styles from "./TempStyles.module.scss";
-import config from "config";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_AUTH_MODAL_PAGE } from '../../../redux/reducers/ux';
+import authModalPages from '../../../constants/authModalPages';
+import { SET_STORAGE_ITEM } from '../../../redux/reducers/storage';
+import Spinner from '@components/loader';
+import st from './EmailAuth.module.scss';
+import styles from './TempStyles.module.scss';
+import config from 'config';
 
 let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -16,41 +16,41 @@ export default function EmailAuth() {
   const { apiUrl } = config;
 
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [rePassword, setRePassword] = useState("");
-  const [name, setName] = useState("");
+  const [rePassword, setRePassword] = useState('');
+  const [name, setName] = useState('');
   const [isHovering, setIsHovering] = useState(false);
 
   // <------------------save all account info after making requests to the backend API begins----------------->
   const saveAccountInfo = (responseJson, loginType) => {
-    setEmail("");
-    setPassword("");
+    setEmail('');
+    setPassword('');
     setLoading(false);
 
     const userInfo = responseJson.info;
     dispatch({
       type: SET_STORAGE_ITEM,
-      key: "jwt",
+      key: 'jwt',
       value: responseJson.token,
     });
     dispatch({
       type: SET_STORAGE_ITEM,
-      key: "userID",
+      key: 'userID',
       value: userInfo.cus_uid,
     });
-    dispatch({ type: SET_STORAGE_ITEM, key: "userType", value: "customer" });
-    dispatch({ type: SET_STORAGE_ITEM, key: "isLoggedIn", value: true });
-    dispatch({ type: SET_STORAGE_ITEM, key: "loginType", value: loginType });
+    dispatch({ type: SET_STORAGE_ITEM, key: 'userType', value: 'customer' });
+    dispatch({ type: SET_STORAGE_ITEM, key: 'isLoggedIn', value: true });
+    dispatch({ type: SET_STORAGE_ITEM, key: 'loginType', value: loginType });
     dispatch({
       type: SET_STORAGE_ITEM,
-      key: "userName",
+      key: 'userName',
       value: userInfo.username,
     });
     setLoading(false);
-    localStorage.setItem("token", responseJson.token);
+    localStorage.setItem('token', responseJson.token);
 
     dispatch({ type: SET_AUTH_MODAL_PAGE, value: authModalPages.SUCCESS });
   };
@@ -59,23 +59,23 @@ export default function EmailAuth() {
   // <-----------registering the details on clicking the sign up button begins---------------->
   const emailRegister = async () => {
     setLoading(true);
-    if (email === "" || password === "" || rePassword === "") {
-      alert("Please enter all the details!");
+    if (email === '' || password === '' || rePassword === '') {
+      alert('Please enter all the details!');
     } else if (reg.test(email) === false) {
-      alert("Please enter correct email!");
+      alert('Please enter correct email!');
     } else if (password.length < 4) {
-      alert("Password must be at least 4 characters");
+      alert('Password must be at least 4 characters');
     } else if (password !== rePassword) {
-      alert("Password and rePassword must be the same");
+      alert('Password and rePassword must be the same');
     } else {
       // const name = email.replace(/@.*$/, "");
       setLoading(true);
       try {
         const response = await fetch(`${apiUrl}/api/user/emailRegister`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             name: name,
@@ -90,42 +90,41 @@ export default function EmailAuth() {
 
         if (responseJson.status < 400) {
           const userInfo = responseJson.info;
-        dispatch({
-          type: SET_STORAGE_ITEM,
-          key: "jwt",
-          value: responseJson.token,
-        });
-        dispatch({
-          type: SET_STORAGE_ITEM,
-          key: "userID",
-          value: userInfo.cus_uid,
-        });
-        dispatch({
-          type: SET_STORAGE_ITEM,
-          key: "userType",
-          value: "customer",
-        });
-        dispatch({ type: SET_STORAGE_ITEM, key: "isLoggedIn", value: true });
-        dispatch({
-          type: SET_STORAGE_ITEM,
-          key: "loginType",
-          value: "email",
-        });
-        dispatch({
-          type: SET_STORAGE_ITEM,
-          key: "userName",
-          value: userInfo.username,
-        });
-        localStorage.setItem("token", responseJson.token);
+          dispatch({
+            type: SET_STORAGE_ITEM,
+            key: 'jwt',
+            value: responseJson.token,
+          });
+          dispatch({
+            type: SET_STORAGE_ITEM,
+            key: 'userID',
+            value: userInfo.cus_uid,
+          });
+          dispatch({
+            type: SET_STORAGE_ITEM,
+            key: 'userType',
+            value: 'customer',
+          });
+          dispatch({ type: SET_STORAGE_ITEM, key: 'isLoggedIn', value: true });
+          dispatch({
+            type: SET_STORAGE_ITEM,
+            key: 'loginType',
+            value: 'email',
+          });
+          dispatch({
+            type: SET_STORAGE_ITEM,
+            key: 'userName',
+            value: userInfo.username,
+          });
+          localStorage.setItem('token', responseJson.token);
           dispatch({
             type: SET_AUTH_MODAL_PAGE,
             value: authModalPages.EMAIL_VERIFICATION,
           });
         } else {
-          
-            alert("user exists");
-          
-      }} catch (error) {
+          alert('user exists');
+        }
+      } catch (error) {
         alert(error);
       }
     }
@@ -142,32 +141,32 @@ export default function EmailAuth() {
   }) => {
     // const {t} = useTranslation('login');
     setLoading(true);
-    if (email === "" || password === "") {
-      alert("Please enter your details");
+    if (email === '' || password === '') {
+      alert('Please enter your details');
       setLoading(false);
     } else if (reg.test(email.trim()) === false) {
-      alert("Email is not properly formed");
+      alert('Email is not properly formed');
       setLoading(false);
     } else {
       try {
         console.log(`${apiUrl}/api/user/emailLogin`);
         const response = await fetch(`${apiUrl}/api/user/emailLogin`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            "email_id": email,
-            "password": password,
+            email_id: email,
+            password: password,
           }),
         });
         const responseJson = await response.json();
 
         if (responseJson.status < 400) {
-          saveAccountInfo(responseJson, "email");
+          saveAccountInfo(responseJson, 'email');
         } else {
-          alert(" Please enter valid credentials");
+          alert(' Please enter valid credentials');
         }
       } catch (error) {
         alert(error);
@@ -187,11 +186,10 @@ export default function EmailAuth() {
 
   return (
     <div className={st.EmailAuth}>
-      {loading && <Spinner />}
       <section className={styles.formsSection}>
         <div className={styles.forms}>
           <div
-            className={`${styles.formWrapper} ${show ? "" : styles.isActive}`}
+            className={`${styles.formWrapper} ${show ? '' : styles.isActive}`}
           >
             <button
               type="button"
@@ -212,7 +210,7 @@ export default function EmailAuth() {
                     id="loginEmail"
                     type="email"
                     required
-                    placeholder={"Enter email"}
+                    placeholder={'Enter email'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -223,7 +221,7 @@ export default function EmailAuth() {
                     id="loginPassword"
                     type="password"
                     required
-                    placeholder={"Enter password"}
+                    placeholder={'Enter password'}
                     value={password}
                     autoCapitalize="none"
                     onChange={(e) => setPassword(e.target.value)}
@@ -231,7 +229,7 @@ export default function EmailAuth() {
                 </div>
                 <div className={st.ForgetPassword}>
                   <button
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={() => {
                       // dispatch({
                       //   type: SET_AUTH_MODAL_PAGE,
@@ -241,10 +239,10 @@ export default function EmailAuth() {
                   >
                     <h4
                       style={{
-                        color: isHovering ? "salmon" : "",
-                        transform: isHovering ? "scale(1.1)" : "",
-                        transition: "all 0.3s",
-                        marginRight: "1rem",
+                        color: isHovering ? 'salmon' : '',
+                        transform: isHovering ? 'scale(1.1)' : '',
+                        transition: 'all 0.3s',
+                        marginRight: '1rem',
                       }}
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
@@ -268,13 +266,13 @@ export default function EmailAuth() {
                     });
                   }}
                 >
-                  Login
+                  {loading ? <Spinner /> : 'Login'}
                 </button>
               )}
             </form>
           </div>
           <div
-            className={`${styles.formWrapper} ${show ? styles.isActive : ""}`}
+            className={`${styles.formWrapper} ${show ? styles.isActive : ''}`}
           >
             <button
               type="button"
@@ -296,7 +294,7 @@ export default function EmailAuth() {
                     id="signupusername"
                     type="text"
                     required
-                    placeholder={"Enter username"}
+                    placeholder={'Enter username'}
                     autoCapitalize="none"
                     onChange={(e) => setName(e.target.value)}
                   />
@@ -307,7 +305,7 @@ export default function EmailAuth() {
                     id="signupEmail"
                     type="email"
                     required
-                    placeholder={"Enter email"}
+                    placeholder={'Enter email'}
                     autoCapitalize="none"
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -317,7 +315,7 @@ export default function EmailAuth() {
                   <input
                     id="signupPassword"
                     required
-                    placeholder={"Enter password"}
+                    placeholder={'Enter password'}
                     type="password"
                     autoCapitalize="none"
                     onChange={(e) => setPassword(e.target.value)}
@@ -330,7 +328,7 @@ export default function EmailAuth() {
                   <input
                     id="signupPasswordConfirm"
                     required
-                    placeholder={"Re-enter password"}
+                    placeholder={'Re-enter password'}
                     autoCapitalize="none"
                     type="password"
                     onChange={(e) => setRePassword(e.target.value)}
@@ -343,7 +341,7 @@ export default function EmailAuth() {
                   role="button"
                   onClick={emailRegister}
                 >
-                  Sign-Up
+                  {loading ? <Spinner /> : 'Sign-Up'}
                 </button>
               )}
             </form>

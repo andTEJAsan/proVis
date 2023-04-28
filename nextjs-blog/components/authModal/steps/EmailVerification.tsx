@@ -1,25 +1,25 @@
 //*Written by Eklavya Agarwal
 
-import React, { useState, useEffect } from "react";
-import Spinner from "@components/authModal/components/spinner";
-import btnStyles from "./AuthSuccess.module.scss";
-import { SET_STORAGE_ITEM } from "../../../redux/reducers/storage";
-import config from "../../../config";
-import { useDispatch, useSelector } from "react-redux";
-import readyStatus from "../../../constants/readyStatus";
-import { SET_AUTH_MODAL_PAGE } from "../../../redux/reducers/ux";
-import authModalPages from "../../../constants/authModalPages";
-import ReactCodeInput from "@components/authModal/components/CodeField";
-import { IoClose } from "@react-icons/all-files/io5/IoClose";
-import { RootState } from "../../../redux/reducers";
+import React, { useState, useEffect } from 'react';
+import Spinner from '@components/loader';
+import btnStyles from './AuthSuccess.module.scss';
+import { SET_STORAGE_ITEM } from '../../../redux/reducers/storage';
+import config from '../../../config';
+import { useDispatch, useSelector } from 'react-redux';
+import readyStatus from '../../../constants/readyStatus';
+import { SET_AUTH_MODAL_PAGE } from '../../../redux/reducers/ux';
+import authModalPages from '../../../constants/authModalPages';
+import ReactCodeInput from '@components/authModal/components/CodeField';
+import { IoClose } from '@react-icons/all-files/io5/IoClose';
+import { RootState } from '../../../redux/reducers';
 
 const { apiUrl } = config;
 
 const CELL_COUNT = 6;
 const source =
-  "https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png";
+  'https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png';
 export default function EmailVerification() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const registering = false;
 
   // <-----------------------60s counter for resend email begins---------------------------------------->
@@ -47,7 +47,7 @@ export default function EmailVerification() {
   const userId = useSelector((state: RootState) => state.storage.userID);
   const jwt = useSelector((state: RootState) => state.storage.jwt);
   const dispatch = useDispatch();
-  
+
   // <----------------------sendVerificationMail function hits backend send OTP endpoint begins------------------->
   const sendVerificationMail = async () => {
     setSendEmailStatus(readyStatus.PENDING);
@@ -61,11 +61,11 @@ export default function EmailVerification() {
       //   },
       // });
       // const responseJson = await response.json();
-      
+
       // if (responseJson.status < 400) {
-        setEmailSentAtLeastOnce(true);
-        setSendEmailStatus(readyStatus.SUCCESS);
-        setVerifyEmailStatus(readyStatus.INVALID);
+      setEmailSentAtLeastOnce(true);
+      setSendEmailStatus(readyStatus.SUCCESS);
+      setVerifyEmailStatus(readyStatus.INVALID);
       // }
     } catch (err) {
       setEmailSentAtLeastOnce(true);
@@ -85,10 +85,10 @@ export default function EmailVerification() {
     setVerifyEmailStatus(readyStatus.PENDING);
     try {
       const response = await fetch(`${apiUrl}/api/user/verifyEmail`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           otp: value,
@@ -98,12 +98,9 @@ export default function EmailVerification() {
       const responseJson = await response.json();
 
       if (responseJson.status < 400) {
-        
-
         dispatch({ type: SET_AUTH_MODAL_PAGE, value: authModalPages.SUCCESS });
-
       } else {
-        setValue("");
+        setValue('');
         setVerifyEmailStatus(readyStatus.FAILURE);
       }
     } catch (err) {
@@ -121,34 +118,33 @@ export default function EmailVerification() {
           }}
           role="button"
         >
-          <IoClose style={{ fontSize: "4vh", color: "#777" }} />
+          <IoClose style={{ fontSize: '4vh', color: '#777' }} />
         </button>
       </div>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <div>
           <h4>
-            {emailSentAtLeastOnce ? "Verification" : "Verify Account Email"}
+            {emailSentAtLeastOnce ? 'Verification' : 'Verify Account Email'}
           </h4>
         </div>
         <img
           src={source}
           style={{
-            borderRadius: "20px",
+            borderRadius: '20px',
             boxShadow:
-              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-              margin:'2rem'
+              '0 4px 8px 0 rgba(0, 0, 0, 0.2)ˀ, 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+            margin: '2rem',
           }}
         />
         <h4>
-          After you verify your account {"\n"}
+          After you verify your account {'\n'}
           You can access to our premium content
         </h4>
         {emailSentAtLeastOnce ? (
@@ -165,13 +161,13 @@ export default function EmailVerification() {
               onClick={verifyEmail}
               role="button"
             >
-              {" "}
+              {' '}
               {verifyEmailPending ? <Spinner /> : <h4>Verify</h4>}
             </button>
             <h4>
               {verifyEmailStatus === readyStatus.FAILURE
-                ? "The code is incorrect or expired"
-                : ""}
+                ? 'The code is incorrect or expired'
+                : ''}
             </h4>
 
             <button
