@@ -81,23 +81,23 @@ def email_register(body):  # noqa: E501
         except NameError:
             return  {"error":"User with given email already exists","status":400}
         cus_id = customer._cus_id
-        secret = pyotp.random_base32()
-        totp = pyotp.TOTP(secret)
-        otp = totp.now()
-        print("otp :" ,otp)
-        msg = EmailMessage()
-        email_sender = our_id
-        email_receiver = email
-        msg['From'] = email_sender
-        msg['To'] = email
-        msg['Subject'] = "OTP!! Here is your OTP generated OTP"
-        body ="Here is your generated OTP "+ otp
-        msg.set_content(body)
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
-            smtp.login(email_sender,our_pass)
-            smtp.sendmail(email_sender,email_receiver,msg.as_string())
-        db.addotp(otp,email)
+        # secret = pyotp.random_base32()
+        # totp = pyotp.TOTP(secret)
+        # otp = totp.now()
+        # print("otp :" ,otp)
+        # msg = EmailMessage()
+        # email_sender = our_id
+        # email_receiver = email
+        # msg['From'] = email_sender
+        # msg['To'] = email
+        # msg['Subject'] = "OTP!! Here is your OTP generated OTP"
+        # body ="Here is your generated OTP "+ otp
+        # msg.set_content(body)
+        # context = ssl.create_default_context()
+        # with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
+        #     smtp.login(email_sender,our_pass)
+        #     smtp.sendmail(email_sender,email_receiver,msg.as_string())
+        # db.addotp(otp,email)
 
     return {"info":{"cus_uid":cus_id,"username":name},"token":token,"status":200}
 

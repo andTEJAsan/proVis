@@ -236,12 +236,12 @@ def getcompanyimgurl_fromcompanyid(companyid:str)->str:
         return ""
     
 def check_company_exists(companyid:str)->None:
-    print("This is debugging of check_company_exists")
+    ##print("This is debugging of check_company_exists")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id` = %s""",companyid)
-        print("query executed for check_company_exists function")
+        ##print("query executed for check_company_exists function")
         r=cursor.fetchone()
-        print("this is r:",r)
+        ##print("this is r:",r)
         if (not r):
             raise NameError
         
@@ -268,19 +268,19 @@ def get_all_companies() ->list[Companies]:
     return cp
 
 def get_company_by_id(companyid:str)->Optional[Companies]:
-    print("Debugging for get_company_by_id function")
+    ##print("Debugging for get_company_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `companies` WHERE `company_id`=%s""",companyid)
-        print("query executed for get_company_by_id function")
+        ##print("query executed for get_company_by_id function")
         r=cursor.fetchone()
-        print("type:",r)
-        print("this is r:",r)
+        ##print("type:",r)
+        ##print("this is r:",r)
         if (not r):
             raise NameError
         company=Companies(company_id=r['company_id'],name=r['name'],company_img_url=r['company_img_url'],
                           about_us=r['about_us'],website_link=r['website_link'])
-        print("type:",type(company))
-        print("this is company:",company)
+        ##print("type:",type(company))
+        ##print("this is company:",company)
         return company
         
 
@@ -318,12 +318,12 @@ def add_contractors(contractor:Contractors) -> None:
         contractor.contractor_id=str(cursor.lastrowid)
 
 def check_contractor_exists(contractorid:str)->None:
-    print("Debugging for check_contractor_exists function")
+    ##print("Debugging for check_contractor_exists function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
-        print("query executed for check_contractor_exists function")
+        ##print("query executed for check_contractor_exists function")
         r=cursor.fetchone()
-        print("this is r:",r)
+        ##print("this is r:",r)
         if (not r):
             raise NameError
         
@@ -341,19 +341,19 @@ def get_all_contractors() -> list[Contractors]:
     return cr
 
 def get_contractor_by_id(contractorid:str)->Optional[Contractors]:
-    print("Debugging for getcontractor_by_id function")
+    ##print("Debugging for getcontractor_by_id function")
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `contractors` WHERE `contractor_id`=%s""",contractorid)
-        print("query executed for get_contractor_by_id function")
+        ##print("query executed for get_contractor_by_id function")
         r=cursor.fetchone()
-        print("type:",type(r))
-        print("this is r:",r)
+        ##print("type:",type(r))
+        ##print("this is r:",r)
         if (not r):
             raise NameError
         contractor=Contractors(contractor_id=r['contractor_id'],name=r['name'],email=r['email'],
                                address=r['address'],phone_no=r['phone_no'],company_id=r['company_id']) 
-        print("type:",type(contractor))  
-        print("this is contractor:",contractor)    
+        ##print("type:",type(contractor))  
+        ##print("this is contractor:",contractor)    
         return contractor
 
 #BOOKMARKS
@@ -376,7 +376,7 @@ def getbookmarks_fromcusid(cusid:str)->list[Bookmarks]:
             bk.append(bookmark)
     return bk
 
-def getbookmark_fromid(bookmarkid:str)->Optional[Bookmarks]:
+def getbookmark_fromid(queryid:str,bookmarkid:str)->Optional[Bookmarks]:
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
         element=cursor.fetchone()
@@ -386,7 +386,7 @@ def getbookmark_fromid(bookmarkid:str)->Optional[Bookmarks]:
         bookmark=Bookmarks(id=element['id'],cus_uid=element['cus_uid'],product=product)    
         return bookmark
 
-def deletebookmark_fromid(bookmarkid:str)->None:
+def deletebookmark_fromid(queryid:str,bookmarkid:str)->None:
     with connection.cursor() as cursor:
         cursor.execute("""DELETE FROM `bookmarks` WHERE `id`=%s""",bookmarkid)
         connection.commit()
@@ -727,8 +727,8 @@ def getreviews_frompuid(puid:str)->list[Reviews]:
                 rw.append(review)
     return rw
 
-def deletereviews_fromreviewid(puid:str,reviewid:str)->Optional[Reviews]:
+def deletereviews_fromreviewid(reviewid:str)->Optional[Reviews]:
 
     with connection.cursor() as cursor:
-        cursor.execute("""DELETE FROM `reviews` WHERE `id`=%s AND `p_uid`=%s""",reviewid,puid)
+        cursor.execute("""DELETE FROM `reviews` WHERE `id`=%s""",reviewid)
         connection.commit()

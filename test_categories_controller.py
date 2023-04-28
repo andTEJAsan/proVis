@@ -5,20 +5,20 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.locations import Locations  # noqa: E501
+from swagger_server.models.categories import Categories  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
-class TestLocationsController(BaseTestCase):
-    """LocationsController integration test stubs"""
+class TestCategoriesController(BaseTestCase):
+    """CategoriesController integration test stubs"""
 
-    def test_locations_get(self):
-        """Test case for locations_get
+    def test_categories_get(self):
+        """Test case for categories_get
 
-        get a list of all locations
+        get a list of all categories
         """
         response = self.client.open(
-            '/api//locations',
+            '/api/categories',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

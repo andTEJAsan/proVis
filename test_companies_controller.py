@@ -19,7 +19,7 @@ class TestCompaniesController(BaseTestCase):
         get a list of all companies
         """
         response = self.client.open(
-            '/api//companies',
+            '/api/companies',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,9 +29,14 @@ class TestCompaniesController(BaseTestCase):
 
         create a new Company
         """
-        body = CompanyRequest()
+        body = {
+        "about_us": "this is the best",
+        "company_img_url": "url4",
+        "name": "testcompany4",
+        "website_link": "websitelink4"
+        }
         response = self.client.open(
-            '/api//companies',
+            '/api/companies',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -44,7 +49,7 @@ class TestCompaniesController(BaseTestCase):
         get a company by id
         """
         response = self.client.open(
-            '/api//companies/{queryid}'.format(queryid='queryid_example'),
+            '/api/companies/{queryid}'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

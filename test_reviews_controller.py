@@ -16,10 +16,10 @@ class TestReviewsController(BaseTestCase):
     def test_products_queryid_reviews_get(self):
         """Test case for products_queryid_reviews_get
 
-        get a list of all Reviews of a specific product
+        get a list of all Reviews of a specific products
         """
         response = self.client.open(
-            '/api//products/{queryid}/reviews'.format(queryid='queryid_example'),
+            '/api/products/{queryid}/reviews'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,9 +29,13 @@ class TestReviewsController(BaseTestCase):
 
         create a new review for a product with given id
         """
-        body = ReviewRequest()
+        body = {
+        "cus_uid": "1",
+        "p_uid": "1",
+        "review": "this is the best"
+        }
         response = self.client.open(
-            '/api//products/{queryid}/reviews'.format(queryid='queryid_example'),
+            '/api/products/{queryid}/reviews'.format(queryid=1),
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
@@ -44,10 +48,9 @@ class TestReviewsController(BaseTestCase):
         deletes a specific product's review by id of both
         """
         response = self.client.open(
-            '/api//products/{queryid}/reviews/{reviewid}'.format(queryid='queryid_example', reviewid='reviewid_example'),
+            '/api/products/{queryid}/reviews/{reviewid}'.format(queryid=1, reviewid=1),
             method='DELETE')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(response.status_code,204)
 
 
 if __name__ == '__main__':

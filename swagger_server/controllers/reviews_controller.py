@@ -42,7 +42,7 @@ def products_queryid_reviews_post(body, queryid):  # noqa: E501
             return {"error":"Customer with given cus_uid doesn't exist","status":400}
         
         try:
-            db.check_product_exists(queryid)
+            db.check_product_exists(review.p_uid)
         except NameError:
             return {"error":"Product with given p_uid doesn't exist","status":400}
         
@@ -63,4 +63,4 @@ def products_queryid_reviews_reviewid_delete(queryid, reviewid):  # noqa: E501
 
     :rtype: None
     """
-    db.deletereviews_fromreviewid(queryid,reviewid)
+    db.deletereviews_fromreviewid(reviewid)

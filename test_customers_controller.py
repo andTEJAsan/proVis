@@ -19,7 +19,7 @@ class TestCustomersController(BaseTestCase):
         get a customer by id
         """
         response = self.client.open(
-            '/api//customers/{queryid}'.format(queryid='queryid_example'),
+            '/api/customers/{queryid}'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -30,7 +30,7 @@ class TestCustomersController(BaseTestCase):
         get a list of all customers
         """
         response = self.client.open(
-            '/api//customers',
+            '/api/customers',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -40,9 +40,14 @@ class TestCustomersController(BaseTestCase):
 
         create a new customer
         """
-        body = Customers()
+        body = {
+        "emailid": "email1",
+        "name": "name1",
+        "password": "password",
+        "phone_number": 123
+        }
         response = self.client.open(
-            '/api//customers',
+            '/api/customers',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')

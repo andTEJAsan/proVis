@@ -18,7 +18,7 @@ class TestProductsController(BaseTestCase):
         get a product by id
         """
         response = self.client.open(
-            '/api//products/{queryid}'.format(queryid='queryid_example'),
+            '/api/products/{queryid}'.format(queryid=1),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -28,10 +28,10 @@ class TestProductsController(BaseTestCase):
 
         gets all products matching the tags
         """
-        query_string = [('location', 'location_example'),
-                        ('category', 'category_example')]
+        query_string = [('location', 'Delhi'),
+                        ('category', 'Architects and Building Designers')]
         response = self.client.open(
-            '/api//products/findByTags',
+            '/api/products/findByTags',
             method='GET',
             query_string=query_string)
         self.assert200(response,
@@ -43,7 +43,7 @@ class TestProductsController(BaseTestCase):
         get a list of all products
         """
         response = self.client.open(
-            '/api//products',
+            '/api/products',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -53,9 +53,18 @@ class TestProductsController(BaseTestCase):
 
         create a new product
         """
-        body = Products()
+        body = {
+        "category": "testcategory2",
+        "company_img_url": "url1",
+        "company_name": "testcompany2",
+        "contractor_id": "123",
+        "contractor_name": "testcontractor2",
+        "location": "testlocation2",
+        "product_description": "this is the best",
+        "product_img_url": "url2"
+        }
         response = self.client.open(
-            '/api//products',
+            '/api/products',
             method='POST',
             data=json.dumps(body),
             content_type='application/json')
