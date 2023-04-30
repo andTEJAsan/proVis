@@ -119,7 +119,7 @@ export default function EmailAuth() {
           localStorage.setItem('token', responseJson.token);
           dispatch({
             type: SET_AUTH_MODAL_PAGE,
-            value: authModalPages.EMAIL_VERIFICATION,
+            value: authModalPages.SUCCESS,
           });
         } else {
           alert('user exists');
