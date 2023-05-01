@@ -12,7 +12,7 @@ def main():
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'proVis'}, pythonic_params=True)
     db.setup()
-    app.run(port=8080,debug=True)
+    app.run(port=8080)
 
 
 if __name__ == '__main__':
